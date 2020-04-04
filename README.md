@@ -4,23 +4,23 @@
 
 ## 文章目录
 
-## 「HTML」
+## HTML
 
 - [HTML的基本结构](./HTML/HTML的基本结构.md)
 - [基本的表单标签](./HTML/基本的表单标签.md)
 - [DOM基础](./HTML/DOM基础.md)
 - HTML5标签
 
-## 「CSS」
+## CSS
 
 - [CSS的基础知识](./CSS/CSS的基础知识.md)
 - [伪类](./CSS/伪类.md)
 - 水平垂直居中
 - 经典布局
 - BFC
-- [【问】position-fixed什么时候会失效？](./CSS/[问]position-fixed什么时候会失效？.md)
+- [【问】position-fixed什么时候会失效](./CSS/[问]position-fixed什么时候会失效.md)
 
-## 「JavaScript」
+## JavaScript
 
 ### JavaScript基础知识
 
@@ -53,26 +53,22 @@
 
 - [【建议点赞】再来40道this面试题酸爽继续](./JavaScript/this/[建议点赞]再来40道this面试题酸爽继续.md)
 
-
-
 ### 原型和原型链
 
-- [原型到底是个啥？](./JavaScript/原型和原型链/原型到底是个啥？)
+- [原型到底是个啥](./JavaScript/原型和原型链/原型到底是个啥.md)
 
 ### 深浅拷贝
 
-
+- [深浅拷贝问点](./JavaScript/深浅拷贝问点.md)
 
 ### 深入数组
 
-
+- [数组扁平化的六种实现方式](./JavaScript/深入数组/数组扁平化的六种实现方式.md)
 
 ### 面向对象三要素
 
 - [封装](./JavaScript/面向对象三要素/🔥[何不三连]比继承家业还要简单的JS继承题-封装篇(牛刀小试).md)
 - [继承](./JavaScript/面向对象三要素/💦[何不三连]做完这48道题彻底弄懂JS继承(1.7w字含辛整理-返璞归真).md)
-
-
 
 ### 手写api
 
@@ -81,6 +77,7 @@
 ### V8引擎工作原理
 
 - [垃圾回收机制](./JavaScript/调用堆栈/JavaScript进阶-内存机制.md)
+- EventLoop
 
 ### 异步
 
@@ -91,7 +88,7 @@
 ### ES6+
 
 - [Javascript之ES7详解](./JavaScript/ES6+/Javascript之ES7详解.md)
-- [ES9已经来了 Are you ready?](./JavaScript/ES6+/ES9已经来了 Are you ready?.md)
+- [ES9已经来了 Are you ready](./JavaScript/ES6+/ES9已经来了 Are you ready.md)
 
 ### 函数式编程
 
@@ -99,6 +96,8 @@
 - [霖呆呆的函数式编程之路(二)-偏函数和柯里化](./JavaScript/函数式编程/霖呆呆的函数式编程之路(二)-偏函数和柯里化.md)
 - [霖呆呆的函数式编程之路(三)-进阶柯里化](./JavaScript/函数式编程/霖呆呆的函数式编程之路(三)-进阶柯里化.md)
 - [霖呆呆的函数式编程之路(四)-组合函数](./JavaScript/函数式编程/霖呆呆的函数式编程之路(四)-组合函数.md)
+
+## TypeScript
 
 
 
@@ -116,9 +115,11 @@
 - [Angular自定义组件-UI组件篇-switch组件](./框架-库/Angular/Angular自定义组件-UI组件篇-switch组件.md)
 - [Angular4中自定义管道](./框架-库/Angular/Angular4中自定义管道.md)
 
+## 前端工程化
 
+### webpack
 
-## TypeScript
+- [webpack教材及案例目录]()
 
 
 
@@ -131,15 +132,19 @@
 
 - [霖呆呆你来说说浏览器缓存吧](./浏览器工作原理/霖呆呆你来说说浏览器缓存吧.md)
 
+## 多端开发
+
 
 
 ## 算法
 
-
+- [LeetCode算法题](./算法/LeetCode算法题/README.md)
 
 ## 数据结构
 
-
+- [二叉树](./数据结构/二叉树/README.md)
+- [链表](./数据结构/链表/README.md)
+- [数组](./数据结构/数组/README.md)
 
 ## 正则
 
@@ -151,7 +156,7 @@
 
 ### 博客相关
 
-- [2020希望你能像对待她一样对待程序 | 掘金年度征文](./other/2020希望你能像对待她一样对待程序 | 掘金年度征文.md)
+- [2020希望你能像对待她一样对待程序-掘金年度征文](./other/2020希望你能像对待她一样对待程序-掘金年度征文.md)
 - [【金三银四加分项】也许你也应该有一个自己的博客了](./other/【金三银四加分项】也许你也应该有一个自己的博客了.md)
 - [你的掘金文章本可以这么炫（博客美化工具一波带走）](./other/你的掘金文章本可以这么炫（博客美化工具一波带走）.md)
 
@@ -175,4 +180,9 @@
 
 - [Flutter入门](./other/Flutter入门.md)
 
-- [配置flutter全局命令-bash- flutter- command not found](./other/配置flutter全局命令-bash- flutter- command not found.md)
+- [配置flutter全局命令-bash- flutter- command not found](./other/配置flutter全局命令-bash.md)
+
+### bpmnjs
+
+- [全网最详bpmn.js教材github地址](https://github.com/LinDaiDai/bpmn-chinese-document)
+

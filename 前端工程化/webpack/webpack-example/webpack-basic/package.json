@@ -1,0 +1,24 @@
+{
+  "name": "webpack-basic",
+  "version": "1.0.0",
+  "description": "这个webpack配置是引入css、图片、字体、xml的案例",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^3.4.2",
+    "file-loader": "^5.0.2",
+    "lindaidai-webpack-numbers": "^1.0.0",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}
