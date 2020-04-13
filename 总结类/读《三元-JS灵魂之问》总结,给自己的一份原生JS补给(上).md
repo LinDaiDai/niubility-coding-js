@@ -91,7 +91,7 @@ var bol = new Boolean(true) // Boolean{true}
 var symbol = new Symbol(1) // TypeError
 ```
 
-向上面这种使用`new Number、new String`等创建的基本数据类型被称之为：**围绕原始数据类型创建一个显式包装器对象**。
+像上面这种使用`new Number、new String`等创建的基本数据类型被称之为：**围绕原始数据类型创建一个显式包装器对象**。
 
 通俗点说就是：用`new`来创建基本类型的包装类。
 
@@ -512,7 +512,7 @@ console.log(getClass(arguments)) // Arguments
 
 `"霖呆呆，这么多，这是人干的事吗？"`
 
-`"性平气和，记住一些常用的就行了..."`
+`"心平气和，记住一些常用的就行了..."`
 
 `"啪!"`
 
@@ -522,7 +522,7 @@ console.log(getClass(arguments)) // Arguments
 
 好滴👌，通过刚刚的学习，我们了解到了，`toString.call`这种方式是为了获取某个变量更加具体的数据类型。
 
-咦～说到数据类型，我们原来不是有一个`typeof`吗？它和`toString.call()`又啥区别？
+咦～说到数据类型，我们原来不是有一个`typeof`吗？它和`toString.call()`又有啥区别？
 
 首先帮大家回顾一下`typeof`它的显示规则：
 
@@ -1644,3 +1644,4 @@ class Child extends Parent {
 [《【何不三连】做完这48道题彻底弄懂JS继承(1.7w字含辛整理-返璞归真)》](https://juejin.im/post/5e75e22951882549027687f9)
 
 [《【精】从206个console.log()完全弄懂数据类型转换的前世今生(上)》](https://juejin.im/post/5e7f8314e51d4546fa4511c9)
+

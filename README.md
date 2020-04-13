@@ -24,7 +24,7 @@
 - 水平垂直居中
 - 经典布局
 - BFC
-- [【问】position-fixed什么时候会失效](./CSS/[问]position-fixed什么时候会失效.md)
+- [【问】position-fixed什么时候会失效](./CSS/position-fixed什么时候会失效.md)
 
 ## JavaScript
 
@@ -65,7 +65,7 @@
 
 ### 深浅拷贝
 
-- [深浅拷贝问点](./JavaScript/深浅拷贝问点.md)
+- [深浅拷贝问点](./JavaScript/深浅拷贝/深浅拷贝问点.md)
 
 ### 深入数组
 
@@ -79,7 +79,7 @@
 
 ### 手写api
 
-- [你真的能完全运用好防抖节流吗](./JavaScript/你真的能完全运用好防抖节流吗.md)
+- [你真的能完全运用好防抖节流吗](./JavaScript/手写api/你真的能完全运用好防抖节流吗.md)
 
 ### V8引擎工作原理
 
@@ -95,7 +95,7 @@
 ### ES6+
 
 - [Javascript之ES7详解](./JavaScript/ES6+/Javascript之ES7详解.md)
-- [ES9已经来了 Are you ready](./JavaScript/ES6+/ES9已经来了 Are you ready.md)
+- [ES9已经来了 Are you ready](./JavaScript/ES6+/ES9已经来了AreYouReady.md)
 
 ### 函数式编程
 
