@@ -136,10 +136,14 @@
 
 ## 计算机网络
 
+### Shutdown HTTP系列
+
+- [ShutdownHTTP系列-基础篇(1)](./计算机网络/ShutdownHTTP系列-基础篇(1).md)
+- [ShutdownHTTP系列-HTTP请求报文篇(2)](./计算机网络/ShutdownHTTP系列-HTTP请求报文篇(2).md)
+
+### TCP系列
+
 - [适合初学者的TCP讲解](./计算机网络/适合初学者的TCP讲解.md)
-- HTTP
-- HTTPS
-- TCP/IP详解
 
 ## 浏览器工作原理
 
