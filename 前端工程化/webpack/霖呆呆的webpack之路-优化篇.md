@@ -4,7 +4,7 @@
 
 在实际开发中, 我们无意间可能会产生很多未使用的代码, 但是你又因为业务的原因不想把它删除, 同时又不希望在打包的时候将这些无用的代码包含进去.
 
-**(案例GitHub地址: [《LinDaiDai/webpack-basic》])**
+**(案例GitHub地址: [《LinDaiDai/webpack-optimize》])**
 
 ### 1.1 Tree shaking
 

@@ -2,9 +2,53 @@
 
 ## 前言
 
-此文章`webpack`版本号`^4.41.5`, `web pack-cli`版本号`^3.3.10`
+你盼世界，我盼望你无`bug`。Hello 大家好！我是霖呆呆！
 
-在webpack 3中，webpack本身和它的CLI以前都是在同一个包中，但在第4版中，他们已经将两者分开来更好地管理它们。
+先简单说一下标题的前因后果，避免吃瓜群众不明白何为`"呆妹"`。
+
+事情发生在我之前写的一篇文章当中[《读《三元-JS灵魂之问》总结》](https://juejin.im/post/5e8dc6fd6fb9a03c97753dea)：
+
+![](./resource/10.png)
+
+然后...我就到`Lv4`了，发这篇文章我不是为了证明什么，我只想说：
+
+`"你们根本不是喜欢我的文章，就是馋我的身子！"`
+
+ 设计师，配几个狗头的表情包。
+
+好嘞。
+
+[狗头] [狗头] [狗头]
+
+所以这波安排一下`"呆妹"`吧，谁叫我是一个信守承诺的博主呢。
+
+（注⚠️ 以下内容有可能引起您的不适，请谨慎观看）
+
+
+
+
+
+（希望大家不要像此博主一样为了人气不择手段败坏掘金的风气，本次行为仅作为升四级之后的粉丝福利博大家一笑，我更希望的是自己的文章能得到大家的喜欢。感谢～）
+
+
+
+## webpack系列介绍
+
+此系列记录了我在`webpack`上的学习历程。如果你也和我一样想要好好的掌握`webpack`,，那么我认为它对你是有一定帮助的，因为教材中是以一名`webpack`小白的身份进行讲解, 案例`demo`也都很详细, 涉及到：
+
+- 基础篇(本章)
+- 构建方式篇
+- 优化篇
+- loader篇
+- 配置篇
+
+建议先`mark`再花时间来看。
+
+（其实这个系列在很早之前就写了，一直没有发出来，当时还写了一大长串前言可把我感动的，想看废话的可以点这里：[GitHub地址](https://github.com/LinDaiDai/webpack-document)，不过现在让我们正式开始学习吧）
+
+所有文章`webpack`版本号`^4.41.5`, `webpack-cli`版本号`^3.3.10`。
+
+在`webpack3`中，`webpack`本身和它的`CLI`都是在同一个包中，但在第4版中，两者分开来了，也是为了让我们更好地管理它们。
 
 ## 一、基本使用
 
@@ -16,14 +60,16 @@
 
 所以在后面的教材中, 我都会以本地安装`webpack`的方式进行讲解.
 
-**(教材中的案例GitHub地址: [LinDaiDai/webpack-basic]())**
+**(教材中的案例GitHub地址: [LinDaiDai/webpack-basic](https://github.com/LinDaiDai/webpack-document/tree/master/webpack-example))**
+
+
 
 ### 1.1 初始化项目
 
 首先我们创建一个目录, 并初始化`npm`:
 
 ```javascript
-$ mkdir webpack-demo && cd webpack-demo
+$ mkdir webpack-basic && cd webpack-basic
 $ npm init -y
 ```
 
@@ -35,7 +81,7 @@ $ npm init -y
 
 前面已经提到过, 文章采用的`webpack`版本号是`>4.0`的, 由于`webpack`与`webpack-cli`已经分开了, 我们需要分别安装它们(如果你使用的`webpack`版本号小于`4.0`则只需要安装`webpack`就可以了)
 
-在`webpack-demo`的根目录下执行指令:
+在`webpack-basic`的根目录下执行指令:
 
 ```
 $ npm install webpack webpack-cli --save-dev
@@ -56,7 +102,7 @@ $ npm install webpack webpack-cli --save-dev
 之后, 项目结构就变成了这样:
 
 ```
- webpack-demo
+ webpack-basic
  	|- package.json
  	|- /dist
  		|- index.html
@@ -158,7 +204,7 @@ module.exports = {
 
 现在让我们重新使用命令来进行构建:
 
-```
+```javascript
 $ npx webpack --config webpack.config.js
 
 Hash: dabab1bac2b940c1462b
@@ -223,7 +269,7 @@ $ npx webpack
     "private": true,
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-+        "build": "webpack"
++       "build": "webpack"
     },
     "keywords": [],
     "author": "",
@@ -255,7 +301,7 @@ $ npm run build
 让我们来回顾一下上面👆讲解的项目目录:
 
 ```
- webpack-demo
+ webpack-basic
  	|- package.json
  	|- webpack.config.js
  	|- /dist
@@ -266,7 +312,7 @@ $ npm run build
 
 可以看到, 上面的案例只允许了我们使用`js`文件来进行构建, 但是在实际开发中, 我们不可能只有`js`文件, 若是我们要使用`css`、 图片、字体这些资源怎么办?
 
-别担心, `webpack` 最出色的功能之一就是，除了 `JavaScript`，还可以通过 loader *引入任何其他类型的文件*。
+别担心, `webpack` 最出色的功能之一就是，除了 `JavaScript`，还可以通过 `loader` *引入任何其他类型的文件*。
 
 
 
@@ -276,11 +322,14 @@ $ npm run build
 
 #### style-loader和css-loader
 
-为了从`js`模块中`import`一个`css`文件, 比如你想在`index.js`中引入一个`css`文件:
+为了从`js`模块中导入一个`css`文件, 比如你想在`index.js`中引入一个`css`文件:
 
 ```javascript
 // index.js
 import './style.css'
+
+// 或者用require()的方式
+const style = require('./style.css')
 ```
 
 你需要在项目中(也就是`module`配置中), 安装并添加这两个`loader`:
@@ -295,33 +344,33 @@ $ npm i --save-dev style-loader css-loader
 并且在`webpack.config.js`中进行配置:
 
 ```javascript
-const path = require('path')
+const path = require("path");
 
 module.exports = {
-	entry: './src/index.js',
-	output: {
-		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist')
-	},
-	module: {
-		rules: [
-			{
-				test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
-			}
-		]
-	}
-}
+  entry: "./src/index.js",
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+    ],
+  },
+};
+
 ```
 
 我们在`webpack.config.js`中新增了一个`module`的配置.
 
 这里配置的意思是: 
 
-`webpack` 根据正则表达式，来确定应该查找哪些文件，并将其提供给指定的` loader`。在这种情况下，以 `.css` 结尾的全部文件，都将被提供给 `style-loader` 和 `css-loader`。
+`webpack` 根据正则表达式，来确定应该查找哪些文件，并将其提供给指定的` loader`。`/.css$/`这个正则的意思就是匹配目录下所有以 `.css` 结尾的全部文件，都将被提供给 `style-loader` 和 `css-loader`。
+
+(`$`应该知道什么意思吧，就是表示必须以什么结尾)
 
 **注**⚠️:
 
@@ -344,7 +393,6 @@ module.exports = {
 然后修改我们之前的`src/index.js`文件, 给`element` 加上一个类名:
 
 ```javascript diff
-import _ from 'lodash'
 import './style.css' // 1. 导入css文件
 
 function component() {
@@ -371,6 +419,92 @@ $ npm run build
 它这里实现的方式是: **当该模块运行时，含有 CSS 字符串的标签，将被插入到 `html` 文件的 `head` 中。**
 
 所以如果我们检查页面(也就是打开控制台), 然后在`Elements`中你会发现, `head`里会加上一个`style`标签, 里面就是你定义`css`的内容.
+
+
+
+#### 单独使用css-loader有什么效果？
+
+虽然上面👆我们介绍要想在页面中使用`css`就需要使用`style-loader`和`css-loader`这两个`loader`，那么它们单独的作用是什么呢？
+
+现在我们修改一下`webpack.config.js`的配置，去除掉`style-loader`：
+
+```diff
+const path = require("path");
+
+module.exports = {
+  entry: "./src/index.js",
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+-           "style-loader", 
+            "css-loader"
+        ],
+      },
+    ],
+  },
+};
+```
+
+并且把`index.js`那里引入的`style`打印出来看看：
+
+```javascript
+// src/index.js
+const style = require('./style.css')
+console.log('style', style)
+```
+
+效果：
+
+![](./resource/11.png)
+
+可以发现，`css-loader`它的作用实际就是能识别导入的`css`这个模块，并通过特定的语法规则进行内容转换。
+
+但是这里得到的是一个数组啊，并不是我们想要的，页面也无法来使用它。所以这时候就需要配合上`style-loader`它才能发挥它真正的作用。
+
+
+
+#### style-loader的作用
+
+`style-loader`它的原理其实就是通过一个JS脚本创建一个`style`标签，里面会包含一些样式。并且它是不能单独使用的，因为它并不负责解析`css`之前的依赖关系。
+
+也就是说：
+
+- 单独使用了`css-loader`只能保证我们能引用`css`模块进来，但是并没有效果
+- 而`style-loader`就可以创建一个`style`标签，并且把引入进来的`css`样式都塞到这个标签里
+
+但是有一点需要注意了，我们在当前项目的`js`中引入了几个`css`模块，它就会生成几个`style`标签。
+
+比如现在我在项目中又新建了一个`style2.css`文件并加上一些样式：
+
+```javascript
+.color_red {
+  font-size: 20px;
+  color: green;
+}
+```
+
+然后在`src/index.js`都引入这两个`css`文件：
+
+```javascript
+import './style.css'
+import './style2.css'
+```
+
+（记得把`webpack.config.js`中的`style-loader`重新加上）
+
+此时重新`npm run build`一下，并打开页面：
+
+![](./resource/12.png)
+
+现在你会发现`"霖呆呆"`他变绿了。（当然是选择原谅她了...）
+
+页面中确实是生成了两个`style`标签，而且样式的显示规则也是后面的覆盖前面的(`style2.css`比`style.css`晚引入)
 
 
 
@@ -428,17 +562,16 @@ module.exports = {
 
 ```javascript
 // index.js
-import _ from 'lodash'
 import './style.css'
 import Icon from './icon.png' // 1. 引入图片
 
 function component() {
     var element = document.createElement('div');
 
-    element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+    element.innerHTML = '霖呆呆';
     element.classList.add('color_red')
 
-    var img = new Image(); // 2. 使用图片
+    var img = new Image(200, 200); // 2. 使用图片
     img.src = Icon;
     element.appendChild(img);
 
@@ -453,17 +586,18 @@ document.body.appendChild(component());
 .color_red {
     color: red;
     background: url('./icon.png');
+  	height: 300px;
 }
 ```
 
-重新打包, 然后查看页面, 发现图片在两个地方都可以正常引用了.
+重新打包, 然后查看页面, 可以看到图片在两个地方都可以正常引用了.
 
-
+![](./resource/13.png)
 
 此时细心的你可能会发现, 在打包完的`dist`文件夹里, 会出现一个以MD5哈希值命名的`png`文件:
 
 ```
-webpack-demo
+webpack-basic
 	|- /dist
 		|- 182ba2a0f5c9507387abe2ad84c23e6b.png
 		|- bundle.js
@@ -472,7 +606,7 @@ webpack-demo
 
 没错, 当你在`js`或者`css`中引入这个图片的时候, 该图片会被处理并添加到`output`目录下.
 
-有意思的是, 如果你去掉`index.js`和`style.css` 中对`icon.png`的引用的话, 则`webpack`打包完之后的`dist`文件夹内就不会有这张图片.
+有意思的是, 如果你去掉`index.js`和`style.css` 中对`icon.png`的引用的话, 则`webpack`打包完之后的`dist`文件夹内就不会有这张图片。
 
 
 
@@ -482,13 +616,11 @@ webpack-demo
 
 ```javascript
 rules: [
-	{
-		test: /\.(png|svg|jpg|gif)$/,
-		use: [
-			'file-loader'
-		]
-	}
-]
+  {
+    test: /\.(png|svg|jpg|gif)$/,
+    use: ["file-loader"],
+  },
+],
 ```
 
 其实, `file-loader`还有很多其它的参数.
@@ -536,7 +668,7 @@ rules: [
 此时, 打包完之后的目录结构就会变成:
 
 ```
-webpack-demo
+webpack-basic
 	|- /dist
 		|- /images
 			|- icon.png
@@ -562,12 +694,10 @@ webpack-demo
 
 ```javascript
 rules: [
-	{
-		test: /\.(woff|woff2|eot|ttf|otf)$/,
-		use: [
-			"file-loader"
-		]
-	}
+  {
+    test: /\.(woff|woff2|eot|ttf|otf)$/,
+    use: ["file-loader"],
+  },
 ]
 ```
 
@@ -575,8 +705,10 @@ rules: [
 
 OK, 让我们在项目里引用一下字体, 在`src/`下新建一个`fonts`文件夹, 并添加两个字体文件, 此时项目目录变成:
 
+（这两个字体文件是我从[Iconfont的在线字体](https://www.iconfont.cn/webfont?spm=a313x.7781069.1998910419.12&puhui=1#!/webfont/index)上下载下来的）
+
 ```diff
- webpack-demo
+ webpack-basic
  	|- package.json
  	|- webpack.config.js
  	|- /dist
@@ -606,9 +738,24 @@ OK, 让我们在项目里引用一下字体, 在`src/`下新建一个`fonts`文�
 }
 ```
 
+然后修改一下`src/index.js`中的字：
+
+```javascript
+// src/index.js
+function createElement () {
+	element.innerHTML = '孔子曰：中午不睡，下午崩溃!孟子曰：孔子说的对!';
+}
+```
+
+(注意了，案例中我是偷了下懒，直接使用[Iconfont的在线字体](https://www.iconfont.cn/webfont?spm=a313x.7781069.1998910419.12&puhui=1#!/webfont/index)写的，它只针对于`"孔子曰：中午不睡，下午崩溃!孟子曰：孔子说的对!"`这几个字有效，换成其它字就不行了，当然实际使用上你肯定不能这么干)
+
 重新打包后打开页面, 可以看到刚刚引入的字体.
 
 它和图片一样, 如果没用到字体的话, 也不会被输出到`output`里.
+
+![](./resource/14.png)
+
+
 
 
 
@@ -630,18 +777,14 @@ $ npm i --save-dev csv-loader xml-loader
 
 ```javascript
 rules: [
-	{
-		test: /\.(csv|tsv)$/,
-		use: [
-			'csv-loader'
-		]
-	},
-	{
-		test: /\.xml$/,
-		use: [
-			'xml-loader'
-		]
-	}
+  {
+    test: /\.(csv|tsv)$/,
+    use: ["csv-loader"],
+  },
+  {
+    test: /\.xml$/,
+    use: ["xml-loader"],
+  },
 ]
 ```
 
@@ -665,17 +808,15 @@ $ npm i --save-dev raw-loader
 
 ```javascript
 rules: [
-	{
-		test: /\.(csv|tsv)$/,
-		use: [
-			'csv-loader'
-		]
-	},
-	{
-		test: /\.txt$/,
-		use: 'raw-loader'
-	}
-]
+  {
+    test: /\.(csv|tsv)$/,
+    use: ["csv-loader"],
+  },
+  {
+    test: /\.txt$/,
+    use: "raw-loader",
+  },
+],
 ```
 
 此时引用`.txt`文件就可以获取它里面的内容了:
@@ -898,34 +1039,33 @@ OK👌, 它现在已经会自动在`dist`文件夹下生成`index.html`, 而且�
 然后修改一下`webpack.config.js`:
 
 ```diff
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    entry: {
-        app: './src/index.js',
-        print: './src/print.js'
-    },
-   	plugins: [
-       new HtmlWebpackPlugin({
-            title: 'Webpack Output Management',
-+            filename: 'assets/admin.html',
-+            template: 'src/index.html'
-        })
-    ],
-    output: {
-        filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    }
-}
+  entry: {
+    app: "./src/index.js",
+    print: "./src/print.js",
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: "Webpack Output Management",
++      filename: "admin.html",
++      template: "src/index.html",
+    }),
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+};
 ```
 
 现在执行打包指令之后, 生成的`dist`文件目录就会变成:
 
 ```diff
 /dist
-+	|- /assets
-+		|- admin.html
++ |- admin.html
 	|- app.bundle.js
 	|- print.bundle.js
 -	|- index.html
@@ -946,33 +1086,33 @@ $ npm i --save-dev clean-webpack-plugin
 然后在`webpack.config.js`配置一下:
 
 ```diff
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-+ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
++ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = {
-    entry: {
-        app: './src/index.js',
-        print: './src/print.js'
-    },
-   	plugins: [
-+   		 new CleanWebpackPlugin({
-+   		 			cleanAfterEveryBuildPatterns: ['dist'] // 这个是非必填的
-+   		 })
-       new HtmlWebpackPlugin({
-            title: 'Webpack Output Management',
-            filename: 'assets/admin.html',
-            template: 'src/index.html'
-        })
-    ],
-    output: {
-        filename: '[name].bundle.js',
-        path: path.resolve(__dirname, 'dist')
-    }
-}
+  entry: {
+    app: "./src/index.js",
+    print: "./src/print.js",
+  },
+  plugins: [
++   new CleanWebpackPlugin({
++       cleanAfterEveryBuildPatterns: ["dist"], // 这个是非必填的
++   }),
+    new HtmlWebpackPlugin({
+      title: "Webpack Output Management",
+      filename: "assets/admin.html",
+      template: "src/index.html",
+    }),
+  ],
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "dist"),
+  },
+};
 ```
 
-如果你安装官网的方式:
+若你是按照官网的安装方式:
 
 ```javascript
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -986,7 +1126,13 @@ new CleanWebpackPlugin(['dist'])
 TypeError: CleanWebpackPlugin is not a constructor
 ```
 
-后面我查明原因, 如果你安装的`clean-webpack-plugin`是`3.0` 以上的话, 你就得像我一样用`const { CleanWebpackPlugin } = require('clean-webpack-plugin')`这样的方式引用. 
+这个我查明了原因, 如果你安装的`clean-webpack-plugin`是`3.0` 以上的话, 你就得像我一样用`const { CleanWebpackPlugin } = require('clean-webpack-plugin')`这样的方式引用. 
 
 并且配置要清理的文件夹也要用`cleanAfterEveryBuildPatterns`来定义.
+
+
+
+## 后语
+
+你盼世界，我盼望你无`bug`。这篇文章就介绍到这里。
 

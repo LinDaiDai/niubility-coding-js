@@ -1,23 +1,21 @@
-import _ from 'lodash'
 import './style.css'
-import { cube } from './math'
-// import * as lindaiWebpackNumbers from 'lindaidai-webpack-numbers'
-var lindaiWebpackNumbers = require('lindaidai-webpack-numbers')
-    // import Icon from './icon.png'
+import './style2.css'
+import Icon from './icon.png'
+import printMe from './print'
+function createElement () {
+  const element = document.createElement('div')
+  element.innerHTML = '孔子曰：中午不睡，下午崩溃!孟子曰：孔子说的对!';
+  element.classList.add('color_red')
 
-function component() {
-    var element = document.createElement('div');
+  var img = new Image(200, 200)
+  img.src = Icon
+  element.appendChild(img)
 
-    // element.innerHTML = _.join(['Hello', 'webpack'], ' ');
-    element.innerHTML = '孔子曰：中午不睡，下午崩溃!孟子曰：孔子说的对!';
-    element.classList.add('color_red')
+  var btn = document.createElement('button');
+  btn.innerHTML = '点击我';
+  btn.onclick = printMe;
+  element.appendChild(btn);
 
-    // var img = new Image();
-    // img.src = Icon;
-    // element.appendChild(img);
-    console.log(cube(3)) // 使用了cube
-    console.log(lindaiWebpackNumbers.numToWord(2))
-    return element;
+  return element
 }
-
-document.body.appendChild(component());
+document.body.appendChild(createElement())

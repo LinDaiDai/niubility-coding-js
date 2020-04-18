@@ -4,8 +4,6 @@
 
 《霖呆呆的 webpack 之路-基础篇》
 
-《霖呆呆的 webpack 之路-优化篇》
-
 主要介绍了以下的功能:
 
 基础篇:
@@ -20,6 +18,3 @@
 - HtmlWebpackPlugin 插件
 - CleanWebpackPlugin 插件
 
-优化篇:
-
-- tree shaking 与压缩输出
