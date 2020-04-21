@@ -628,7 +628,11 @@ Entrypoint index = index.bundle.js
 
 通过[Vue Loader中的CSS提取](https://vue-loader.vuejs.org/zh/guide/extract-css.html)我发现在webpack4中使用的是**mini-css-extract-plugin**
 
-(官网推荐的是使用`extract-text-webpack-plugin`, 在`Vue Loader`中表示它最好在`webpack3`中使用)
+(官网推荐的是使用`extract-text-webpack-plugin`, 但是在`Vue Loader`中表示它最好在`webpack3`中使用)
+
+另外`extract-text-webpack-plugin`是`mini-css-webpack-plugin`的前身，在`webpack4`中不更推荐使用后者。
+
+
 
 #### mini-css-extract-plugin
 
@@ -660,7 +664,7 @@ module.exports = {
 
 #### extract-text-webpack-plugin
 
-这时候就需要用到**extract-text-webpack-plugin** 插件.
+再来看看**extract-text-webpack-plugin** 插件.
 
 1. 安装插件
 
