@@ -6,9 +6,9 @@
 
 不知道你有没有使用过类似于`vue-cli`这样的脚手架工具, 在使用它们的时候, 每次只要执行`npm run start`这样的指令就可以创建一个本地的`web`服务器, 然后打开一个例如`localhost:8080`这样的端口页面, 同时还有热更新等功能.
 
-其实这些功能的实现都是`vue-cli`内部使用了一些`webpack`的开发工具.
+其实这些功能的实现都是`vue-cli`内部使用了`webpack`.
 
-webpack 中有几个不同的选项，可以帮助你在代码发生变化后自动编译代码.
+`webpack`中有几个不同的选项，可以帮助你在代码发生变化后自动编译代码.
 
 **(以下教材案例GitHub地址: [LinDaidai/webpak-server])**
 
@@ -81,6 +81,8 @@ module.exports = {
 
 使用`webpack-dev-middleware`配合`express server`来介绍它的功能.
 
+（`express`是一个很精简的`Node.js`开发框架，如果你之前没用过也没关系，使用起来很简单。）
+
 先来说下我的需求, 我想要实现一个这个功能:
 
 - 配置一条`script`指令让它能运行一个本地`web`服务器(也就是能够在`localhost: 3000`中查看页面)
@@ -104,7 +106,7 @@ const webpackDevMiddleware = require('webpack-dev-middleware')
 const app = express()
 const config = require('./webpack.config')
 const compiler = webpack(config)
-    // 把webpack 处理后的文件传递给一个服务器
+// 把 webpack 处理后的文件传递给一个服务器
 app.use(webpackDevMiddleware(compiler))
 
 app.listen(3000, function() {
@@ -156,7 +158,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),
-+        publicPath: '/assets/'
++       publicPath: '/assets/'
     }
 }
 ```
@@ -198,13 +200,13 @@ Cannot GET /
 icon.png => 变为 /assets/icon.png
 ```
 
-
+此选项指定在浏览器中所引用的「此输出目录对应的**公开 URL**」。
 
 **注**⚠️:
 
-如果没有配置`output.publicPath`和`webpack-dev-middleware`的`publicPath`, 则默认都会以根目录`/`作为配置项.
+如果没有配置`output.publicPath`和`webpack-dev-middleware`的`publicPath`, 则默认都会是`""`，以根目录作为配置项。
 
-如果配置了`output.publicPath`, 则`webpack-dev-middleware`中的`publicPath`也要和它一样才行.
+如果配置了`output.publicPath`, 则`webpack-dev-middleware`中的`publicPath`也要和它一样才行。
 
 
 

@@ -232,6 +232,8 @@ module.exports = {
 
 `lodash`这个依赖在不同的`js`文件中被使用, 例如在`index.js`和`another-module.js`中都被使用了:
 
+(`lodash`是一个工具库里面提供了很多实用的方法，可以使用`npm i lodash`安装)
+
 ```javascript
 // src/index.js
 import _ from 'lodash'
@@ -624,13 +626,11 @@ Entrypoint index = index.bundle.js
 
 但是在实际使用来说, 我们更希望能将less或者css文件提取出来作为一个单独的文件加载到页面上.
 
-通过[Vue Loader中的CSS提取](https://vue-loader.vuejs.org/zh/guide/extract-css.html)我发在webpack4中使用**mini-css-extract-plugin**
+通过[Vue Loader中的CSS提取](https://vue-loader.vuejs.org/zh/guide/extract-css.html)我发现在webpack4中使用的是**mini-css-extract-plugin**
 
 (官网推荐的是使用`extract-text-webpack-plugin`, 在`Vue Loader`中表示它最好在`webpack3`中使用)
 
 #### mini-css-extract-plugin
-
-在webpack4中我们最好使用`mini-css-extract-plugin`来达到css代码分离的效果.
 
 1. 安装插件
 

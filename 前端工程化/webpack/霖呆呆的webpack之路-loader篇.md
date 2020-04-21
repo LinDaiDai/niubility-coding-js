@@ -149,7 +149,7 @@ rules: [{
 
 #### 1. 基本用法
 
-```
+```javascript
 rules: [{
 	test: /\.(png|svg|jpg|gif)$/,
 	use: [{
@@ -355,9 +355,11 @@ console.log(numToWord(2)) // two
 
 下面介绍一个比较重要的loader: `babel-loader`.
 
-我们都知道Babel就是一个JS编译器, 主要用于在旧的浏览器或环境中将ECMAScript 2015+代码转换为向后兼容版本的JavaScript代码.
+我们都知道Babel就是一个JS编译器, 主要用于在旧的浏览器或环境中将ECMAScript 2015+代码转换为向后兼容版本的JavaScript代码。
 
-例如我们在刚刚的案例`src/index.js`中加上一个ES6+才有的箭头函数, 以及一个 ES7才有的幂运算符:
+（原理简单说就是先将`ES6+`的解析生成为`ES6+`的`AST`，然后把`ES6+`的`AST`转换为`ES5+`的`AST`，最后再将这个`AST`转换为具体的`ES5`的代码）
+
+例如我们在刚刚的案例`src/index.js`中加上一个ES6才有的箭头函数, 以及一个 ES7才有的幂运算符:
 
 ```diff
 import { print } from './print'
@@ -392,7 +394,7 @@ console.log(fileHtml)
 
 为了方便查看我将`webpack.config.js`中的`mode`属性配置为`development`, 这样我们就能查看bundle之后的代码了:
 
-![](/Users/lindaidai/Documents/webpack-document/resource/loader1.png)
+![](./resource/loader1.png)
 
 
 
@@ -434,7 +436,7 @@ module.exports = {
 
 保存成功之后重新执行`npm run serve`来看看效果:
 
-![](/Users/lindaidai/Documents/webpack-document/resource/loader2.png)
+![](./resource/loader2.png)
 
 可以发现, 现在我们的箭头函数以及幂运算符都被转换成了ES5的语法.
 
@@ -511,7 +513,7 @@ module.exports = {
 
 解决办法: 一种是确保转译尽可能少的文件, 所以可以用`exclude`选项来去除`node_modules` 和`bower_components`中文件. 另一种你可以设置`cacheDirectory`选项为`true`, 开启缓存, 转译的结果将会缓存到文件系统中, 这样使`babel-loader`至少提速两倍(代码量越多效果应该越明显).
 
-2. `babel-loaderd`使得打包文件体积过大
+2. `babel-loader`使得打包文件体积过大
 
 Babel 对一些公共方法使用了非常小的辅助代码, 比如 `_extend`.默认情况下会被添加到每一个需要它的文件中, 
 
