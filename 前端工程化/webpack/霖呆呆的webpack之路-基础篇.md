@@ -12,7 +12,7 @@
 
 建议先`mark`再花时间来看。
 
-（其实这个系列在很早之前就写了，一直没有发出来，当时还写了一大长串前言可把我感动的，想看废话的可以点这里：[GitHub地址](https://github.com/LinDaiDai/webpack-document)，不过现在让我们正式开始学习吧）
+（其实这个系列在很早之前就写了，一直没有发出来，当时还写了一大长串前言可把我感动的，想看废话的可以点这里：[GitHub地址](https://github.com/LinDaiDai/webpack-example)，不过现在让我们正式开始学习吧）
 
 所有文章`webpack`版本号`^4.41.5`, `webpack-cli`版本号`^3.3.10`。
 
@@ -28,7 +28,7 @@
 
 所以在后面的教材中, 我都会以本地安装`webpack`的方式进行讲解.
 
-**(教材中的案例GitHub地址: [LinDaiDai/webpack-basic](https://github.com/LinDaiDai/webpack-document/tree/master/webpack-example))**
+**(教材中的案例GitHub地址: [LinDaiDai/webpack-basic](https://github.com/LinDaiDai/webpack-example))**
 
 
 

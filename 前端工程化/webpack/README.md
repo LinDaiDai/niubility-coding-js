@@ -42,22 +42,24 @@
 
 关于各个知识点的教材地址以及对应的案例地址:
 
-### [基础篇](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-基础篇.md)
+### [基础篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-基础篇.md)
 
-**文档地址**: [《霖呆呆的webpack之路-基础篇》](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-基础篇.md)
+**文档地址**: [《霖呆呆的webpack之路-基础篇》](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-基础篇.md)
+
+**掘金对应地址：**[《跟着"呆妹"来学webpack(基础篇)》](https://juejin.im/post/5e9ada576fb9a03c391300a1)
 
 - 基本使用
 - 使用配置文件
 - 资源管理: style-loader, css-loader, file-loader
 - 管理输出: 多个输入/输出, HtmlWebpackPlugin, CleanWebpackPlugin
 
-**案例地址**: [LinDaiDai/webpack-basic]()
+**案例地址**: [LinDaiDai/webpack-basic](https://github.com/LinDaiDai/webpack-example)
 
 
 
-### [构建方式篇](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-构建方式篇.md)
+### [构建方式篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-构建方式篇.md)
 
-**文档地址**: [《霖呆呆的webpack之路-构建方式篇》](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-构建方式篇.md)
+**文档地址**: [《霖呆呆的webpack之路-构建方式篇》](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-构建方式篇.md)
 
 - webpack --watch
 - webpack-dev-server 工具
@@ -75,9 +77,9 @@
 
 
 
-### [优化篇](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-优化篇.md)
+### [优化篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-优化篇.md)
 
-**文档地址**: [《霖呆呆的webpack之路-优化篇》](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-优化篇.md)
+**文档地址**: [《霖呆呆的webpack之路-优化篇》](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-优化篇.md)
 
 - tree shaking 与压缩输出
 
@@ -106,9 +108,9 @@
 
 
 
-### [loader篇](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-loader篇.md)
+### [loader篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-loader篇.md)
 
-**文档地址**: [《霖呆呆的webpack之路-loader篇》](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-loader篇.md)
+**文档地址**: [《霖呆呆的webpack之路-loader篇》](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-loader篇.md)
 
 - 文件
 - 转换编译
@@ -116,13 +118,13 @@
 
 
 
-### [配置篇](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-配置篇.md)
+### [配置篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-配置篇.md)
 
 - mode
 - output
 - devtool
 
-**文档地址**: [《霖呆呆的webpack之路-配置篇》](https://github.com/LinDaiDai/webpack-document/blob/master/霖呆呆的webpack之路-配置篇.md)
+**文档地址**: [《霖呆呆的webpack之路-配置篇》](https://github.com/LinDaiDai/niubility-coding-js/blob/master/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/webpack/霖呆呆的webpack之路-配置篇.md)
 
 **案例地址**: 在教材中的每一项有具体说明
 
