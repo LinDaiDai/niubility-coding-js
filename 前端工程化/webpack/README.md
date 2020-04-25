@@ -53,7 +53,7 @@
 - 资源管理: style-loader, css-loader, file-loader
 - 管理输出: 多个输入/输出, HtmlWebpackPlugin, CleanWebpackPlugin
 
-**案例地址**: [LinDaiDai/webpack-basic](https://github.com/LinDaiDai/webpack-example)
+**案例地址**: [LinDaiDai/webpack-example/branch/webpack-basic](https://github.com/LinDaiDai/webpack-example/tree/webpack-basic)
 
 
 
@@ -134,10 +134,16 @@
 
 喜欢**霖呆呆**的小伙还希望可以关注霖呆呆的公众号 `LinDaiDai` 或者扫一扫下面的二维码👇👇👇.
 
-<img src="./resource/LinDaiDai公众号二维码.png" alt="LinDaiDai公众号" />
+| 公众号二维码                              | 赞赏码                              |
+| ----------------------------------------- | ----------------------------------- |
+| ![](./resource/LinDaiDai公众号二维码.png) | ![](./resource/LinDaiDai赞赏码.png) |
 
 我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉
 
-你的支持和鼓励是我持续创作的主要动力 😊.
+你的鼓励就是我持续创作的主要动力 😊
 
-<img src="./resource/LinDaiDai赞赏码.png" alt="LinDaiDai赞赏码" />
+整理文章, 编写案例不易 😂... 
+
+走过路过的各位大佬能否打赏点饭钱呢...
+
+

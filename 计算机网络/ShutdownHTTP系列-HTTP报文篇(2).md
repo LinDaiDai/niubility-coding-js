@@ -55,19 +55,19 @@
 
 **请求报文：**
 
-图片21
+![](./resource/shutdownHTTP/21.png)
 
 真实例子：
 
-图片22
+![](./resource/shutdownHTTP/22.png)
 
 **响应报文：**
 
-图片23
+![](./resource/shutdownHTTP/23.png)
 
 真实例子：
 
-图片24
+![](./resource/shutdownHTTP/24.png)
 
 
 
@@ -77,11 +77,11 @@
 
 HTTP报文的整体是：报文首部 + 空行 + 报文实体
 
-不过因为：报文首部 = 起始行 + 首部字段，其起始行也挺重要的，所以我就分为部分说了。
+不过因为：报文首部 = 起始行 + 首部字段，其实起始行也挺重要的，所以我就分为两部分说了。
 
-其实大家记住这张图就可以了：
+大家记住这张图就可以了：
 
-图片25
+![](./resource/shutdownHTTP/25.png)
 
 
 
@@ -119,7 +119,7 @@ HTTP报文的整体是：报文首部 + 空行 + 报文实体
 
 例如下面这个实例：
 
-图片26
+![](./resource/shutdownHTTP/26.png)
 
 在`Connection: keep-alive`下面就有一个换行符。
 
@@ -143,7 +143,7 @@ HTTP报文的整体是：报文首部 + 空行 + 报文实体
 
 （HTTP报文中最繁琐的就是首部字段了，也就是我们经常在`network`上看到的那么一大串的配置）
 
-图片27
+![](./resource/shutdownHTTP/27.png)
 
 
 
@@ -194,7 +194,7 @@ HTTP首部字段我会从这几个方面来讲解：
 - 响应首部字段(Response Header Fields)：响应报文时用的字段
 - 实体首部字段(Entity Header Fields)：请求和响应报文的实体部分用的字段
 
-而每一种类型下面又有很多字段，其实面试中能回答出一些常用，重要的就可以了。
+而每一种类型下面又有很多字段，可能一下要记这么多也比较难，所以面试时能尽量把自己知道的说出来就可以了，让面试官知道对于一些重要的字段你还是有了解的。
 
 以下我列举了一些，不过标了星号的可是重点哦。
 
@@ -202,19 +202,19 @@ HTTP首部字段我会从这几个方面来讲解：
 
 #### 通用首部字段
 
-
+![](./resource/shutdownHTTP/通用首部字段.png)
 
 #### 请求首部字段
 
-
+![](./resource/shutdownHTTP/请求首部字段.png)
 
 #### 响应首部字段
 
-
+![](./resource/shutdownHTTP/响应首部字段.png)
 
 #### 实体首部字段
 
-
+![](./resource/shutdownHTTP/实体首部字段.png)
 
 ### 4.3 非标准的首部字段
 
@@ -222,7 +222,7 @@ HTTP首部字段我会从这几个方面来讲解：
 
 有这么一些：
 
-
+![](./resource/shutdownHTTP/非标准首部字段.png)
 
 
 
@@ -248,7 +248,7 @@ Accept: text/html, q=1; application/xml, q=0.8
 
 （图中的序号并无优先级的意思，只是单纯的作为标记）
 
-
+![](./resource/shutdownHTTP/Accept相关字段.png)
 
 需要注意的是：
 

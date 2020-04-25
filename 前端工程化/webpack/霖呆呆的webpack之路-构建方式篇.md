@@ -1,5 +1,57 @@
 # 霖呆呆的webpack之路-构建方式篇
 
+
+## 前言
+
+你盼世界，我盼望你无`bug`。Hello 大家好！我是霖呆呆！
+
+什么？！你还想要`"呆妹"`出来给你讲`webpack`？！小伙子，你的想法很危险❌啊。
+
+不可能的，下次想要见到`"她"`可能要等到呆呆`5000`粉的时候吧😒。在这之前我绝不可能再女装👚了 😊。
+
+（所以请醒醒吧，你看到的那么可爱的萌妹是一个帅哥！这个帅哥他迷惑了你！当然我现实生活中不叫帅哥哈，因为我在广东，所以他们一般都叫我靓仔）
+
+另外关于「霖呆呆的webpack之路系列」的教材案例我更新了github的地址哦，之前那个太乱了我给删了，现在所有的教材案例都是同一个项目，不过不同的分支上可以下载单独的案例，主干上是所有的案例。具体下载方式请仔细阅读github上的README。（[https://github.com/LinDaiDai/webpack-example](https://github.com/LinDaiDai/webpack-example)）
+
+------------
+
+霖呆呆向你发起了多人学webpack
+
+请选择：☑️接受  ⭕️拒绝
+
+-----------
+
+
+
+## webpack系列介绍
+
+此系列记录了我在`webpack`上的学习历程。如果你也和我一样想要好好的掌握`webpack`,，那么我认为它对你是有一定帮助的，因为教材中是以一名`webpack`小白的身份进行讲解, 案例`demo`也都很详细, 涉及到：
+
+- [基础篇](https://juejin.im/post/5e9ada576fb9a03c391300a1)
+- 构建方式篇(本章)
+- 优化篇
+- loader篇
+- 配置篇
+
+建议先`mark`再花时间来看。
+
+（其实这个系列在很早之前就写了，一直没有发出来，当时还写了一大长串前言可把我感动的，想看废话的可以点这里：[GitHub地址](https://github.com/LinDaiDai/webpack-example)，不过现在让我们正式开始学习吧）
+
+所有文章`webpack`版本号`^4.41.5`, `webpack-cli`版本号`^3.3.10`。
+
+在`webpack3`中，`webpack`本身和它的`CLI`都是在同一个包中，但在第4版中，两者分开来了，也是为了让我们更好地管理它们。
+
+通过阅读本篇文章你可以学习到：
+
+- webpack --watch
+- webpack-dev-server 工具
+- webpack-dev-middle 工具, 以及配合express搭建本地web服务器
+- webpack-merge 构建不同的环境
+- process.env.NODE_ENV 的基本使用
+- webpack.DefinePlugin 插件指定 NODE_ENV
+
+
+
 ## 一、几种开发工具
 
 每次要编译代码时，手动运行 `npm run build` 就会变得很麻烦。
@@ -10,7 +62,9 @@
 
 `webpack`中有几个不同的选项，可以帮助你在代码发生变化后自动编译代码.
 
-**(以下教材案例GitHub地址: [LinDaidai/webpak-server])**
+**(第一节教材案例GitHub地址: [LinDaidai/webpack-example/tree/webpack-server](https://github.com/LinDaiDai/webpack-example/tree/webpack-server) ⚠️：请仔细查看README说明)**
+
+
 
 ### webpack's Watch Mode(观察者模式)
 
@@ -27,6 +81,8 @@
 比如你在重新修改了本地的代码并保存后, 它会重新进行编译, 不需要我们手动再执行编译指令, 缺点**是你需要手动刷新页面**才能看到更改效果.
 
 (`--watch`也可以简写为`-w`)
+
+
 
 ### webpack-dev-server
 
@@ -52,20 +108,20 @@
 
 ```javascript
 module.exports = {
-	devServer: {
-		contentBase: './dist', // 告诉服务器从哪里提供内容
-		host: '0.0.0.0', // 默认是 localhost
-		port: 8000, // 端口号, 默认是8080
-    open: true, // 是否自动打开浏览器
-		hot: true, // 启用 webpack 的模块热替换特性
-		hotOnly: true // 当编译失败之后不进行热更新
-	}
+    devServer: {
+        contentBase: './dist', // 告诉服务器从哪里提供内容
+        host: '0.0.0.0', // 默认是 localhost
+        port: 8000, // 端口号, 默认是8080
+        open: true, // 是否自动打开浏览器
+        hot: true, // 启用 webpack 的模块热替换特性
+        hotOnly: true // 当编译失败之后不进行热更新
+    }
 }
 ```
 
 如果你使用了这个功能之后, 你就会发现, 它就有点`vue-cli`的样子了.
 
-更多关于`devServer`的配置可以查看这里: [开发中Server](https://www.webpackjs.com/configuration/dev-server/)
+更多关于`devServer`的配置可以查看这里: [开发中Server](https://www.webpackjs.com/configuration/dev-server/)。
 
 
 
@@ -118,15 +174,15 @@ app.listen(3000, function() {
 
 ```json
 {
-  "scripts": {
-		"server": "node server.js"
-	}
+    "scripts": {
+        "server": "node server.js"
+    }
 }
 ```
 
 #### publicPath配置项
 
-在学习这里的时候, 我顺便也了解到了`webpack.config.js` 中`output`的另一个属性`publicPath`.
+在学习这里的时候, 我顺便也了解到了`webpack.config.js` 中`output`的另一个属性`publicPath`.
 
 开始看文档 [output.outputPath](https://www.webpackjs.com/configuration/output/#output-publicpath)的时候没太看懂.
 
@@ -177,7 +233,7 @@ const compiler = webpack(config)
 // 把webpack 处理后的文件传递给一个服务器
 app.use(webpackDevMiddleware(compiler 
 +	,{
-+		publicPath: config.output.publicPath
++	    publicPath: config.output.publicPath
 +	}
 ))
 
@@ -221,7 +277,9 @@ icon.png => 变为 /assets/icon.png
 
 虽说是想要编写各自独立的配置, 但是肯定也有一些公用的配置项, 我们可以将这些公用的配置项提取出来, 然后不同的配置写在不同的文件中.
 
-**(以下教材案例GitHub地址: [LinDaidai/webpak-merge])**
+**(第二节教材案例GitHub地址: [LinDaidai/webpack-example/webpak-merge](https://github.com/LinDaiDai/webpack-example/tree/webpack-merge) ⚠️：请仔细查看README说明)**
+
+
 
 ### webpack-merge
 
@@ -422,11 +480,11 @@ webpack --mode=development
 
 ```diff
 {
-	"scripts": {
-		"start": "webpack-dev-server --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
-+   "local": "webpack --env.custom=local --env.production --progress --config webpack.local.js"
-	}
+    "scripts": {
+        "start": "webpack-dev-server --open --config webpack.dev.js",
+        "build": "webpack --config webpack.prod.js",
++       "local": "webpack --env.custom=local --env.production --progress --config webpack.local.js"
+    }
 }
 ```
 
@@ -530,18 +588,65 @@ module.exports = env => {
 
 `combine-prod`生成的js文件是`main.a79eb0c94212b905d48b.bundle.js`
 
-**但是有一点需要注意的是这里的env.NODE_ENV并不是process.env.NODE_ENV**, 所以它并不能改变process.env.
+**但是有一点需要注意的是这里的env.NODE_ENV并不是process.env.NODE_ENV**, 所以它并不能改变`process.env`.
 
 也就是说不管你通过哪种方式生成的页面, 你在页面中获取到的`process.env.NODE_ENV`都还是`production`.
 
 
 
-### 总结
+### 第二节总结
 
-**第二节中所有案例的GitHub地址: [LinDaiDai/webpack-merge]()**
+- 可以安装`webpack-merge`工具帮助我们将多个配置文件合并成一个
+- 在`webpack.config.js`获取不到环境变量`process`
+- 可以通过`webpack.DefinePlugin`插件帮助我们修改`process.env`的值
+- 还可以通过命令行`CLI`中的 `--mode` 来修改环境变量的模式
+- 若是`webpack.config.js`导出的是一个函数, 则允许我们在命令行中用 `--env` 传递环境变量
 
-- 可以安装webpack-merge工具帮助我们将多个配置文件合并成一个
-- 在webpack.config.js获取不到环境变量`process`
-- 可以通过webpack.DefinePlugin插件帮助我们修改process.env的值
-- 还可以通过命令行CLI中的 --mode 来修改环境变量的模式
-- 若是webpack.config.js导出的是一个函数, 则允许我们在命令行中用 --env 传递环境变量
+
+
+## 案例地址
+
+第一节：https://github.com/LinDaiDai/webpack-example/tree/webpack-server
+
+第二节：https://github.com/LinDaiDai/webpack-example/tree/webpack-merge
+
+注意⚠️：其实「霖呆呆的webpack之路系列」所有的教材案例都是同一个项目，不过不同的分支上可以下载单独的案例，主分支上是所有的案例。具体下载方式请仔细阅读github上的README。
+
+
+
+## 参考文章
+
+知识无价，支持原创。
+
+参考文章：
+
+- [webpack中文文档](https://www.webpackjs.com/configuration/dev-server/)
+
+
+
+## 后语
+
+喜欢**霖呆呆**的小伙还希望可以关注霖呆呆的公众号 `LinDaiDai` 或者扫一扫下面的二维码👇👇👇.
+
+
+![](https://user-gold-cdn.xitu.io/2020/4/24/171ab5a3a5c179e4?w=900&h=500&f=gif&s=1632550)
+
+我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉
+
+你的鼓励就是我持续创作的主要动力 😊.
+
+相关推荐:
+
+[《全网最详bpmn.js教材》](https://juejin.im/post/5def372af265da33c84a4818)
+
+[《【建议改成】读完这篇你还不懂Babel我给你寄口罩》](https://juejin.im/post/5e477139f265da574c566dda)
+
+[《【建议星星】要就来45道Promise面试题一次爽到底(1.1w字用心整理)》](https://juejin.im/post/5e58c618e51d4526ed66b5cf)
+
+[《【建议👍】再来40道this面试题酸爽继续(1.2w字用手整理)》](https://juejin.im/post/5e6358256fb9a07cd80f2e70)
+
+[《【何不三连】比继承家业还要简单的JS继承题-封装篇(牛刀小试)》](https://juejin.im/post/5e707417e51d45272054d5d3)
+
+[《【何不三连】做完这48道题彻底弄懂JS继承(1.7w字含辛整理-返璞归真)》](https://juejin.im/post/5e75e22951882549027687f9)
+
+[《【精】从206个console.log()完全弄懂数据类型转换的前世今生(上)》](https://juejin.im/post/5d89b2a7f265da03dd3db2ca)
