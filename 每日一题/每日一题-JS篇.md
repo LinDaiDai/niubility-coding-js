@@ -58,8 +58,6 @@ let d = 4
 
 ## 数组相关
 
-
-
 ### Array(3)和Array(3, 4)的区别？
 
 ```javascript
@@ -113,6 +111,8 @@ console.log(arr1[-2]) // 2
 ```
 
 
+
+##  正则相关
 
 ### 用正则写一个根据name获取cookie中的值的方法
 
@@ -204,6 +204,35 @@ console.log(collectGroup(str))
 
 
 
+### 去除字符串首位空格
+
+第一种：正则匹配首位空格并去除：
+
+```javascript
+function trim (str) {
+  return str.replace(/(^\s+)|(\s+$)/g, '')
+}
+console.log(trim('  11  ')) // '11'
+console.log(trim('  1 1  ')) // '1 1'
+```
+
+第二种：使用`ES10`中的`trimStart`和`trimEnd`：
+
+```javascript
+function trim (str) {
+  str = str.trimStart()
+  return str.trimEnd()
+}
+console.log(trim('  11  ')) // '11'
+console.log(trim('  1 1  ')) // '1 1'
+```
+
+
+
+## 编程题
+
+
+
 ### 实现sum(1,2,3)==sum(1)(2)(3)
 
 ```javascript
@@ -282,6 +311,40 @@ console.log('xxx'.padStart(16))
 
 
 
+### 设计一个方法提取对象中所有value大于2的键值对并返回最新的对象
+
+实现：
+
+```javascript
+var obj = { a: 1, b: 3, c: 4 }
+foo(obj) // { b: 3, c: 4 }
+```
+
+方法有很多种，这里提供一种比较简洁的写法，用到了`ES10`的`Object.fromEntries()`：
+
+```javascript
+var obj = { a: 1, b: 3, c: 4 }
+function foo (obj) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key, value]) => value > 2)
+  )
+}
+var obj2 = foo(obj) // { b: 3, c: 4 }
+console.log(obj2)
+```
+
+```javascript
+// ES8中 Object.entries()的作用：
+var obj = { a: 1, b: 2 }
+var entries = Object.entries(obj); // [['a', 1], ['b', 2]]
+// ES10中 Object.fromEntries()的作用：
+Object.fromEntries(entries); // { a: 1, b: 2 }
+```
+
+
+
+## this
+
 ### 一句话描述一下this
 
 指向最后调用函数的那个对象，是函数运行时内部自动生成的一个内部对象，只能在函数内部使用
@@ -291,6 +354,8 @@ console.log('xxx'.padStart(16))
 ### apply/call/bind的相同和不同
 
 
+
+## 异步相关
 
 ### 描述一下EventLoop的执行过程
 
@@ -402,63 +467,6 @@ series()
 ```
 
 参考：https://developers.google.com/web/fundamentals/primers/async-functions
-
-
-
-### 设计一个方法提取对象中所有value大于2的键值对并返回最新的对象
-
-实现：
-
-```javascript
-var obj = { a: 1, b: 3, c: 4 }
-foo(obj) // { b: 3, c: 4 }
-```
-
-方法有很多种，这里提供一种比较简洁的写法，用到了`ES10`的`Object.fromEntries()`：
-
-```javascript
-var obj = { a: 1, b: 3, c: 4 }
-function foo (obj) {
-  return Object.fromEntries(
-    Object.entries(obj).filter(([key, value]) => value > 2)
-  )
-}
-var obj2 = foo(obj) // { b: 3, c: 4 }
-console.log(obj2)
-```
-
-```javascript
-// ES8中 Object.entries()的作用：
-var obj = { a: 1, b: 2 }
-var entries = Object.entries(obj); // [['a', 1], ['b', 2]]
-// ES10中 Object.fromEntries()的作用：
-Object.fromEntries(entries); // { a: 1, b: 2 }
-```
-
-
-
-### 去除字符串首位空格
-
-第一种：正则匹配首位空格并去除：
-
-```javascript
-function trim (str) {
-  return str.replace(/(^\s+)|(\s+$)/g, '')
-}
-console.log(trim('  11  ')) // '11'
-console.log(trim('  1 1  ')) // '1 1'
-```
-
-第二种：使用`ES10`中的`trimStart`和`trimEnd`：
-
-```javascript
-function trim (str) {
-  str = str.trimStart()
-  return str.trimEnd()
-}
-console.log(trim('  11  ')) // '11'
-console.log(trim('  1 1  ')) // '1 1'
-```
 
 
 
@@ -584,6 +592,16 @@ function xhrPost (url, params, onSuccess, onError) {
 
 
 
+## 模块化
+
+### CommonJS和ES6模块的区别
+
+
+
+
+
+## webpack
+
 ### webpack的打包原理
 
 1. 识别入口文件
@@ -611,6 +629,8 @@ loader它是一个转换器，只专注于转换文件这一个领域，完成�
 2. `babel-loader`使得打包文件体积过大。Babel 对一些公共方法使用了非常小的辅助代码, 比如 `_extend`.默认情况下会被添加到每一个需要它的文件中, 所以会导致打包文件体积过大.解决办法: 引入`babel runtime`作为一个单独的模块, 来避免重复。也就是可以使用`@babel/plugin-transform-runtime`和`babel-runtime`。
 
 
+
+## Vue
 
 ### Vue3.0相对于Vue2.x有哪些不同？
 
