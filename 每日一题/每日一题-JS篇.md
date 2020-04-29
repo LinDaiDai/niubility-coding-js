@@ -1,520 +1,6 @@
-## HTML/DOM相关
+# 每日一题-JS篇
 
-### H5新增的特性
-
-标签：新增语义化标签（`aside / figure / section / header / footer / nav`等），增加多媒体标签`video`和`audio`，使得样式和结构更加分离
-
-属性：增强表单，主要是增强了`input`的type属性(`number/color/range`)；`meta`增加charset以设置字符集；`script`增加async以异步加载脚本
-
-存储：增加`localStorage`、`sessionStorage`和`indexedDB`，引入了`application cache`对web和应用进行缓存
-
-API：增加`拖放API`、`地理定位`、`SVG绘图`、`canvas绘图`、`Web Worker`、`WebSocket`
-
-
-
-### DIV+CSS布局的好处
-
-1. 代码精简，且结构与样式分离，易于维护
-2. 代码量减少了，减少了大量的带宽，页面加载的也更快，提升了用户的体验
-3. 对SEO搜索引擎更加友好，且H5又新增了许多语义化标签更是如此
-4. 允许更多炫酷的页面效果，丰富了页面
-5. **符合W3C标准**，保证网站不会因为网络应用的升级而被淘汰(也算是重点)
-
-缺点:
-不同浏览器对web标准默认值不同，所以更容易出现对浏览器的兼容性问题。
-
-
-
-### DOM和BOM的区别
-
-DOM：文档对象模型，描述了处理网页内容的方法和接口。最根本对象是document（window.document）。
-
-由于DOM的操作对象是文档，所以DOM和浏览器没有直接关系。
-
-它表示部署在服务器上的文件夹、右键查看源代码等。
-
-BOM：浏览器对象模型，描述了与浏览器进行交互的方法和接口。由navigator、history、screen、location、window五个对象组成的，最根本对象是 window (前面四个都是window下的属性,也就是说`window.history===history`)。用来获取或设置浏览器的属性、行为，例如：新建窗口、获取屏幕分辨率、浏览器版本号等；另一方面作为一个全局对象，有权访问`isNaN()、parseInt()`等方法。
-
-DOM是W3C的标准，BOM没有相关标准。
-
-
-
-### docoment,window,html,body的层级关系
-
-**层级关系**：
-
-```javascript
-window > document > html > body
-```
-
-- `window`是`BOM`的核心对象，它一方面用来获取或设置浏览器的属性和行为，另一方面作为一个全局对象。
-- `document`对象是一个跟文档相关的对象，拥有一些操作文档内容的功能。但是地位没有`window`高。
-- `html`元素对象和`document`元素对象是属于`html`文档的`DOM`对象，可以认为就是`html`源代码中那些标签所化成的对象。他们跟`div、select`什么对象没有根本区别。
-
-（我是这样记的，整个浏览器中最大的肯定就是窗口`window`了，那么进来的我不管你是啥，就算你是`document`也得给我盘着）
-
-
-
-### 如何解决a标点击后hover事件失效的问题?
-
-改变a标签css属性的排列顺序
-
-只需要记住`LoVe HAte`原则就可以了：
-
-```
-link→visited→hover→active
-```
-
-比如下面错误的代码顺序：
-
-```css
-a:hover{
-  color: green;
-  text-decoration: none;
-}
-a:visited{ /* visited在hover后面，这样的话hover事件就失效了 */
-  color: red;
-  text-decoration: none;
-}
-```
-
-正确的做法是将两个事件的位置调整一下。
-
-注意⚠️各个阶段的含义：
-
-`a:link`：未访问时的样式，一般省略成a
-`a:visited`：已经访问后的样式
-`a:hover`：鼠标移上去时的样式
-`a:active`：鼠标按下时的样式
-
-
-
-### 点击一个input依次触发的事件
-
-```javascript
-const text = document.getElementById('text');
-text.onclick = function (e) {
-  console.log('onclick')
-}
-text.onfocus = function (e) {
-  console.log('onfocus')
-}
-text.onmousedown = function (e) {
-  console.log('onmousedown')
-}
-text.onmouseenter = function (e) {
-  console.log('onmouseenter')
-}
-```
-
-答案：
-
-```javascript
-'onmouseenter'
-'onmousedown'
-'onfocus'
-'onclick'
-```
-
-
-
-### 有写过原生的自定义事件吗
-
-**创建自定义事件**
-
-原生自定义事件有三种写法：
-
-1. 使用`Event`
-
-```javascript
-let myEvent = new Event('event_name');
-```
-
-2. 使用`customEvent` （可以传参数）
-
-```javascript
-let myEvent = new CustomEvent('event_name', {
-	detail: {
-		// 将需要传递的参数放到这里
-		// 可以在监听的回调函数中获取到：event.detail
-	}
-})
-```
-
-3. 使用`document.createEvent('CustomEvent')和initCustomEvent()`
-
-```javascript
-let myEvent = document.createEvent('CustomEvent');// 注意这里是为'CustomEvent'
-myEvent.initEvent(
-	// 1. event_name: 事件名称
-	// 2. canBubble: 是否冒泡
-	// 3. cancelable: 是否可以取消默认行为
-)
-```
-
-- `createEvent`：创建一个事件
-- `initEvent`：初始化一个事件
-
-可以看到，`initEvent`可以指定3个参数。
-
-（有些文章中会说还有第四个参数`detail`，但是我查看了`W3C`上并没有这个参数，而且实践了一下也没有效果）
-
-**事件的监听**
-
-自定义事件的监听其实和普通事件的一样，使用`addEventListener`来监听：
-
-```javascript
-button.addEventListener('event_name', function (e) {})
-```
-
-**事件的触发**
-
-触发自定义事件使用`dispatchEvent(myEvent)`。
-
-注意⚠️，这里的参数是要自定义事件的对象(也就是`myEvent`)，而不是自定义事件的名称(`'myEvent'`)
-
-**案例**
-
-来看个案例吧：
-
-```javascript
-// 1.
-// let myEvent = new Event('myEvent');
-// 2.
-// let myEvent = new CustomEvent('myEvent', {
-//   detail: {
-//     name: 'lindaidai'
-//   }
-// })
-// 3.
-let myEvent = document.createEvent('CustomEvent');
-myEvent.initEvent('myEvent', true, true)
-
-let btn = document.getElementsByTagName('button')[0]
-btn.addEventListener('myEvent', function (e) {
-  console.log(e)
-  console.log(e.detail)
-})
-setTimeout(() => {
-  btn.dispatchEvent(myEvent)
-}, 2000)
-```
-
-
-
-### addEventListener函数的第三个参数
-
-第三个参数涉及到冒泡和捕获，是`true`时为捕获，是`false`则为冒泡。
-
-或者是一个对象`{passive: true}`，针对的是`Safari`浏览器，禁止/开启使用滚动的时候要用到。
-
-
-
-### 冒泡和捕获的具体过程
-
-冒泡指的是：当给某个目标元素绑定了事件之后，这个事件会依次在它的父级元素中被触发(当然前提是这个父级元素也有这个同名称的事件，比如子元素和父元素都绑定了`click`事件就触发父元素的`click`)。
-
-捕获则是从上层向下层传递，与冒泡相反。
-
-（非常好记，你就想想水底有一个泡泡从下面往上传的，所以是冒泡）
-
-来看看这个例子：
-
-```html
-<!-- 会依次执行 button li ul -->
-<ul onclick="alert('ul')">
-  <li onclick="alert('li')">
-    <button onclick="alert('button')">点击</button>
-  </li>
-</ul>
-```
-
-冒泡结果：`button > li > ul`
-
-捕获结果：`ul > li > button`
-
-
-
-### 如何阻止冒泡和默认事件(兼容写法)
-
-阻止冒泡：
-
-```javascript
-function stopBubble (e) { // 阻止冒泡
-  if (e && e.stopPropagation) {
-    e.stopPropagation();
-  } else {
-    // 兼容 IE
-    window.event.cancelBubble = true;
-  }
-}
-function stopDefault (e) { // 阻止默认事件
-  if (e && e.preventDefault) {
-    e.preventDefault();
-  } else {
-    // 兼容 IE
-    window.event.returnValue = false;
-    return false;
-  }
-}
-```
-
-
-
-### 拖拽有哪些知识点
-
-1. 可以通过给标签设置`draggable`属性来实现元素的拖拽，`img和a标签`默认是可以拖拽的
-2. 拖拽者身上的三个事件：`ondragstart`、`ondrag`、`ondragend`
-3. 拖拽要放到的元素：`ondragenter`、`ondragover`、`ondragleave`、`ondrap`
-
-
-
-### offset、scroll、client的区别
-
-**client**:
-
-oEvent.clientX是指鼠标到可视区左边框的距离。
-
-oEvent.clientY是指鼠标到可视区上边框的距离。
-
-clientWidth是指可视区的宽度。
-
-clientHeight是指可视区的高度。
-
-clientLeft获取左边框的宽度。
-
-clientTop获取上边框的宽度。
-
-**offset**:
-
-offsetWidth是指div的宽度（包括div的边框）
-
-offsetHeight是指div的高度（包括div的边框）
-
-offsetLeft是指div到整个页面左边框的距离（不包括div的边框）
-
-offsetTop是指div到整个页面上边框的距离（不包括div的边框）
-
-**scroll**:
-
-scrollTop是指可视区顶部边框与整个页面上部边框的看不到的区域。
-
-scrollLeft是指可视区左边边框与整个页面左边边框的看不到的区域。
-
-scrollWidth是指左边看不到的区域加可视区加右边看不到的区域即整个页面的宽度（包括边框）
-
-scrollHeight是指上边看不到的区域加可视区加右边看不到的区域即整个页面的高度（包括边框）
-
-
-
-## CSS相关
-
-
-
-### CSS选择器优先级
-
-- !import
-- 内联 1000
-- ID 100
-- 类选择器/伪类选择器/属性选择器 10
-- 元素选择器/关系选择器/伪元素选择器 1
-- 通配符 *
-- 继承
-- 原始
-
-
-
-### CSS3新特性
-
-- transition：过渡
-- transform: 旋转、缩放、移动或倾斜
-- animation: 动画
-- gradient: 渐变
-- box-shadow: 阴影
-- border-radius: 圆角
-- word-break: normal|break-all|keep-all; 文字换行(默认规则|单词也可以换行|只在半角空格或连字符换行)
-- text-overflow: 文字超出部分处理
-- text-shadow: 水平阴影，垂直阴影，模糊的距离，以及阴影的颜色。
-- box-sizing: content-box|border-box 盒模型
-- 媒体查询 `@media screen and (max-width: 960px) {}`还有打印`print`
-
-
-
-### 文字单超出显示省略号
-
-```css
-div {
-	width: 200px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-```
-
-
-
-### 文字多行超出显示省略号
-
-```css
-div {
-	width: 200px;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
-	overflow: hidden;
-}
-```
-
-该方法适用于WebKit浏览器及移动端。
-
-**跨浏览器兼容方案：**
-
-```css
-p {
-    position:relative;
-    line-height:1.4em;
-    /* 3 times the line-height to show 3 lines */
-    height:4.2em;
-    overflow:hidden;
-}
-p::after {
-    content:"...";
-    font-weight:bold;
-    position:absolute;
-    bottom:0;
-    right:0;
-    padding:0 20px 1px 45px;
-}
-```
-
-
-
-### 页面变灰
-
-```css
-body {
-	filter: grayscale(100%); /* 百分比或者 0~1 */
-}
-```
-
-
-
-### CSS中可继承的属性
-
-可继承的只有：颜色、文字、字体间距、行高对齐方式，列表样式。
-
-所有元素可继承：visibility和cursor。
-
-内联元素可继承：letter-spacing、word-spacing、white-space、line-height、color、font、font-family、font-size、font-style、font-variant、font-weight、text-decoration、text-transform、direction。 
-
-块状：text-indent和text-align。
-
-列表元素可继承：list-style、list-style-type、list-style-position、list-style-image。
-
-
-
-### 如何画扇形？
-
-```css
-.sector {
-  width: 0;
-  height: 0;
-  border: 100px solid red;
-  border-color: red transparent transparent transparent;
-  border-radius: 50%;
-}
-/*或者*/
-.sector {
-  width: 100px;
-  height: 100px;
-  border: 100px solid transparent;
-  border-top-color: red;
-  box-sizing: border-box; /* 这步很重要 */
-  border-radius: 50%;
-}
-```
-
-
-
-### 如何画三角形？
-
-```css
-.triangle {
-  width: 0;
-  height: 0;
-  border: 100px solid red;
-  border-color: red transparent transparent transparent;
-}
-/*或者*/
-.triangle {
-  width: 100px;
-  height: 100px;
-  border: 100px solid transparent;
-  border-top-color: red;
-  box-sizing: border-box;
-}
-```
-
-
-
-### 圆？半圆？椭圆？
-
-```css
-div {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-  margin-top: 20px;
-}
-.box1 { /* 圆 */
-  /* border-radius: 50%; */
-  border-radius: 50px;
-}
-.box2 { /* 半圆 */
-  height: 50px;
-  border-radius: 50px 50px 0 0;
-}
-.box3 { /* 椭圆 */
-  height: 50px;
-  border-radius: 50px/25px; /* x轴/y轴 */
-}
-```
-
-
-
-### 什么是BFC
-
-BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，BFC是页面上的一个隔离的独立容器，不受外界干扰或干扰外界
-
-### 如何触发BFC
-
-- `float`不为 none
-- `overflow`的值不为 visible
-- `position` 为 absolute 或 fixed
-- `display`的值为 inline-block 或 table-cell 或 table-caption 或 grid
-
-### BFC的渲染规则是什么
-
-- BFC是页面上的一个隔离的独立容器，不受外界干扰或干扰外界
-- 计算BFC的高度时，浮动子元素也参与计算（即内部有浮动元素时也不会发生高度塌陷）
-- BFC的区域不会与float的元素区域重叠
-- BFC内部的元素会在垂直方向上放置
-- BFC内部两个相邻元素的margin会发生重叠
-
-### BFC的应用场景
-
-- **清除浮动**：BFC内部的浮动元素会参与高度计算，因此可用于清除浮动，防止高度塌陷
-- **避免某元素被浮动元素覆盖**：BFC的区域不会与浮动元素的区域重叠
-- **阻止外边距重叠**：属于同一个BFC的两个相邻Box的margin会发生折叠，不同BFC不会发生折叠
-
-可以参考这里：
-
-作者：写代码像蔡徐抻
-链接：https://juejin.im/post/5e8b261ae51d4546c0382ab4
-
-
-
-## JS基础相关
+## JS基础
 
 ### var、let题，在以下会输出什么？
 
@@ -976,242 +462,125 @@ console.log(trim('  1 1  ')) // '1 1'
 
 
 
-### HTTP和TCP的不同
+### 关于http,XMLHttpRequest,Ajax的关系
 
-HTTP的责任是去定义数据，在两台计算机相互传递信息时，HTTP规定了每段数据以什么形式表达才是能够被另外一台计算机理解。
-
-而TCP所要规定的是数据应该怎么传输才能稳定且高效的传递与计算机之间。
-
-(还可以再扩展)
-
-### TCP和UDP的区别
-
-1. TCP是一个面向连接的、可靠的、基于字节流的传输层协议。
-2. UDP是一个面向无连接的传输层协议。
-
-TCP为什么可靠，是因为它有三次握手来保证双方都有接受和发送数据的能力。
-
-字节流服务：将大块数据分割为以报文段为单位的数据包进行管理
+- `http`是浏览器和web服务器交换数据的协议,规范
+- `XMLHttpRequest`是一个`JS`对象，是浏览器实现的一组`api`函数，使用这些函数，浏览器再通过`http`协议请求和发送数据。
+- `Ajax`是一种技术方案，但并不是一种新技术，它最核心的就是依赖浏览器提供的`XMLHttpRequest`对象。用一句话来概括就是`我们使用XMLHttpRequest对象来发送一个Ajax请求`。
 
 
 
-### 跨域是什么？为什么浏览器会禁止跨域？
+### XMLHttpRequest的发展历程是怎样的？
 
-跨域的产生来源于现代浏览器所通用的`同源策略`，所谓同源策略，是指只有在地址的：
+它最开始只是微软浏览器提供的一个接口，后来各大浏览器纷纷效仿也提供了这个接口，再后来W3C对它进行了标准化，提出了`XMLHttpRequest`标准。标准又分为`Level 1`和`Level 2`。
 
-1. 协议名
-2. 域名
-3.  端口名
+`Level 2`相对于`Level 1`做了很大的改进，具体来说是：
 
-均一样的情况下，才允许访问相同的cookie、localStorage，以及访问页面的`DOM`或是发送`Ajax`请求。若在不同源的情况下访问，就称为跨域。
+- 可以设置HTTP请求的超时时间。
+- 可以使用FormData对象管理表单数据。
+- 可以上传文件。
+- 可以请求不同域名下的数据（跨域请求）。
+- 可以获取服务器端的二进制数据。
+- 可以获得数据传输的进度信息。
 
-例如以下为同源：
+（参考：https://juejin.im/post/58e4a174ac502e006c1e18f4）
 
-```javascript
-http://www.example.com:8080/index.html
-http://www.example.com:8080/home.html
-```
 
-以下为跨域：
 
-```javascript
-http://www.example.com:8080/index.html
-http://www3.example.com:8080/index.html
-```
+### 使用XMLHttpRequest封装一个get和post请求
 
-注意⚠️：
+**get请求**：
 
-但是有两种情况：`http`默认的端口号为`80`，`https`默认端口号为`443`。
+核心就四步：
 
-所以：
+1. `var xhr = new XMLHttpRequest()`
+2. `xhr.open('GET', 'http://www.example.com/api/getname', true)`
+3. `xhr.onreadystatechange = function () {}`
+4. `xhr.send()`
+
+让我们来封装一个简易版的：
 
 ```javascript
-http://www.example.com:80 === http://www.example.com
-https://www.example.com:443 === https://www.example.com
-```
-
-**为什么浏览器会禁止跨域？**
-
-- 首先，跨域只存在于浏览器端。浏览器它为`web`提供了访问入口，并且访问的方式很简单，在地址栏输入要访问的地址或者点击某个链接就可以了，正是这种**开放的形态**，所以我们需要对它有所限制。
-
-- 所以同源策略它的产生主要是为了保证用户信息的安全，防止恶意的网站窃取数据。分为两种：`Ajax`同源策略与`DOM`同源策略：
-
-  - `Ajax`同源策略它主要做了这两种限制：1.不同源页面不能获取`cookie`；2.不同源页面不能发起`Ajax`请求。我认为它是防止`CSRF`攻击的一种方式吧。因我们知道`cookie`这个东西它主要是为了解决浏览器与服务器会话状态的问题，它本质上是存储在浏览器或本地文件中一个小小的文本文件，那么它里面一般都会存储了用户的一些信息，包括隐私信息。如果没有`Ajax`同源策略，恶意网站只需要一段脚本就可以获取你的`cookie`，从而冒充你的身份去给其它网站发送恶意的请求。
-  - `DOM`同源策略也一样，它限制了不同源页面不能获取`DOM`。例如一个假的网站利用`iframe`嵌套了一个银行网站[mybank.com]()，并把宽高或者其它部分调整的和原银行网站一样，仅仅只是地址栏上的域名不同，若是用户没有注意的话就以为这个是个真的网站。如果这时候用户在里面输入了账号密码，如果没有同源策略，那么这个恶意网站就可以获取到银行网站中的`DOM`，也就能拿到用户的输入内容以此来达到窃取用户信息的攻击。
-
-  同源策略它算是浏览器安全的第一层屏障吧，因为就像`CSRF`攻击，它只能限制不同源页面`cookie`的获取，但是攻击者还可能通过其它的方式来达到攻击效果。
-
-  （注，上面提到的`iframe`限制`DOM`查询，案例如下）
-
-  ```html
-  // HTML
-  <iframe name="yinhang" src="www.yinhang.com"></iframe>
-  // JS
-  // 由于没有同源策略的限制，钓鱼网站可以直接拿到别的网站的Dom
-  const iframe = window.frames['yinhang']
-  const node = iframe.document.getElementById('你输入账号密码的Input')
-  console.log(`拿到了这个${node}，我还拿不到你刚刚输入的账号密码吗`)
-  ```
-
-参考：
-
-- https://segmentfault.com/a/1190000015597029
-- https://juejin.im/post/5cad99796fb9a068ab40a29a
-
-
-
-### JSONP的原理并用代码实现
-
-基本原理： 主要就是利用了 `script` 标签的`src`没有跨域限制来完成的。
-
-执行过程：
-
-- 前端定义一个解析函数(如: `jsonpCallback = function (res) {}`)
-- 通过`params`的形式包装`script`标签的请求参数，并且声明执行函数(如`cb=jsonpCallback`)
-- 后端获取到前端声明的执行函数(`jsonpCallback`)，并以带上参数且调用执行函数的方式传递给前端
-- 前端在`script`标签返回资源的时候就会去执行`jsonpCallback`并通过回调函数的方式拿到数据了。
-
-缺点：
-
-- 只能进行`GET`请求
-
-优点：
-
-- 兼容性好，在一些古老的浏览器中都可以运行
-
-代码实现：
-
-（具体可以看我的这篇文章：）
-
-```html
-<script>
-    function JSONP({
-        url,
-        params = {},
-        callbackKey = 'cb',
-        callback
-    }) {
-        // 定义本地的唯一callbackId，若是没有的话则初始化为1
-        JSONP.callbackId = JSONP.callbackId || 1;
-        let callbackId = JSONP.callbackId;
-        // 把要执行的回调加入到JSON对象中，避免污染window
-        JSONP.callbacks = JSONP.callbacks || [];
-        JSONP.callbacks[callbackId] = callback;
-        // 把这个名称加入到参数中: 'cb=JSONP.callbacks[1]'
-        params[callbackKey] = `JSONP.callbacks[${callbackId}]`;
-        // 得到'id=1&cb=JSONP.callbacks[1]'
-        const paramString = Object.keys(params).map(key => {
-            return `${key}=${encodeURIComponent(params[key])}`
-        }).join('&')
-        // 创建 script 标签
-        const script = document.createElement('script');
-        script.setAttribute('src', `${url}?${paramString}`);
-        document.body.appendChild(script);
-        // id自增，保证唯一
-        JSONP.callbackId++;
-
+/*
+* xhr的get请求
+* @param url: 请求地址
+* @param params: 请求参数
+* @param onSuccess: 成功回调函数
+* @param onError: 失败回调函数
+*/
+function xhrGet (url, params = {}, onSuccess, onError) {
+  // 兼容IE6
+  var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  let paramString = formatParams(params);
+  // xhr.open的第三个参数isAsync：是否异步 
+  xhr.open('GET', `${url}${paramString}`, true);
+  xhr.onreadystatechange = function () {
+    // console.log(e);
+    console.log(this);
+    if (this.readyState === 4) {
+      if (this.status >= 200 && this.status < 300) {
+        onSuccess(this.response);
+      } else {
+        onError(this.response)
+      }
     }
-    JSONP({
-        url: 'http://localhost:8080/api/jsonps',
-        params: {
-            a: '2&b=3',
-            b: '4'
-        },
-        callbackKey: 'cb',
-        callback (res) {
-            console.log(res)
-        }
-    })
-    JSONP({
-        url: 'http://localhost:8080/api/jsonp',
-        params: {
-            id: 1
-        },
-        callbackKey: 'cb',
-        callback (res) {
-            console.log(res)
-        }
-    })
-</script>
+  }
+  xhr.send();
+}
+// 处理参数：如将{name: 'lindaidai'}转为'?name=lindaidai'
+function formatParams (params) {
+  var paramString = Object.keys(params).map(key => {
+    return `${key}=${encodeURIComponent(params[key])}`
+  }).join('&');
+  return paramString ? `?${paramString}` : ''
+}
 ```
 
+（当然上面的兼容`IE6`估计现在考的不多了，而且我这种写法其实也没啥用，因为如果真是在`IE6`下的话，后面的`Object.keys()`等方法也用不了了）
 
+需要注意的是两种状态，一个是`readyState`，一个是`status`。
 
-### CORS跨域的原理
+`readyState`请求状态：
 
+- 0（未初始化）：还没有调用 open() 方法。
 
+- 1（载入）：已调用 send() 方法，正在发送请求。
 
-### CORS预请求OPTIONS就一定是安全的吗？
+- 2（载入完成）：send() 方法完成，已收到全部响应内容。
 
-### 在深圳的网页上输入百度，是怎么把这个请求发到北京的
+- 3（解析）：正在解析响应内容。
 
-### CDN原理
+- 4（完成）：响应内容解析完成，可以在客户端调用。
 
-CDN的基本原理是广泛采用各种缓存服务器，将这些缓存服务器分布到用户访问相对集中的地区或者网络中，在用户访问网站的时候，将其指向距离最近的工作正常的缓存服务器上，由缓存服务器直接响应用户请求。
+`status`结果状态码：
 
+- 0 ：如果状态是 UNSENT 或 OPENED；或者如果错误标签被设置(例如跨域时)
 
-
-### 为什么使用多域名部署？
-
-主要是因为`http1`和浏览器的原因，同一时间同一个域名最多进行6个`tcp`连接。
-
-
-
-### 页面10张img，http1是怎样的加载表现？怎样解决的？
-
-`http1`下，浏览器对一个域名的最大`tcp`连接数为6，所以10张图片表现为`6 + 4`。
-
-可以使用多域名部署解决。比如`5个a域名`和`5个b域名`，或者`6个a域名`和`4个b域名`，就可以实现一瞬间全部出来了。
+- 200 成功
+- 其它HTTP状态码
 
 
 
-### XSS攻击
+**post请求：**
 
-XSS(Cross Site Script)跨站脚本攻击。指的是攻击者向网页注入恶意的客户端代码，通过恶意的脚本对客户端网页进行篡改，从而在用户浏览网页时，对用户浏览器进行控制或者获取用户隐私数据的一种攻击方式。
-
-主要是分为三种：
-
-**存储型**：即攻击被存储在服务端，常见的是在评论区插入攻击脚本，如果脚本被储存到服务端，那么所有看见对应评论的用户都会受到攻击。
-
-**反射型**：攻击者将脚本混在URL里，服务端接收到URL将恶意代码当做参数取出并拼接在HTML里返回，浏览器解析此HTML后即执行恶意代码
-
-**DOM型**：将攻击脚本写在URL中，诱导用户点击该URL，如果URL被解析，那么攻击脚本就会被运行。和前两者的差别主要在于DOM型攻击不经过服务端
-
-### 如何防御XSS攻击
-
-- **输入检查**：对输入内容中的`script`和`<iframe>`等标签进行转义或者过滤
-- **设置httpOnly**：很多XSS攻击目标都是窃取用户cookie伪造身份认证，设置此属性可防止JS获取cookie
-- **开启CSP**，即开启白名单，可阻止白名单以外的资源加载和运行
-
-
-
-### CSRF攻击
-
-CSRF攻击(Cross-site request forgery)跨站请求伪造。是一种劫持受信任用户向服务器发送非预期请求的攻击方式，通常情况下，它是攻击者借助受害者的 Cookie 骗取服务器的信任，但是它并不能拿到Cookie，也看不到Cookie的内容，它能做的就是给服务器发送请求，然后执行请求中所描述的命令，以此来改变服务器中的数据，也就是并不能窃取服务器中的数据。
-
-防御主要有三种：
-
-验证`Token`：浏览器请求服务器时，服务器返回一个token，每个请求都需要同时带上token和cookie才会被认为是合法请求
-
-验证`Referer`：通过验证请求头的Referer来验证来源站点，但请求头很容易伪造
-
-设置`SameSite`：设置cookie的SameSite，可以让cookie不随跨域请求发出，但浏览器兼容不一
-
-
-
-### 点击劫持
-
-- 诱使用户点击看似无害的按钮（实则点击了透明 iframe 中的按钮）.
-- 监听鼠标移动事件，让危险按钮始终在鼠标下方.
-- 使用 HTML5 拖拽技术执行敏感操作（例如 deploy key）.
-
-预防策略：
-
-1. 服务端添加 X-Frame-Options 响应头,这个 HTTP 响应头是为了防御用 iframe 嵌套的点击劫持攻击。 这样浏览器就会阻止嵌入网页的渲染。
-2. JS 判断顶层视口的域名是不是和本页面的域名一致，不一致则不允许操作，`top.location.hostname === self.location.hostname`；
-3. 敏感操作使用更复杂的步骤（验证码、输入项目名称以删除）。
-
-(这个来源于LuckyWinty: http://www.imooc.com/article/295400)
+```javascript
+function xhrPost (url, params, onSuccess, onError) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', url, true);
+  // ajax的默认请求ContentType:text/plain(纯文本)
+  xhr.setRequestHeader("Content-Type", "application-x-www-form-urlencode");
+  xhr.onreadystatechange = function () {
+    if (this.readyState === 4) {
+      if (this.status >= 200 && this.status < 300) {
+        onSuccess(this.response);
+      } else {
+        onError(this.response);
+      }
+    }
+  }
+  xhr.send(params);
+}
+```
 
 
 
@@ -1223,6 +592,10 @@ CSRF攻击(Cross-site request forgery)跨站请求伪造。是一种劫持受信
 4. 最终形成打包后的代码
 
 
+
+### webpack打包优化
+
+https://juejin.im/post/5ea528496fb9a03c576cceac#heading-2
 
 ### webpack中的loader和plugin有什么区别
 
