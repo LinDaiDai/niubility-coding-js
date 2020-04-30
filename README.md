@@ -104,6 +104,7 @@
 
 - [Javascript之ES7详解](./JavaScript/ES6+/Javascript之ES7详解.md)
 - [ES9已经来了 Are you ready](./JavaScript/ES6+/ES9已经来了AreYouReady.md)
+- [一篇不是标题党的CommonJS和ES6模块规范讲解](./JavaScript/ES6+/一篇不是标题党的CommonJS和ES6模块规范讲解.md)
 
 ### 函数式编程
 
