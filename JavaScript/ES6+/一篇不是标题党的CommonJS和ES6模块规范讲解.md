@@ -25,6 +25,14 @@
 - ES6 Modules规范
 - CommonJS与ES6 Modules规范的区别
 
+📒 本文已被收入[niubility-coding-js](https://github.com/LinDaiDai/niubility-coding-js) 霖呆呆个人博客汇总，欢迎Star~
+
+🌰 本文教材案例地址：[CommonJS-example](https://github.com/LinDaiDai/CommonJS-example)
+
+🔥本文排版工具：[mdnice](https://mdnice.com/)， 感谢作者[画手](https://juejin.im/user/59c3205b6fb9a00a532763e2) 😊。
+
+
+
 
 ### 原始写法
 
@@ -270,6 +278,8 @@ var m1 = require(m1Url);
 // 甚至做一些字符串拼接：
 var m1 = require('./m' + '1.js');
 ```
+
+但是需要注意咯，这个传参可以为表达式并不是`require`特有的。因为`JS`语言是传值调用，函数或者方法在调用的时候参数会被先计算出来，因此在我们使用`require`方法并传入表达式的时候，会先计算出表达式的值再传递给`require`。(感谢掘友[骑自行车](https://juejin.im/user/5a91606ef265da4e7e10d527)的指出)
 
 
 
@@ -1256,7 +1266,7 @@ console.log(count)
 
 你盼世界，我盼望你无`bug`。这篇文章就介绍到了这里。
 
-唔...怎样说呢，虽然最后的总结记都很好记，但是如果不深入理解的话就只能知道一些浅显的知识，那样是不可以的哦。
+唔...怎么说呢，虽然最后的总结记都很好记，但是如果不深入理解的话就只能知道一些浅显的知识，那样是不可以的哦。
 
 （霖呆呆，你叫别人深入了解，你自己了解多少呢？）
 
