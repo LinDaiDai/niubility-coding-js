@@ -8,6 +8,8 @@
 
 ### 前期准备
 
+本篇文章中以下所有的教材案例`GitHub`地址：[LinDaiDai/webpack-example/tree/webpack-hash](https://github.com/LinDaiDai/webpack-example/tree/webpack-hash) **⚠️：请仔细查看README说明)**
+
 为了能更好的查看到效果，我需要准备一个本地的案例项目。
 
 OK👌，让我们快速的构建一个简单的案例：
@@ -131,8 +133,8 @@ module.exports = merge(commonConfig, {
 ```json
 {
   "scripts": {
-  	"allhash": "webpack --config webpack.all.hash.js"
-	}
+    "allhash": "webpack --config webpack.all.hash.js"
+  }
 }
 ```
 
@@ -189,8 +191,8 @@ module.exports = merge(commonConfig, {
 ```json
 {
   "scripts": {
-  	"allchunkhash": "webpack --config webpack.all.chunkhash.js"
-	}
+    "allchunkhash": "webpack --config webpack.all.chunkhash.js"
+  }
 }
 ```
 
@@ -284,8 +286,8 @@ module.exports = merge(commonConfig, {
 ```json
 {
   "scripts": {
-  	"allcontenthash": "webpack --config webpack.all.contenthash.js"
-	}
+    "allcontenthash": "webpack --config webpack.all.contenthash.js"
+  }
 }
 ```
 

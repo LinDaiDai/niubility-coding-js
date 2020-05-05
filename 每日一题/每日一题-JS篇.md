@@ -644,6 +644,39 @@ loader它是一个转换器，只专注于转换文件这一个领域，完成�
 
 
 
+### webpack有哪几种文件指纹？
+
+- `hash`是跟整个项目的构建相关，只要项目里有文件更改，整个项目构建的`hash`值都会更改，并且全部文件都共用相同的`hash`值。(粒度整个项目)
+- `chunkhash`是根据不同的入口进行依赖文件解析，构建对应的`chunk`(模块)，生成对应的`hash`值。只有被修改的`chunk`(模块)在重新构建之后才会生成新的`hash`值，不会影响其它的`chunk`。(粒度`entry`的每个入口文件)
+- `contenthash`是跟每个生成的文件有关，每个文件都有一个唯一的`hash`值。当要构建的文件内容发生改变时，就会生成新的`hash`值，且该文件的改变并不会影响和它同一个模块下的其它文件。(粒度每个文件的内容)
+
+（具体可以看我简书上的这篇文章：https://www.jianshu.com/p/486453d81088）
+
+
+
+### webpack如果使用了hash命名，那是每次都会重写生成hash吗
+
+这个问题在上一个问题中已经说明了，要看`webpack`的配置。
+
+有三种情况：
+
+- 如果是`hash`的话，是和整个项目有关的，有一处文件发生更改则所有文件的`hash`值都会发生改变且它们共用一个`hash`值；
+- 如果是`chunkhash`的话，只和`entry`的每个入口文件有关，也就是同一个`chunk`下的文件有所改动该`chunk`下的文件的`hash`值就会发生改变
+- 如果是`contenthash`的话，和每个生成的文件有关，只有当要构建的文件内容发生改变时才会给该文件生成新的`hash`值，并不会影响其它文件。
+
+
+
+### webpack中如何处理图片的？
+
+在`webpack`中有两种处理图片的`loader`：
+
+- `file-loader`：解决`CSS`等中引入图片的路径问题；(解决通过`url`,`import/require()`等引入图片的问题)
+- `url-loader`：当图片小于设置的`limit`参数值时，`url-loader`将图片进行`base64`编码(当项目中有很多图片，通过`url-loader`进行`base64`编码后会减少`http`请求数量，提高性能)，大于limit参数值，则使用`file-loader`拷贝图片并输出到编译目录中；
+
+（详细使用可以查看这里：[霖呆呆的webpack之路-loader篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/前端工程化/webpack/霖呆呆的webpack之路-loader篇.md#file-loader)）
+
+
+
 ## Vue
 
 ### Vue3.0相对于Vue2.x有哪些不同？
