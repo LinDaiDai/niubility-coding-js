@@ -336,13 +336,15 @@ module.exports = {
 
 这里配置的意思是: 
 
-`webpack` 根据正则表达式，来确定应该查找哪些文件，并将其提供给指定的` loader`。`/.css$/`这个正则的意思就是匹配目录下所有以 `.css` 结尾的全部文件，都将被提供给 `style-loader` 和 `css-loader`。
+`webpack` 根据正则表达式，来确定应该查找哪些文件，并将其提供给指定的` loader`。`/\.css$/`这个正则的意思就是匹配目录下所有以 `.css` 结尾的全部文件，都将被提供给 `style-loader` 和 `css-loader`。
 
 (`$`应该知道什么意思吧，就是表示必须以什么结尾)
 
 **注**⚠️:
 
 `style-loader`要放到`css-loader`前面, 不然打包的时候就会报错了.
+
+这是因为`loader`的执行顺序是`从右往左，从下往上`的，`webpack`肯定是先将所有`css`模块依赖解析完得到计算结果再创建`style`标签。因此应该把`style-loader`放在`css-loader`的前面。
 
 
 

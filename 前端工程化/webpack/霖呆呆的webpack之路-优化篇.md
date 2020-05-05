@@ -630,7 +630,7 @@ Entrypoint index = index.bundle.js
 
 (官网推荐的是使用`extract-text-webpack-plugin`, 但是在`Vue Loader`中表示它最好在`webpack3`中使用)
 
-另外`extract-text-webpack-plugin`是`mini-css-webpack-plugin`的前身，在`webpack4`中不更推荐使用后者。
+另外`extract-text-webpack-plugin`是`mini-css-webpack-plugin`的前身，在`webpack4`中更推荐使用后者。
 
 
 
