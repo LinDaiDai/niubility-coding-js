@@ -59,7 +59,7 @@ window > document > html > body
 
 改变a标签css属性的排列顺序
 
-只需要记住`LoVe HAte`原则就可以了：
+只需要记住`LoVe HAte`原则就可以了(爱恨原则)：
 
 ```
 link→visited→hover→active
@@ -210,6 +210,21 @@ setTimeout(() => {
 
 
 
+### DOM事件流是什么？
+
+事件发生时会在元素节点之间按照**特定的顺序**传播，这个传播过程就叫做DOM事件流。
+
+DOM事件流分为三个阶段：
+
+1. 捕获阶段：事件从`window`发出，自上而下向目标节点传播的阶段
+
+2. 目标阶段：真正的目标阶段正在处理事件的阶段
+3. 冒泡阶段：事件从目标节点自下而上向`window`传播的阶段
+
+(注意⚠️：`JS`代码只能执行捕获或者冒泡其中一个阶段，要么是捕获要么是冒泡)
+
+
+
 ### 冒泡和捕获的具体过程
 
 冒泡指的是：当给某个目标元素绑定了事件之后，这个事件会依次在它的父级元素中被触发(当然前提是这个父级元素也有这个同名称的事件，比如子元素和父元素都绑定了`click`事件就触发父元素的`click`)。
@@ -227,11 +242,30 @@ setTimeout(() => {
     <button onclick="alert('button')">点击</button>
   </li>
 </ul>
+<script>
+  window.addEventListener('click', function (e) {
+    alert('window')
+  })
+  document.addEventListener('click', function (e) {
+    alert('document')
+  })
+</script>
 ```
 
-冒泡结果：`button > li > ul`
+冒泡结果：`button > li > ul > document > window`
 
-捕获结果：`ul > li > button`
+捕获结果：`window > document > ul > li > button`
+
+
+
+### 所有的事件都有冒泡吗？
+
+并不是所有的事件都有冒泡的，例如以下事件就没有：
+
+- `onblur`
+- `onfocus`
+- `onmouseenter`
+- `onmouseleave`
 
 
 

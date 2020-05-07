@@ -220,6 +220,76 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 
 
 
+### 设置了绝对定位的元素相对于谁进行定位？
+
+绝对定位元素相对的元素是它**最近的一个祖先，该祖先满足：position的值必须是：relative、absolute、fixed，若没有这样的祖先则相对于body进行定位**。偏移值由其top、bottom、left、right值确定。
+
+(绝对定位常见误区：我们之前总是听到的答案是绝对定位的盒子是相对于离它最近的一个设置为`relative`的盒子进行定位的，其实这是不对的，应该说是**相对于离它最近的一个已定位的盒子进行定位**；只不过我们实际开发中总是用`relative`配合`absolute`来用，所以就让我们潜意识的认为是前一种答案)
+
+
+
+### 绝对定位的元素决定其定位的父级如果设置了padding或者border它是怎样定位的？
+
+- `border`会影响子级的定位
+- `padding`不会影响
+
+如下图：
+
+![](https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/css1.png)
+
+这里的代码是：
+
+```html
+<style>
+  body, html {
+    margin: 0;
+    height: 100%;
+  }
+  .super {
+    text-align: right;
+    position: relative;
+    top: 30px;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    padding: 50px;
+    border: 50px solid yellowgreen;
+  }
+  .sub {
+    position: absolute;
+    background-color: royalblue;
+    width: 100px;
+    height: 100px;
+    top: 10px;
+    left: 10px;
+  }
+</style>
+<body>
+  <div class="super">
+    我是父级
+    <div class="sub">
+      我是子级
+    </div>
+  </div>
+</body>
+```
+
+
+
+### position: fixed什么时候会失效？
+
+我们知道，设置了`position: fixed`固定定位属性的元素会脱离文档流，达到“超然脱俗”的境界。
+也就是说此时给这种元素设置`top, left, right, bottom`等属性是根据**浏览器窗口**定位的，与其上级元素的位置无关。
+
+但是有一种情况例外：
+
+若是设置了`position: fixed`属性的元素，它的上级元素设置了`transform`属性则会导致固定定位属性失效。
+无论你的`transform`设置的是什么属性都会影响到`position: fixed`。
+
+(具体可以看我这里的案例：[【问】position: fixed什么时候会失效？](https://github.com/LinDaiDai/niubility-coding-js/blob/master/CSS/position-fixed什么时候会失效.md))
+
+
+
 ### 说一下回流和重绘
 
 **回流**：
