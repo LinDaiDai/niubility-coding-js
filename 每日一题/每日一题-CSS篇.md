@@ -248,7 +248,6 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
   .super {
     text-align: right;
     position: relative;
-    top: 30px;
     width: 200px;
     height: 200px;
     background-color: red;
@@ -285,6 +284,8 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 
 若是设置了`position: fixed`属性的元素，它的上级元素设置了`transform`属性则会导致固定定位属性失效。
 无论你的`transform`设置的是什么属性都会影响到`position: fixed`。
+
+注意，这个特性表现，目前只在Chrome浏览器/FireFox浏览器下有，IE浏览器，包括IE11, `fixed`还是`fixed`的表现。
 
 (具体可以看我这里的案例：[【问】position: fixed什么时候会失效？](https://github.com/LinDaiDai/niubility-coding-js/blob/master/CSS/position-fixed什么时候会失效.md))
 

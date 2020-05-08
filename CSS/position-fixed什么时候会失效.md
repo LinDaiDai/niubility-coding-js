@@ -7,6 +7,8 @@
 若是设置了`position: fixed`属性的元素，它的上级元素设置了`transform`属性则会导致固定定位属性失效。
 无论你的`transform`设置的是什么属性都会影响到`position: fixed`。
 
+注意，这个特性表现，目前只在Chrome浏览器/FireFox浏览器下有，IE浏览器，包括IE11, `fixed`还是`fixed`的表现。
+
 看下面的案例1：
 
 ```html
@@ -69,3 +71,4 @@
 ```
 上面的案例也会影响`position: fixed`属性。
 
+具体原理可以看一下张大大的这篇文章：https://www.zhangxinxu.com/wordpress/2015/05/css3-transform-affect/
