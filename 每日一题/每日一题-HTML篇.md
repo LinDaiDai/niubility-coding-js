@@ -202,6 +202,15 @@ setTimeout(() => {
 
 
 
+### addEventListener和attachEvent的区别？
+
+- 前者是标准浏览器，后者ie8以下
+- `addEventListener`可有冒泡，可有捕获；`attachEvent`只有冒泡，没有捕获。
+- 前者事件名不带`on`，后者带`on`
+- 前者this指向当前元素，后者指向window
+
+
+
 ### addEventListener函数的第三个参数
 
 第三个参数涉及到冒泡和捕获，是`true`时为捕获，是`false`则为冒泡。
@@ -269,6 +278,34 @@ DOM事件流分为三个阶段：
 
 
 
+### 关于一些兼容性
+
+1. `event`的兼容性
+
+- 其它浏览器`window.event`
+- 火狐下没有`window.event`，所以用传入的参数`ev`代替
+- 最终写法：`var oEvent = ev || window.event`
+
+2. 事件源的兼容性
+
+- 其它浏览器`event.target`
+- `IE`下为`event.srcElement`
+- 最总写法：`var target = event.target || event.srcElement`
+
+3. 阻止事件冒泡
+
+- 其它浏览器`event.stopPropagation()`
+- `IE`下为`window.event.cancelBubble = true`
+
+4. 阻止默认事件
+
+- 其它浏览器`e.preventDefault()`
+- `IE`下为`window.event.returnValue = false`
+
+(参考：[JS事件对象兼容性](https://www.cnblogs.com/diwangkaige/p/10078683.html))
+
+
+
 ### 如何阻止冒泡和默认事件(兼容写法)
 
 阻止冒泡：
@@ -295,11 +332,78 @@ function stopDefault (e) { // 阻止默认事件
 
 
 
+### 事件委托知道吗？
+
+
+
 ### 拖拽有哪些知识点
 
 1. 可以通过给标签设置`draggable`属性来实现元素的拖拽，`img和a标签`默认是可以拖拽的
 2. 拖拽者身上的三个事件：`ondragstart`、`ondrag`、`ondragend`
 3. 拖拽要放到的元素：`ondragenter`、`ondragover`、`ondragleave`、`ondrap`
+
+
+
+### 实现一个拖拽(兼容写法)
+
+*css*
+
+```html
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+  }
+  #box {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+  }
+</style>
+```
+
+*html*
+
+```html
+<div id="box"></div>
+```
+
+*javascript*
+
+```javascript
+window.onload = function () {
+  var box = document.getElementById('box');
+  box.onmousedown = function (ev) {
+    var oEvent = ev || window.event; // 兼容火狐,火狐下没有window.event
+    var distanceX = oEvent.clientX - box.offsetLeft; // 鼠标到可视区左边的距离 - box到页面左边的距离
+    var distanceY = oEvent.clientY - box.offsetTop;
+    document.onmousemove = function (ev) {
+      var oEvent = ev || window.event;
+      var left = oEvent.clientX - distanceX;
+      var top = oEvent.clientY - distanceY;
+      if (left <= 0) {
+        left = 0;
+      } else if (left >= document.documentElement.clientWidth - box.offsetWidth) {
+        left = document.documentElement.clientWidth - box.offsetWidth;
+      }
+      if (top <= 0) {
+        top = 0;
+      } else if (top >= document.documentElement.clientHeight - box.offsetHeight) {
+        top = document.documentElement.clientHeight - box.offsetHeight;
+      }
+      box.style.left = left + 'px';
+      box.style.top = top + 'px';
+    }
+    box.onmouseup = function () {
+      document.onmousemove = null;
+      box.onmouseup = null;
+    }
+  }
+}
+```
 
 
 

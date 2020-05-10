@@ -379,6 +379,40 @@ Object.fromEntries(entries); // { a: 1, b: 2 }
 
 （看这里：https://juejin.im/post/5e58c618e51d4526ed66b5cf#heading-1）
 
+
+
+### setInterval存在哪些问题？
+
+答案参考来源：[木子星兮-setTimeout和requestAnimationFrame](https://juejin.im/post/5e621f5fe51d452700567c32#heading-17) （真的良心好文啊😂）
+
+JavaScript中使用 setInterval 开启轮询。定时器代码可能在代码再次被添加到队列之前还没有完成执行，结果导致定时器代码连续运行好几次，而之间没有任何停顿。而javascript引擎对这个问题的解决是：当使用setInterval()时，仅当没有该定时器的任何其他代码实例时，才将定时器代码添加到队列中。这确保了定时器代码加入到队列中的最小时间间隔为指定间隔。
+
+但是，这样会导致两个问题：
+
+1. 某些间隔被跳过；
+
+2. 多个定时器的代码执行之间的间隔可能比预期的小
+
+
+
+### 链式调用setTimeout对比setInterval
+
+在上一题中也说到了`setInterval`本身是会存在一些问题的。而使用链式调用`setTimeout`这种方式会比它好一些：
+
+```javascript
+setTimeout(function fn(){
+    console.log('我是setTimeout');
+    setTimeout(fn, 1000);
+},1000);
+```
+
+这个模式链式调用了`setTimeout()`，每次函数执行的时候都会创建一个新的定时器。第二个`setTimeout()`调用当前执行的函数，并为其设置另外一个定时器。这样做的好处是：
+
+- 在前一个定时器代码执行完之前，不会向队列插入新的定时器代码，确保不会有任何缺失的间隔。
+- 而且，它可以保证在下一次定时器代码执行之前，至少要等待指定的间隔，避免了连续的运行。
+
+
+
 ### 介绍一下Promise以及它的一些方法
 
 这道题我会先大概介绍一下`Promise`：
@@ -427,7 +461,207 @@ Object.fromEntries(entries); // { a: 1, b: 2 }
 
 ### Promise为什么能链式调用
 
-由于它的`then`方法和`catch、finally`方法会返回一个**新的`Promise`**所以可以允许我们链式调用
+由于它的`then`方法和`catch、finally`方法会返回一个**新的`Promise`**所以可以允许我们链式调用。
+
+
+
+### 手写一个简易的Promise
+
+简易版的Promise：
+
+```javascript
+const PENDING = 'pending';
+const RESOLVED = 'resolved';
+const REJECTED = 'rejected';
+function MyPromise (fn) {
+  let that = this;
+  that.status = PENDING;
+  that.value = null;
+  that.resolvedCallbacks = [];
+  that.rejectedCallbacks = [];
+  function resolve (value) {
+    if (that.status === PENDING) {
+      that.status = RESOLVED;
+      that.value = value;
+      that.resolvedCallbacks.forEach(cb => cb(value))
+    }
+  }
+  function reject (value) {
+    if (that.status === PENDING) {
+      that.status = REJECTED;
+      that.value = value;
+      that.rejectedCallbacks.forEach(cb => cb(value))
+    }
+  }
+  try {
+    fn(resolve, reject);
+  } catch (e) {
+    reject(e);
+  }
+}
+MyPromise.prototype.then = function (onFulfilled, onRejected) {
+  let that = this;
+  onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+  onRejected = typeof onRejected === 'function' ? onRejected : r => { throw r };
+  if (that.status === PENDING) {
+    that.resolvedCallbacks.push(onFulfilled);
+    that.rejectedCallbacks.push(onRejected);
+  }
+  if (that.status === RESOLVED) {
+    onFulfilled(that.value)
+  }
+  if (that.status === REJECTED) {
+    onRejected(that.value)
+  }
+}
+new MyPromise((resolve, reject) => {
+  console.log('我立即执行')
+  setTimeout(() => {
+    resolve(1)
+  }, 1000)
+}).then(res => {
+  console.log(res)
+})
+```
+
+
+
+### 手写一个符合Promise/A+规范
+
+这个我是参考的[刘小夕-Promise的源码实现（完美符合Promise/A+规范）](https://juejin.im/post/5c88e427f265da2d8d6a1c84)
+
+具体的实现，文章中讲解的很详细了。
+
+测试脚本: `promises-aplus-tests`
+
+```javascript
+const PENDING = 'pending';
+  const FULFILLED = 'fulfilled';
+const REJECTED = 'rejected';
+function Promise (executor) {
+  let self = this;
+  self.status = PENDING;
+  self.onFulfilled = [];
+  self.onRejected = [];
+  function resolve (value) {
+    if (self.status === PENDING) {
+      self.status = FULFILLED;
+      self.value = value;
+      self.onFulfilled.forEach(fn => fn());
+    }
+  }
+  function reject (value) {
+    if (self.status === PENDING) {
+      self.status = REJECTED;
+      self.reason = value;
+      self.onRejected.forEach(fn => fn());
+    }
+  }
+  try {
+    executor(resolve, reject);
+  } catch (e) {
+    reject(e);
+  }
+}
+Promise.prototype.then = function (onFulfilled, onRejected) {
+  var self = this;
+  onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+  onRejected = typeof onRejected === 'function' ? onRejected : (reason) => {
+    throw reason;
+  };
+  let promise2 = new Promise((resolve, reject) => {
+    if (self.status === FULFILLED) {
+      setTimeout(() => {
+        try {
+          let x = onFulfilled(self.value);
+          resolvePromise(promise2, x, resolve, reject);    
+        } catch (e) {
+          reject(e);
+        }
+      })
+    } else if (self.status === REJECTED) {
+      setTimeout(() => {
+        try {
+          let x = onRejected(self.reason);
+          resolvePromise(promise2, x, resolve, reject);    
+        } catch (e) {
+          reject(e);
+        }
+      })
+    } else if (self.status === PENDING) {
+      self.onFulfilled.push(() => {
+        setTimeout(() => {
+          try {
+            let x = onFulfilled(self.value);
+            resolvePromise(promise2, x, resolve, reject);    
+          } catch (e) {
+            reject(e);
+          }
+        })
+      })
+      self.onRejected.push(() => {
+        setTimeout(() => {
+          try {
+            let x = onRejected(self.reason);
+            resolvePromise(promise2, x, resolve, reject);    
+          } catch (e) {
+            reject(e);
+          }
+        })
+      })
+    }
+  })
+  return promise2;
+}
+function resolvePromise (promise2, x, resolve, reject) {
+  var self = this;
+  if (promise2 === x) {
+    reject(new TypeError('Chaining Cycle'));
+  }
+  if (x && typeof x === 'object' || typeof x === 'function') {
+    let used;
+    try {
+      let then = x.then;
+      if (typeof then === 'function') {
+        then.call(x, (y) => {
+          if (used) return;
+          used = true;
+          resolvePromise(promise2, y, resolve, reject);
+        }, (r) => {
+          if (used) return;
+          used = true;
+          reject(r);
+        })
+      } else {
+        if (used) return;
+        used = true;
+        resolve(x);
+      }
+    } catch (e) {
+      if (used) return;
+      used = true;
+      reject(e);
+    }
+  } else {
+    resolve(x);
+  }
+}
+
+module.exports = Promise;
+
+Promise.defer = Promise.deferred = function () {
+  let dfd = {};
+  dfd.promise = new Promise((resolve, reject) => {
+      dfd.resolve = resolve;
+      dfd.reject = reject;
+  });
+  return dfd;
+}
+```
+
+
+
+
 
 ### 关于async/await以下代码分别是怎么执行的？
 
@@ -611,6 +845,109 @@ function xhrPost (url, params, onSuccess, onError) {
 关于第一个差异，是因为CommonJS 加载的是一个对象（即`module.exports`属性），该对象只有在脚本运行完才会生成。而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。
 
 （具体可以看我的这篇文章：https://juejin.im/post/5eaacd175188256d4345ea3a）
+
+
+
+## 设计模式
+
+### 实现一个发布订阅者模式(4步骤)
+
+以下回答参考：[发布订阅模式，在工作中它的能量超乎你的想象](https://juejin.im/post/5b125ad3e51d450688133f22)
+
+**简介：**
+
+发布订阅者模式，一种对象间一对多的依赖关系，但一个对象的状态发生改变时，所依赖它的对象都将得到状态改变的通知。
+
+**主要的作用(优点)：**
+
+1. 广泛应用于异步编程中(替代了传递回调函数)
+2. 对象之间松散耦合的编写代码
+
+**缺点：**
+
+- 创建订阅者本身要消耗一定的时间和内存
+- 多个发布者和订阅者嵌套一起的时候，程序难以跟踪维护
+
+**实现的思路：**
+
+- 创建一个对象(缓存列表)
+- on方法用来把回调函数fn都加到缓存列表中
+- emit方法取到arguments里第一个当做key，根据key值去执行对应缓存列表中的函数
+- remove方法可以根据key值取消订阅
+
+**coding：**
+
+```javascript
+let event = {
+  list: {},
+  on (key, fn) {
+    if (!this.list[key]) {
+      this.list[key] = [];
+    }
+    this.list[key].push(fn);
+  },
+  emit () {
+    let key = [].shift.call(arguments),
+      fns = this.list[key];
+    if (!fns || fns.length <= 0) {
+      return false;
+    }
+    fns.forEach(fn => {
+      fn.apply(this, arguments);
+    })
+  },
+  remove (key, fn) {
+    let fns = this.list[key];
+    if (!fns || fns.length <= 0) {
+      return false;
+    }
+    if (!fn) {
+      fns && (fns.length = 0);
+    } else {
+      fns.forEach((cb, i) => {
+        if (cb === fn) {
+          fns.splice(i, 1);
+        }
+      })
+    }
+  }
+}
+function cat () {
+  console.log('喵喵喵～');
+}
+function dog () {
+  console.log('汪汪汪～');
+}
+function hasArgs (args) {
+  console.log(args);
+}
+event.on('pet', hasArgs);
+event.on('pet', cat);
+event.on('pet', dog);
+
+event.remove('pet', dog)
+
+event.emit('pet', '我是传递的参数');
+
+// 结果：
+// '我是传递的参数'
+// '喵喵喵～'
+```
+
+**工作中的应用：**
+
+- 插广告
+- 打点
+
+
+
+### 发布订阅者模式和观察者模式的区别？
+
+发布/订阅模式是观察者模式的一种变形，两者区别在于，**发布/订阅模式在观察者模式的基础上，在目标和观察者之间增加一个调度中心。**
+
+**观察者模式**是由具体目标调度，比如当事件触发，Subject 就会去调用观察者的方法，所以观察者模式的订阅者与发布者之间是存在依赖的。
+
+**发布/订阅模式**由统一调度中心调用，因此发布者和订阅者不需要知道对方的存在。
 
 
 
