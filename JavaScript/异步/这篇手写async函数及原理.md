@@ -1,10 +1,8 @@
-## 手写async函数及原理
-
 ## 前言
 
 你盼世界，我盼望你无`bug`。Hello 大家好！我是霖呆呆！
 
-其实本文怎么说呢，算不上是呆呆的纯原创吧，因为呆呆也是参考晨曦老哥的[手写async await的最简实现（20行）](https://juejin.im/post/5e79e841f265da5726612b6e)来写的，包括案例啥的也是一样，而且参考的这篇文章，对手写`async`函数说的也很清楚了。不过呆呆主要是在其中加上了一些自己的理解以及更加详细的转换过程，也算是自己的一个学习笔记吧。
+其实本文怎么说呢，算不上是呆呆的纯原创吧，因为呆呆也是参考晨曦老哥的[手写async await的最简实现（20行）](https://juejin.im/post/5e79e841f265da5726612b6e)来写的，包括案例啥的也是一样，哈哈不过大家请放心我也是经过原作者授权的，而且参考的这篇文章，对手写`async`函数说的也很清楚了。不过呆呆主要是在其中加上了一些自己的理解以及更加详细的转换过程，也算是自己的一个学习笔记吧。
 
 所以如果您在看完呆呆写的这篇文章后，还希望可以再看一遍晨曦哥的原创，这样对您的帮助应该会更大。
 
@@ -141,9 +139,7 @@ What X 2...?
 
 原来有些的你以为并不是真的你以为，呆呆这里详细把每一步都分析一下：
 
-![](./resource/async1.png)
-
-
+![](https://user-gold-cdn.xitu.io/2020/5/11/17201bf0f6f40f91?w=1632&h=1320&f=png&s=446674)
 
 OK👌，相信聪明的你现在一定弄懂`Generator`的执行机制了，它和我们的`async`函数是有一些区别的。
 
@@ -312,9 +308,9 @@ gen().then(res => console.log(res))
 
 ```javascript
 function asyncToGenerator (genFunc) {
-	return function () {
-		return new Promise((resolve, reject) => {})
-	}
+  return function () {
+    return new Promise((resolve, reject) => {})
+  }
 }
 ```
 
@@ -322,7 +318,7 @@ function asyncToGenerator (genFunc) {
 
 ```javascript
 function asyncToGenerator (genFunc) {
-	return new Promise((resolve, reject) => {})
+  return new Promise((resolve, reject) => {})
 }
 ```
 
@@ -377,8 +373,8 @@ OK👌，终止条件和怎么终止都已经知道了，让我们接着往下�
 
 ```javascript
 function asyncToGenerator (genFunc) {
-	return function () {
-		return new Promise((resolve, reject) => {
+  return function () {
+    return new Promise((resolve, reject) => {
       function step () {
         return Promise.resolve(value).then(val => {
           step()
@@ -386,7 +382,7 @@ function asyncToGenerator (genFunc) {
       }
       step();
     })
-	}
+  }
 }
 ```
 
@@ -403,23 +399,23 @@ yield getData()
 
 ```diff
 function asyncToGenerator (genFunc) {
-	return function () {
-+   const gen = genFunc.apply(this, arguments);
-		return new Promise((resolve, reject) => {
+    return function () {
++     const gen = genFunc.apply(this, arguments);
+      return new Promise((resolve, reject) => {
       function step () {
-+        let generatorResult = gen.next();
-+        const { value, done } = generatorResult;
-+        if (done) {
++       let generatorResult = gen.next();
++       const { value, done } = generatorResult;
++       if (done) {
 +          return resolve(value);
-+        } else {
++       } else {
           return Promise.resolve(value).then(val => {
-          	step()
-        	})
+             step()
+           })
 +        }
-      }
+       }
       step();
     })
-	}
+  }
 }
 ```
 
@@ -503,6 +499,7 @@ gen().then(res => console.log(res))
 ## 参考文章
 
 - [手写async await的最简实现（20行）](https://juejin.im/post/5e79e841f265da5726612b6e)
+- [async/await 原理及执行顺序分析](https://juejin.im/post/5dc28ea66fb9a04a881d1ac0)
 
 
 
@@ -512,3 +509,30 @@ gen().then(res => console.log(res))
 
 OK👌，情况就是这么一个情况，在我们弄懂这一步一步的原理之后再来记就不难了 😄。
 
+
+喜欢**霖呆呆**的小伙还希望可以关注霖呆呆的公众号 `LinDaiDai` 或者扫一扫下面的二维码👇👇👇.
+
+
+![](https://user-gold-cdn.xitu.io/2020/5/11/17201c26b891ea7c?w=900&h=500&f=gif&s=1632550)
+
+我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉
+
+你的鼓励就是我持续创作的主要动力 😊.
+
+相关推荐:
+
+[《全网最详bpmn.js教材》](https://juejin.im/post/5def372af265da33c84a4818)
+
+[《【建议改成】读完这篇你还不懂Babel我给你寄口罩》](https://juejin.im/post/5e477139f265da574c566dda)
+
+[《【建议星星】要就来45道Promise面试题一次爽到底(1.1w字用心整理)》](https://juejin.im/post/5e58c618e51d4526ed66b5cf)
+
+[《【建议👍】再来40道this面试题酸爽继续(1.2w字用手整理)》](https://juejin.im/post/5e6358256fb9a07cd80f2e70)
+
+[《【何不三连】比继承家业还要简单的JS继承题-封装篇(牛刀小试)》](https://juejin.im/post/5e707417e51d45272054d5d3)
+
+[《【何不三连】做完这48道题彻底弄懂JS继承(1.7w字含辛整理-返璞归真)》](https://juejin.im/post/5e75e22951882549027687f9)
+
+[《【精】从206个console.log()完全弄懂数据类型转换的前世今生(上)》](https://juejin.im/post/5d89b2a7f265da03dd3db2ca)
+
+[《霖呆呆的近期面试128题汇总(含超详细答案) | 掘金技术征文》](https://juejin.im/post/5eb55ceb6fb9a0436748297d)

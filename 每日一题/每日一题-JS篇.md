@@ -48,11 +48,36 @@ let d = 4
 
 ### typeof和instanceof的区别
 
+`typeof`表示是对某个变量类型的检测，基本数据类型除了`null`都能正常的显示为对应的类型，引用类型除了函数会显示为`'function'`，其它都显示为`object`。
+
+而`instanceof`它主要是**用于检测某个构造函数的原型对象在不在某个对象的原型链上**。
+
+
+
 ### typeof为什么对null错误的显示
 
 这只是 JS 存在的一个悠久 Bug。在 JS 的最初版本中使用的是 32 位系统，为了性能考虑使用低位存储变量的类型信息，000 开头代表是对象然而 null 表示为全零，所以将它错误的判断为 object 。
 
+
+
 ### 详细说下instanceof
+
+`instanceof`它主要是**用于检测某个构造函数的原型对象在不在某个对象的原型链上**。
+
+算了，直接手写实现吧：
+
+```javascript
+function myInstanceof (left, right) {
+  let proto = Object.getPrototypeOf(left);
+  while (true) {
+    if (proto === null) return false;
+    if (proto === right.prototype) return true;
+    proto = Object.getPrototypeOf(proto)
+  }
+}
+```
+
+
 
 
 
@@ -832,6 +857,8 @@ function xhrPost (url, params, onSuccess, onError) {
 
 
 
+
+
 ## 模块化
 
 ### CommonJS和ES6模块的区别
@@ -964,7 +991,21 @@ event.emit('pet', '我是传递的参数');
 
 ### webpack打包优化
 
-https://juejin.im/post/5ea528496fb9a03c576cceac#heading-2
+参考文章： https://juejin.im/post/5ea528496fb9a03c576cceac#heading-2
+
+- `Vue`路由懒加载，使用`() => import(xxx.vue)`形式，打包会根据路由自动拆分打包。
+- 第三方库按需加载，例如`lodash`库、`UI`组件库
+- 文件解析优化：
+  - `babel-loader`编译慢，可以通过配置`exclude`来去除一些不需要编译的文件夹，还可以通过设置`cacheDirectory`开启缓存，转译的结果会被缓存到文件系统中
+  - 文件解析优化：通过配置`resolve`选项中的`alias`、`extensions`、`modules`来实现。`alias`创建`import`或者`require`的别名；加快`webpack`查找速度。`extensions`自动解析确定的扩展；`modules`解析模块时应该搜索的目录，通常建议使用绝对路径，避免层层查找祖先目录。
+- 使用`splitChunks`进行拆包，抽离公共模块，一些常用配置项：
+  - `chunks`:表示选择哪些 `chunks` 进行分割，可选值有：`async，initial和all`
+  - `minSize`: 表示新分离出的`chunk`必须大于等于`minSize`，默认为30000，约30kb
+  - `minChunks`: 表示一个模块至少应被minChunks个chunk所包含才能分割，默认为1
+  - `name`: 设置`chunk`的文件名
+  - `cacheGroups`: 可以配置多个组，每个组根据test设置条件，符合test条件的模块，就分配到该组。模块可以被多个组引用，但最终会根据priority来决定打包到哪个组中。默认将所有来自 node_modules目录的模块打包至vendors组，将两个以上的chunk所共享的模块打包至default组。
+
+
 
 ### webpack中的loader和plugin有什么区别
 
@@ -1011,6 +1052,203 @@ loader它是一个转换器，只专注于转换文件这一个领域，完成�
 - `url-loader`：当图片小于设置的`limit`参数值时，`url-loader`将图片进行`base64`编码(当项目中有很多图片，通过`url-loader`进行`base64`编码后会减少`http`请求数量，提高性能)，大于limit参数值，则使用`file-loader`拷贝图片并输出到编译目录中；
 
 （详细使用可以查看这里：[霖呆呆的webpack之路-loader篇](https://github.com/LinDaiDai/niubility-coding-js/blob/master/前端工程化/webpack/霖呆呆的webpack之路-loader篇.md#file-loader)）
+
+
+
+### Babel是如何编译Class的？
+
+(参考来源：[相学长-你的Tree-Shaking并没什么卵用](https://juejin.im/post/5a5652d8f265da3e497ff3de))
+
+就拿下面的类来说：
+
+```javascript
+class Person {
+  constructor ({ name }) {
+    this.name = name
+    this.getSex = function () {
+      return 'boy'
+    }
+  }
+  getName () {
+    return this.name
+  }
+  static getLook () {
+    return 'sunshine'
+  }
+}
+```
+
+当我们在使用`babel`的这些`plugin`的时候或者使用`preset`的时候，有一个配置属性`loose`它默认是为`false`，在这样的条件下：
+
+`Class`编译后：
+
+- 总体来说`Class`会被封装成一个`IIFE`立即执行函数
+- 立即执行函数返回的是一个与类同名的构造函数
+- 实例属性和方法定义在构造函数内(如`name`和`getSex()`)
+- 类内部声明的属性方法(`getName`)和静态属性方法(`getLook`)是会被`Object.defineProperty`所处理，将其可枚举属性设置为`false`
+
+
+
+编译后的代码：
+
+```javascript
+"use strict";
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+var Person = /*#__PURE__*/ (function () {
+  function Person(_ref) {
+    var name = _ref.name;
+
+    _classCallCheck(this, Person);
+
+    this.name = name;
+
+    this.getSex = function () {
+      return "boy";
+    };
+  }
+
+  _createClass(
+    Person,
+    [
+      {
+        key: "getName",
+        value: function getName() {
+          return this.name;
+        },
+      },
+    ],
+    [
+      {
+        key: "getLook",
+        value: function getLook() {
+          return "sunshine";
+        },
+      },
+    ]
+  );
+
+  return Person;
+})();
+```
+
+为什么`Babel`对于类的处理会使用`Object.defineProperty`这种形式呢？它和直接使用原型链有什么不同吗？
+
+- 通过原型链声明的属性和方法是可枚举的，也就是可以被`for...of...`搜寻到
+- 而类内部声明的方法是不可枚举的
+
+所以，babel为了符合ES6真正的语义，编译类时采取了`Object.defineProperty`来定义原型方法。
+
+但是可以通过设置`babel`的`loose`模式(宽松模式)为`true`，它会不严格遵循ES6的语义，而采取更符合我们平常编写代码时的习惯去编译代码，在`.babelrc`中可以如下设置：
+
+```javascript
+{
+  "presets": [["env", { "loose": true }]]
+}
+```
+
+比如上述的`Person`类的属性方法将会编译成直接在原型链上声明方法：
+
+```javascript
+"use strict";
+
+var Person = /*#__PURE__*/function () {
+  function Person(_ref) {
+    var name = _ref.name;
+    this.name = name;
+
+    this.getSex = function () {
+      return 'boy';
+    };
+  }
+
+  var _proto = Person.prototype;
+
+  _proto.getName = function getName() {
+    return this.name;
+  };
+
+  Person.getLook = function getLook() {
+    return 'sunshine';
+  };
+
+  return Person;
+}();
+```
+
+**总结**
+
+- 当使用`Babel`编译时默认的`loose`为`false`，即非宽松模式
+
+- 无论哪种模式，转换后的定义在类内部的属性方法是被定义在构造函数的原型对象上的；静态属性被定义到构造函数上
+
+- 只不过非宽松模式时，这些属性方法会被`_createClass`函数处理，函数内通过`Object.defineProperty()`设置属性的可枚举值`enumerable`为`false`
+
+- 由于在`_createClass`函数内使用了`Object`，所以非宽松模式下是会产生副作用的，而宽松模式下不会。
+
+- `webpack`中的`UglifyJS`依旧还是会将宽松模式认为是有副作用的，而`rollup`有**程序流程分析**的功能，可以更好的判断代码是否真正产生副作用，所以它会认为宽松模式没有副作用。
+
+  (副作用大致理解为：一个函数会、或者可能会对函数外部变量产生影响的行为。)
+
+
+
+### webpack和rollup中对tree-shaking的程度
+
+- 函数的参数若是引用类型，对于它属性的操作，都是有可能会产生副作用的。因为首先它是引用类型，对它属性的任何修改其实都是改变了函数外部的数据。其次获取或修改它的属性，会触发`getter`或者`setter`，而`getter`、`setter`是不透明的，有可能会产生副作用。
+
+- uglify没有完善的程序流分析。它可以简单的判断变量后续是否被引用、修改，但是不能判断一个变量完整的修改过程，不知道它是否已经指向了外部变量，所以很多有可能会产生副作用的代码，都只能保守的不删除。
+- uglify可以配置`pure_getters: true`来强制认为获取对象属性，是没有副作用的。
+
+- rollup有程序流分析的功能，可以更好的判断代码是否真正会产生副作用。
+
+(参考来源：[相学长-你的Tree-Shaking并没什么卵用](https://juejin.im/post/5a5652d8f265da3e497ff3de))
+
+
+
+### 对tree-shaking的了解
+
+**作用：**
+
+它表示在打包的时候会去除一些无用的代码
+
+**原理**：
+
+- `ES6`的模块引入是静态分析的，所以在编译时能正确判断到底加载了哪些模块
+- 分析程序流，判断哪些变量未被使用、引用，进而删除此代码
+
+**特点：**
+
+- 在生产模式下它是默认开启的，但是由于经过`babel`编译全部模块被封装成`IIFE`，它存在副作用无法被`tree-shaking`掉
+- 可以在`package.json`中配置`sideEffects`来指定哪些文件是有副作用的。它有两种值，一个是布尔类型，如果是`false`则表示所有文件都没有副作用；如果是一个数组的话，数组里的文件路径表示改文件有副作用
+- `rollup`和`webpack`中对`tree-shaking`的层度不同，例如对`babel`转译后的`class`，如果`babel`的转译是宽松模式下的话(也就是`loose`为`true`)，`webpack`依旧会认为它有副作用不会`tree-shaking`掉，而`rollup`会。这是因为`rollup`有程序流分析的功能，可以更好的判断代码是否真正会产生副作用。
+
+
+
+### webpack中如何实现动态导入？
+
+1. 使用`import(/** webpackChunkName: "lodash" **/ 'lodash').then(_ => {})`，同时可以在`webpack.config.js`中配置一下`output的chunkFilename`为`[name].bunld.js`将要导入的模块单独抽离到一个`bundle`中，以此实现代码分离。
+2. 使用`async`，由于`import()`返回的是一个`promise`, 因此我们可以使用`async`函数来简化它，不过需要`babel`这样的预处理器及处理转换`async`的插件。`const _ = await import(/* webpackChunkName: "lodash" */ 'lodash');`
 
 
 
@@ -1146,4 +1384,36 @@ beforeRouteLeave (to, from, next) {
 3. 虚拟`DOM`的处理方式不同。`Vue`中的虚拟`DOM`控制了颗粒度，组件层面走`watcher`通知，而组件内部走`vdom`做`diff`，这样，既不会有太多`watcher`，也不会让`vdom`的规模过大。而`React`走了类似于`CPU`调度的逻辑，把`vdom`这棵树，微观上变成了链表，然后利用浏览器的空闲时间来做`diff`。
 
 
+
+### 前端路由和后端路由的优缺点
+
+**前端路由：**
+
+在不刷新页面的情况下显现出不同的页面内容。
+
+*优点：*
+
+- 用户体验好，和后台网速没有关系，不需要每次都从服务器全部获取，快速展现给用户
+- 可以在浏览器中输入指定想要访问的`url`路径地址
+- 实现了前后端的分离，方便开发。有很多框架都带有路由功能模块。
+
+*缺点：*
+
+- 使用浏览器的前进，后退键的时候会重新发送请求，没有合理地利用缓存
+- 单页面无法记住之前滚动的位置，无法在前进，后退的时候记住滚动的位置
+
+**后端路由：**
+
+浏览器在地址栏中切换不同的`url`时，每次都向后台服务器发请求，服务器响应请求，在后台拼接html文件传给前端显示, 返回不同的页面, 意味着浏览器会刷新页面。
+
+*优点：*
+
+- 分担了前端的压力，html和数据的拼接都是由服务器完成。
+- 利于`SEO`
+
+*缺点：*
+
+- 当项目十分庞大时，加大了服务器端的压力
+- 同时在浏览器端不能输入指定的`url`路径进行指定模块的访问
+- 如果当前网速过慢，那将会延迟页面的加载，对用户体验不是很友好
 

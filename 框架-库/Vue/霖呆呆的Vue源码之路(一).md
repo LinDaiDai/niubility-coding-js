@@ -47,6 +47,8 @@ src/core/index.js => src/core/instance/index.js
 
 记住，当我们在看源码的时候，看任何一个复杂的函数时，我们找到自己想要看的东西才是关键，其它的非关键的内容你大可不必太过关注它，如果你是一行一行的看并且又试图一次性全部搞懂的话那会非常的吃力，所以我们应该是要抱有目的性的去看源码，例如我今天是想要了解`Vue`的响应式原理，那我大部分的精力肯定就都是在解决`数据是什么时候被劫持的？`，`依赖收集又是怎样实现的呢？`这类的问题上。
 
+
+
 ### 初始化Vue构造函数时会做哪些事？
 
 初始化Vue构造函数，也就是还未使用`new Vue()`的时候，会做这么几件事：
@@ -88,6 +90,8 @@ export function eventsMixin (Vue) {
 所以你会发现这些都是我们很容易就看得懂的东西，不就是给`Vue`这个构造函数的原型对象上添加一些属性和方法吗，那么如果我们`new Vue()`一个实例的时候，这个实例就可以继承到这些属性和方法了。
 
 
+
+
 #### 为Vue构造函数添加静态方法
 
 同时，也会调用`initGlobalAPI`函数，为`Vue`构造函数上添加静态方法，例如：
@@ -126,6 +130,7 @@ export function initGlobalAPI (Vue) {
 ```
 
 
+
 ### new Vue实例化对象时会做哪些事？
 
 当`new Vue`实例化对象的时候，最主要的就是执行`this._init()`方法，这个方法是在上面👆「初始化Vue构造函数」时调用`initMixin()`函数时给`Vue.prototype`上添加的，对应这伪代码就是：
@@ -153,18 +158,21 @@ export function initMixin (Vue) {
 
 而在此`_init()`函数中主要会做这么几件事：
 
-1. 初始化生命周期`initLifecycle`
-2. 初始化事件`initEvents`
-3. 初始化渲染`initRender`
-4. 调用`callHook`函数触发`beforeCreate`钩子函数
-5. 调用`initInjections`获取到父组件的`provide`值并加入观察者中
-6. 调用`initState`，初始化`data、props、methods、computed、watch`，并为`Vue`实例化对象`vm`添加`watchers`观察者队列
-7. 以及调用`initProvide`方法和触发`created`钩子函数等等...
+1. 给`vm`上添加`$options`，如果是非`Component`的话调用`mergeOptions`合并参数
+2. 初始化生命周期`initLifecycle`
+3. 初始化事件`initEvents`
+4. 初始化渲染`initRender`
+5. 调用`callHook`函数触发`beforeCreate`钩子函数
+6. 调用`initInjections`获取到父组件的`provide`值并加入观察者中
+7. 调用`initState`，初始化`data、props、methods、computed、watch`，并为`Vue`实例化对象`vm`添加`watchers`观察者队列
+8. 以及调用`initProvide`方法
+9. 调用`callHook`函数触发`create`钩子函数
 
 
 对应着源码的位置就是：
 
 ![image.png](https://upload-images.jianshu.io/upload_images/7190596-8054ed841e9fcf12.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 
 #### initState()方法做了哪些事？
@@ -181,7 +189,7 @@ OK👌，各个函数的作用其实不用我写备注你们也能看出来是�
 
 ![image.png](https://upload-images.jianshu.io/upload_images/7190596-9ac2c84d530bc004.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
-咋一看这个`initData`好像非常的复杂，但是其实我们只要把它拆成三部分来看就觉得它没什么了：
+乍一看这个`initData`好像非常的复杂，但是其实我们只要把它拆成三部分来看就觉得它没什么了：
 
 - 判断`data`是不是一个方法，如果是方法的话就调用`getData`方法，`getData`中会有一段关键的代码：`return data.call(vm, vm)`，也就是执行`data()`这个方法，这里其实很好理解，还记得我们在创建一个`vue`组件的时候，里面的`data`要求返回的是一个函数吗？那么这一步的作用相当于是拿到这个返回函数中的数据。
 - 判断`data`中每个属性有没有什么特殊的情况，例如是否和`methods、props`中的属性重名了，以及不是以`$、_`开头的属性则调用`proxy`方法。
