@@ -244,7 +244,19 @@ data () {
 
 #### Observer类是做什么的？
 
-OK👌，其实不用我多说，你们也应该知道，`Observer`的作用就是遍历对象的所有属性将其进行双向绑定。
+OK👌，其实不用我多说，你们也应该知道，`Observer`会对对象的每个属性进行劫持。
+
+
+
+![](./resource/9.png)
+
+> /src/core/instance/observer/index.js
+
+- 判断`value`是不是数组，是的话则进行：
+  - 有`__proto__`属性则进行原型链重写以此来检测数组变化
+  - 若是没`___proto__`属性则复制属性
+  - 调用`observeArray`进行循环遍历
+- 否则执行`walk()`方法对`data`中的每个属性进行依赖收集
 
 
 

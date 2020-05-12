@@ -275,6 +275,72 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 
 
 
+### 绝对定位和非绝对定位时元素的宽高百分比是如何计算的？
+
+- 绝对定位的元素其宽高的百分比是相对于父级的`padding-box`计算的
+- 非绝对定位的元素则是相对于父级的`content-box`计算
+
+如下两个案例：
+
+*案例一：子级为绝对定位元素：*
+
+```html
+<style>
+  body, html {
+    margin: 0;
+    height: 100%;
+  }
+  .super {
+    text-align: right;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    background-color: red;
+    padding: 50px;
+    border: 50px solid yellowgreen;
+  }
+  .sub {
+    position: absolute;
+    background-color: royalblue;
+    width: 50%;
+    height: 50%;
+  }
+</style>
+<body>
+  <div class="super">
+    我是父级
+    <div class="sub">
+      我是子级
+    </div>
+  </div>
+</body>
+```
+
+效果：子级宽高为：`(父级的width(200) + 父级的左右padding(100)) / 2 = 150px`
+
+<img src="https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/css2.png" style="zoom:50%;" />
+
+
+
+*案例二：子级为绝对定位元素*
+
+效果：子级宽高为：`父级的width(200) / 2 = 100px`
+
+<img src="https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/css3.png" style="zoom:50%;" />
+
+
+
+### margin: auto为什么能实现垂直居中?
+
+普通的流体元素它的`margin: auto`的填充规则：
+
+- 若一侧是定值，一侧是`auto`，则`auto`为剩余空间的大小
+- 若两侧都为`auto`，则会平分剩余空间
+
+若是我们给普通的块状水平元素设置了`position: absolute`之后，且其对立方向属性同时有具体的数值时，例如设置了`top: 0; bottom: 0;`，流体特性就发生了，此时它就会按普通流体元素的`margin: auto`填充规则来进行填充。所以`margin: auto`可以实现垂直居中。
+
+
+
 ### position: fixed什么时候会失效？
 
 我们知道，设置了`position: fixed`固定定位属性的元素会脱离文档流，达到“超然脱俗”的境界。
