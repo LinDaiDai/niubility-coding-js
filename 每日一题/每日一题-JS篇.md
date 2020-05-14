@@ -438,6 +438,69 @@ setTimeout(function fn(){
 
 
 
+### 说一下requestAnimationFrame
+
+**简介：**
+
+显示器都有自己固有的刷新频率(60HZ或者75HZ)，也就是说每秒最多重绘60次或者75次。而`requestAnimationFrame`的基本思想就是与这个刷新频率保持同步，利用这个刷新频率进行重绘。
+
+**特点：**
+
+- 使用这个API时，一旦页面不处于浏览器的当前标签，就会自动停止刷新，这样就节省了CPU、GPU、电力。
+- 由于它时在主线程上完成的，所以若是主线程非常忙时它的动画也会收到影响
+- 它使用一个回调函数作为参数，这个回调函数会在浏览器重绘之前调用。
+
+**使用：**
+
+正常使用：
+
+```javascript
+const requestID = window.requestAnimationFrame(callback);
+```
+
+兼容版本：
+
+```javascript
+// 给 window 下挂载一个兼容版本的 requestAniFrame
+window.requestAniFrame = (function () {
+  return  window.requestAnimationFrame || 
+    window.webkitRequestAnimationFrame || 
+    window.mozRequestAnimationFrame    || 
+    window.oRequestAnimationFrame      || 
+    window.msRequestAnimationFrame     || 
+    function( callback ){
+      window.setTimeout(callback, 1000 / 60);
+    };
+})();
+```
+
+
+
+### requestAnimationFrame对比setTimeout
+
+(参考来源：[requestAnimationFrame](https://www.jianshu.com/p/f6d933670617))
+
+**屏幕刷新频率：**屏幕每秒出现图像的次数。普通笔记本为60Hz
+
+**动画原理：**计算机每16.7ms刷新一次，由于人眼的视觉停留，所以看起来是流畅的移动。
+
+**setTimeout：**通过设定间隔时间来不断改变图像位置，达到动画效果。但是容易出现卡顿抖动的现象；原因是：
+
+1. settimeout任务被放入异步队列，只有当主线程任务执行完后才会执行队列中的任务，因此实际执行时间总是比设定时间要晚；
+
+2. settimeout的固定时间间隔不一定与屏幕刷新时间相同，会引起丢帧。
+
+**requestAnimationFrame：**优势：由系统决定回调函数的执行时机。60Hz的刷新频率，那么每次刷新的间隔中会执行一次回调函数，不会引起丢帧，不会卡顿。且由于一旦页面不处于浏览器的当前标签，就会自动停止刷新，这样就节省了CPU、GPU、电力。
+
+
+
+作者：糕糕AA
+链接：https://www.jianshu.com/p/f6d933670617
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
 ### 介绍一下Promise以及它的一些方法
 
 这道题我会先大概介绍一下`Promise`：
@@ -561,7 +624,7 @@ new MyPromise((resolve, reject) => {
 
 ```javascript
 const PENDING = 'pending';
-  const FULFILLED = 'fulfilled';
+const FULFILLED = 'fulfilled';
 const REJECTED = 'rejected';
 function Promise (executor) {
   let self = this;
@@ -683,8 +746,6 @@ Promise.defer = Promise.deferred = function () {
   return dfd;
 }
 ```
-
-
 
 
 
@@ -993,17 +1054,41 @@ event.emit('pet', '我是传递的参数');
 
 参考文章： https://juejin.im/post/5ea528496fb9a03c576cceac#heading-2
 
+- 先使用`webpack-bundle-analyzer`分析打包后整个项目中的体积结构，既可以看到项目中用到的所有第三方包，又能看到各个模块在整个项目中的占比。
+
 - `Vue`路由懒加载，使用`() => import(xxx.vue)`形式，打包会根据路由自动拆分打包。
+
 - 第三方库按需加载，例如`lodash`库、`UI`组件库
+
+- 使用`purgecss-webpack-plugin`和`glob`插件去除无用样式(`glob`插件可以可以同步查找目录下的任意文件夹下的任意文件)：
+
+  ```javascript
+  new PurgecssWebpackPlugin({
+      // paths表示指定要去解析的文件名数组路径
+      // Purgecss会去解析这些文件然后把无用的样式移除
+      paths: glob.sync('./src/**/*', {nodir: true})
+      // glob.sync同步查找src目录下的任意文件夹下的任意文件
+      // 返回一个数组，如['真实路径/src/css/style.css','真实路径/src/index.js',...]
+  })
+  ```
+
 - 文件解析优化：
+
   - `babel-loader`编译慢，可以通过配置`exclude`来去除一些不需要编译的文件夹，还可以通过设置`cacheDirectory`开启缓存，转译的结果会被缓存到文件系统中
   - 文件解析优化：通过配置`resolve`选项中的`alias`、`extensions`、`modules`来实现。`alias`创建`import`或者`require`的别名；加快`webpack`查找速度。`extensions`自动解析确定的扩展；`modules`解析模块时应该搜索的目录，通常建议使用绝对路径，避免层层查找祖先目录。
+
 - 使用`splitChunks`进行拆包，抽离公共模块，一些常用配置项：
+
   - `chunks`:表示选择哪些 `chunks` 进行分割，可选值有：`async，initial和all`
   - `minSize`: 表示新分离出的`chunk`必须大于等于`minSize`，默认为30000，约30kb
   - `minChunks`: 表示一个模块至少应被minChunks个chunk所包含才能分割，默认为1
   - `name`: 设置`chunk`的文件名
   - `cacheGroups`: 可以配置多个组，每个组根据test设置条件，符合test条件的模块，就分配到该组。模块可以被多个组引用，但最终会根据priority来决定打包到哪个组中。默认将所有来自 node_modules目录的模块打包至vendors组，将两个以上的chunk所共享的模块打包至default组。
+
+- `DllPlugin`动态链接库，将第三方库的代码和业务代码抽离：
+
+  - 根目录下创建一个`webpack.dll.js`文件用来打包出`dll`文件。并在`package.json`中配置`dll`指令生成`dll`文件夹，里面就会有`manifest.json`以及生成的`xxx.dll.js`文件
+  - 将打包的dll通过`add-asset-html-webpack-plugin`添加到html中，再通过DllReferencePlugin把dll引用到需要编译的依赖。
 
 
 
@@ -1252,6 +1337,65 @@ var Person = /*#__PURE__*/function () {
 
 
 
+### webpack4为什么弃用CommonsChunkPlugin？
+
+(回答参考：https://www.jianshu.com/p/ece902324ff7)
+
+`CommonsChunkPlugin`是`webpack3`中用于提取公共代码，但是在`webpack4`中已经被弃用了，主要是有这么几个原因：
+
+- **CommonsChunkPlugin的思路（基于父子关系）：**即将满足minchunks配置项所设置的条件的模块移到一个新的chunk文件中去，也就是这个新生成的chunk是所有chunk的父亲，在加载孩子chunk时,父亲chunk是必须提前加载的：
+
+  ```javascript
+  // example:
+  entryA:  vue vuex  someComponents.....
+  entryB:  vue axios someComponents.....
+  entryC: vue vuex axios  someComponents.....
+  minchunks: 2 即某个module被引用2次就提取到公共即父亲chunk中
+  
+  // 产出的chunk
+  vendor-chunk: vue vuex axios
+  chunkA 到 chunkC: only the corresponding components
+  ```
+
+  带来的问题就是： 对entryA 和 entryB 都有多余的module
+
+- 对异步模块不友好，如果asyncB在entryA中动态引入，则会引入多余module。也就是说：无法优化异步chunk，引入重复代码：
+
+  ```javascript
+  // example:
+  entryA:  vue vuex  someComponents.....
+  asyncB:  vue axios someComponents.....
+  entryC: vue vuex axios  someComponents.....
+  minchunks: 2 
+  // 产出的chunk
+  vendor-chunk: vue vuex
+  chunkA: only the corresponding components
+  chunkB: vue axios someComponents
+  chunkC: axios someComponents
+  ```
+
+总结来说：
+
+只能统一抽取到父chunk，造成父chunk过大，不可避免的存在重复引入，引入多余代码。
+
+而在`SplitChunksPlugin`中引入`chunkGroup`的概念,在入口chunk和异步chunk中发现被重复使用的模块，将重复模块以vendor-chunk的形式分离出来，也就是vendor-chunk可能有多个，不再受限于所有chunk中都共同存在的模块。
+
+```javascript
+entryA:  vue vuex  someComponents.....
+entryB:  vue axios someComponents.....
+entryC: vue vuex axios  someComponents.....
+minchunks: 2 
+产出的chunk:
+vendor-chunkA-B-C: vue
+vendor-chunkA-C: vuex
+vendor-chunkB-C: axios
+chunkA: only the corresponding components
+chunkB: only the corresponding components
+chunkC: only the corresponding components
+```
+
+
+
 ## Vue
 
 ### Vue3.0相对于Vue2.x有哪些不同？
@@ -1286,6 +1430,41 @@ tree-shaking它表示的是在打包的时候会去除一些无用的代码。�
 
 
 
+### 前端路由和后端路由的优缺点
+
+**前端路由：**
+
+在不刷新页面的情况下显现出不同的页面内容。
+
+*优点：*
+
+- 用户体验好，和后台网速没有关系，不需要每次都从服务器全部获取，快速展现给用户
+- 可以在浏览器中输入指定想要访问的`url`路径地址
+- 实现了前后端的分离，方便开发。有很多框架都带有路由功能模块。
+
+*缺点：*
+
+- 使用浏览器的前进，后退键的时候会重新发送请求，没有合理地利用缓存
+- 单页面无法记住之前滚动的位置，无法在前进，后退的时候记住滚动的位置
+- 同样不利于`SEO`
+
+**后端路由：**
+
+浏览器在地址栏中切换不同的`url`时，每次都向后台服务器发请求，服务器响应请求，在后台拼接html文件传给前端显示, 返回不同的页面, 意味着浏览器会刷新页面。
+
+*优点：*
+
+- 分担了前端的压力，html和数据的拼接都是由服务器完成。
+- 利于`SEO`
+
+*缺点：*
+
+- 当项目十分庞大时，加大了服务器端的压力
+- 同时在浏览器端不能输入指定的`url`路径进行指定模块的访问
+- 如果当前网速过慢，那将会延迟页面的加载，对用户体验不是很友好
+
+
+
 ### Vue中hash模式和history模式的区别
 
 - 最明显的是在显示上，`hash`模式的`URL`中会夹杂着`#`号，而`history`没有。
@@ -1300,6 +1479,164 @@ window.onhashchange = function(event){
   // 所以可以截取一下
 	let hash = location.hash.slice(1);
 }
+```
+
+
+
+### 能用代码实现一下hash路由吗？
+
+基础的html代码：
+
+```html
+<html>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .box {
+      width: 100%;
+      height: 100%;
+      background-color: red;
+    }
+  </style>
+  <body>
+  <ul>
+    <li>
+      <a href="#red">红色</a>
+    </li>
+    <li>
+      <a href="#green">绿色</a>
+    </li>
+    <li>
+      <a href="#purple">紫色</a>
+    </li>
+  </ul>
+  </body>
+</html>
+```
+
+简单实现：
+
+```html
+<script>
+  const box = document.getElementsByClassName('box')[0];
+  const hash = location.hash
+  window.onhashchange = function (e) {
+    const color = hash.slice(1)
+    box.style.background = color
+  }
+</script>
+```
+
+封装成一个class:
+
+```html
+<script>
+  const box = document.getElementsByClassName('box')[0];
+  const hash = location.hash
+  class HashRouter {
+    constructor (hashStr, cb) {
+      this.hashStr = hashStr
+      this.cb = cb
+      this.watchHash()
+      this.watch = this.watchHash.bind(this)
+      window.addEventListener('hashchange', this.watch)
+    }
+    watchHash () {
+      let hash = window.location.hash.slice(1)
+      this.hashStr = hash
+      this.cb(hash)
+    }
+  }
+  new HashRouter('red', (color) => {
+    box.style.background = color
+  })
+</script>
+```
+
+
+
+### 了解history有哪些方法吗？说下它们的区别
+
+(参考来源：[阿里P7：你了解路由吗？](https://juejin.im/post/5e85cb8151882573c66cf63f#heading-11))
+
+history 这个对象在html5的时候新加入两个api **history.pushState() 和 history.repalceState()** 这两个 API可以在不进行刷新的情况下，操作浏览器的历史纪录。唯一不同的是，前者是新增一个历史记录，后者是直接替换当前的历史记录。
+
+从参数上来说：
+
+```javascript
+window.history.pushState(state,title,url)
+//state：需要保存的数据，这个数据在触发popstate事件时，可以在event.state里获取
+//title：标题，基本没用，一般传null
+//url：设定新的历史纪录的url。新的url与当前url的origin必须是一样的，否则会抛出错误。url可以时绝对路径，也可以是相对路径。
+//如 当前url是 https://www.baidu.com/a/,执行history.pushState(null, null, './qq/')，则变成 https://www.baidu.com/a/qq/，
+//执行history.pushState(null, null, '/qq/')，则变成 https://www.baidu.com/qq/
+
+window.history.replaceState(state,title,url)
+//与pushState 基本相同，但她是修改当前历史纪录，而 pushState 是创建新的历史纪录
+```
+
+另外还有：
+
+- `window.history.back()` 后退
+- `window.history.forward()`前进
+- `window.history.go(1)` 前进或者后退几步
+
+从触发事件的监听上来说：
+
+- `pushState()`和`replaceState()`不能被`popstate`事件所监听
+- 而后面三者可以，且用户点击浏览器前进后退键时也可以
+
+
+
+### 如何监听 pushState 和 replaceState 的变化呢？
+
+利用自定义事件`new Event()`创建这两个事件，并全局监听：
+
+```html
+<body>
+  <button onclick="goPage2()">去page2</button>
+  <div>Page1</div>
+  <script>
+    let count = 0;
+    function goPage2 () {
+      history.pushState({ count: count++ }, `bb${count}`,'page1.html')
+      console.log(history)
+    }
+    // 这个不能监听到 pushState
+    // window.addEventListener('popstate', function (event) {
+    //   console.log(event)
+    // })
+    function createHistoryEvent (type) {
+      var fn = history[type]
+      return function () {
+        // 这里的 arguments 就是调用 pushState 时的三个参数集合
+        var res = fn.apply(this, arguments)
+        let e = new Event(type)
+        e.arguments = arguments
+        window.dispatchEvent(e)
+        return res
+      }
+    }
+    history.pushState = createHistoryEvent('pushState')
+    history.replaceState = createHistoryEvent('replaceState')
+    window.addEventListener('pushState', function (event) {
+      // { type: 'pushState', arguments: [...], target: Window, ... }
+      console.log(event)
+    })
+    window.addEventListener('replaceState', function (event) {
+      console.log(event)
+    })
+  </script>
+</body>
 ```
 
 
@@ -1385,35 +1722,144 @@ beforeRouteLeave (to, from, next) {
 
 
 
-### 前端路由和后端路由的优缺点
+### 如何实现一个简易的MVVM？
 
-**前端路由：**
+(参考文章：[50行代码的MVVM，感受闭包的艺术](https://juejin.im/post/5b1fa77451882513ea5cc2ca))
 
-在不刷新页面的情况下显现出不同的页面内容。
+实现一个简易的MVVM我会分为这么几步来：
 
-*优点：*
+1. 首先我会定义一个类Vue，这个类接收的是一个options，那么其中可能有需要挂载的根元素的id，也就是el属性；然后应该还有一个data属性，表示需要双向绑定的数据
+2. 其次我会定义一个Dep类，这个类产生的实例对象中会定义一个subs数组用来存放所依赖这个属性的依赖，已经添加依赖的方法addSub，删除方法removeSub，还有一个notify方法用来遍历更新它subs中的所有依赖，同时Dep类有一个静态属性target它用来表示当前的观察者，当后续进行依赖收集的时候可以将它添加到dep.subs中。
+3. 然后设计一个observe方法，这个方法接收的是传进来的data，也就是options.data，里面会遍历data中的每一个属性，并使用Object.defineProperty()来重写它的get和set，那么这里面呢可以使用new Dep()实例化一个dep对象，在get的时候调用其addSub方法添加当前的观察者Dep.target完成依赖收集，并且在set的时候调用dep.notify方法来通知每一个依赖它的观察者进行更新
+4. 完成这些之后，我们还需要一个compile方法来将HTML模版和数据结合起来。在这个方法中首先传入的是一个node节点，然后遍历它的所有子级，判断是否有firstElmentChild，有的话则进行递归调用compile方法，没有firstElementChild的话且该child.innderHTML用正则匹配满足有`/\{\{(.*)\}\}/`项的话则表示有需要双向绑定的数据，那么就将用正则`new Reg('\\{\\{\\s*' + key + '\\s*\\}\\}', 'gm')`替换掉`{{ msg }}`是其为`msg`变量。
+5. 完成变量替换的同时，还需要将Dep.target指向当前的这个child，且调用一下this.opt.data[key]，也就是为了触发这个数据的get来对当前的child进行依赖收集，这样下次数据变化的时候就能通知child进行视图更新了，不过在最后要记得将Dep.target指为null哦(其实在Vue中是有一个targetStack栈用来存放target的指向的)
+6. 那么最后我们只需要监听`document`的`DOMContentLoaded`然后在回调函数中实例化这个`Vue`对象就可以了
 
-- 用户体验好，和后台网速没有关系，不需要每次都从服务器全部获取，快速展现给用户
-- 可以在浏览器中输入指定想要访问的`url`路径地址
-- 实现了前后端的分离，方便开发。有很多框架都带有路由功能模块。
+**coding**:
 
-*缺点：*
+需要注意的点：
 
-- 使用浏览器的前进，后退键的时候会重新发送请求，没有合理地利用缓存
-- 单页面无法记住之前滚动的位置，无法在前进，后退的时候记住滚动的位置
+- `childNodes`会获取到所有的子节点以及文本节点(包括元素标签中的空白节点)
+- `firstElementChild`表示获取元素的第一个字元素节点，以此来区分是不是元素节点，如果是的话则调用`compile`进行递归调用，否则用正则匹配
+- 这里面的正则真的不难，大家可以看一下s
 
-**后端路由：**
+完整代码如下：
 
-浏览器在地址栏中切换不同的`url`时，每次都向后台服务器发请求，服务器响应请求，在后台拼接html文件传给前端显示, 返回不同的页面, 意味着浏览器会刷新页面。
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>MVVM</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>姓名</h3>
+      <p>{{name}}</p>
+      <h3>年龄</h3>
+      <p>{{age}}</p>
+    </div>
+  </body>
+</html>
+<script>
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+      let opt = { el: "#app", data: { name: "等待修改...", age: 20 } };
+      let vm = new Vue(opt);
+      setTimeout(() => {
+        opt.data.name = "霖呆呆";
+      }, 2000);
+    },
+    false
+  );
+  class Vue {
+    constructor(opt) {
+      this.opt = opt;
+      this.observer(opt.data);
+      let root = document.querySelector(opt.el);
+      this.compile(root);
+    }
+    observer(data) {
+      Object.keys(data).forEach((key) => {
+        let obv = new Dep();
+        data["_" + key] = data[key];
 
-*优点：*
+        Object.defineProperty(data, key, {
+          get() {
+            Dep.target && obv.addSubNode(Dep.target);
+            return data["_" + key];
+          },
+          set(newVal) {
+            obv.update(newVal);
+            data["_" + key] = newVal;
+          },
+        });
+      });
+    }
+    compile(node) {
+      [].forEach.call(node.childNodes, (child) => {
+        if (!child.firstElementChild && /\{\{(.*)\}\}/.test(child.innerHTML)) {
+          let key = RegExp.$1.trim();
+          child.innerHTML = child.innerHTML.replace(
+            new RegExp("\\{\\{\\s*" + key + "\\s*\\}\\}", "gm"),
+            this.opt.data[key]
+          );
+          Dep.target = child;
+          this.opt.data[key];
+          Dep.target = null;
+        } else if (child.firstElementChild) this.compile(child);
+      });
+    }
+  }
 
-- 分担了前端的压力，html和数据的拼接都是由服务器完成。
-- 利于`SEO`
+  class Dep {
+    constructor() {
+      this.subNode = [];
+    }
+    addSubNode(node) {
+      this.subNode.push(node);
+    }
+    update(newVal) {
+      this.subNode.forEach((node) => {
+        node.innerHTML = newVal;
+      });
+    }
+  }
+</script>
+```
 
-*缺点：*
 
-- 当项目十分庞大时，加大了服务器端的压力
-- 同时在浏览器端不能输入指定的`url`路径进行指定模块的访问
-- 如果当前网速过慢，那将会延迟页面的加载，对用户体验不是很友好
+
+### 对TypeScript的简单理解
+
+**变量**：
+
+1. `void`：与`any`类型相反，它表示没有任何类型，通常用于函数的返回值类型为`void`，声明一个`void`类型的变量没有什么大用，因为你只能为它赋予`undefined`和`null`。
+2. 默认情况下`null`和`undefined`是所有类型的子类型。 就是说你可以把 `null`和`undefined`赋值给`number`类型的变量。然而，当你指定了`--strictNullChecks`标记，`null`和`undefined`只能赋值给`void`和它们各自。
+3. `never`类型：表示的是那些永不存在的值的类型。 例如， `never`类型是那些总是会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型； 变量也可能是 `never`类型，当它们被永不为真的类型保护所约束时。
+
+**接口**：
+
+1. 作用：对值所具有的结构进行类型检查
+2. 可选属性可以用`?`，如：`interface Point { x?: number }`
+3. 只读属性用`readonly`，如：`interface Point { readonly: x: number }`
+
+**范型**：
+
+1. 作用：使用范型来创建可重用的组件，一个组件可以支持多种类型的数据，这样用户就可以用自己的数据类型来使用组件了
+2. 使用的两种方式：
+   - 传入所有的参数，包括类型参数：`let output = fn<string>("LinDaiDai")`
+   - 类型推导，即编译器会根据传入的参数自动地帮助我们确定T的类型：`let output = fn("LinDaiDai")`
+3. 与`any`来定义参数类型的区别：在函数中使用`any`接收任意类型的数据且返回`any`类型的数据是不能保持准确性的，例如我传入进来的是`number`返回的可能是`string`；而范型通过添加类型变量`T`，它可以捕获用户传入的类型，之后我们就可以用这个类型了，保证了数据类型的准确性。
+
+**枚举**：
+
+1. 作用：使用枚举我们可以定义一些带名字的常量，可以清晰的表达意图或者创建一组有区别的用例。
+2. `TypeScript`支持数字和基于字符串的枚举：
+   - 数字：`enum Colors: { Red, Green, Blue }`，默认第一位是从数字`0`开始自增的，也就是说我们获取`Colors.Red`的值是`0`，`Colors.Green`的值是`1`；如果我们改变`Red`，例如设置为`enum Colors: { Red = 1, Green, Blue }`，那么此时`Colors.Red`就是`1`，`Colors.Green`就是`2`了
+   - 字符串：每个成员都必须用字符串字面量，或另外一个字符串枚举成员进行初始化。在该枚举中没有自增，例如：`enum Colors: { Red = 'RED', Green = 'GREEN', Blue = 'BLUE' }`
+   - 异构枚举：也就是在枚举中混合字符串和数字成员，不过不建议这样做。例如：`enum Colors: { No: 0, Yes = 'YES' }`
 

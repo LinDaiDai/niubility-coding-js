@@ -132,6 +132,7 @@ function flushSchedulerQueue () {
     has[id] = null
     watcher.run()
   }
+  waiting = flushing = false
 }
 // 11. nextTick() 方法批量异步更新
 const callbacks = []
