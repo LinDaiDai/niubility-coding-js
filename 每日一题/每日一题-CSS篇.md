@@ -343,6 +343,14 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 
 
 
+### line-height为什么可以垂直居中？
+
+可以实现垂直居中的原因是CSS的行距上下等分机制，实际上line-height等于height也只是近似垂直居中，文字会向下偏移1px-2px的距离，但并不容易察觉。
+
+![](./resource/css4.png)
+
+
+
 ### position: fixed什么时候会失效？
 
 我们知道，设置了`position: fixed`固定定位属性的元素会脱离文档流，达到“超然脱俗”的境界。
@@ -350,10 +358,10 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 
 但是有一种情况例外：
 
-若是设置了`position: fixed`属性的元素，它的上级元素设置了`transform`属性则会导致固定定位属性失效。
-无论你的`transform`设置的是什么属性都会影响到`position: fixed`。
+若是设置了`position: fixed`属性的元素，它的祖先元素设置了`transform`属性则会导致固定定位属性失效。
+只要你的`transform`设置的不是`none`，都会影响到`position: fixed`，因为此时就会相对于祖先元素指定坐标，而不是浏览器窗口。
 
-注意，这个特性表现，目前只在Chrome浏览器/FireFox浏览器下有，IE浏览器，包括IE11, `fixed`还是`fixed`的表现。
+注意，这个特性表现，目前只在Chrome浏览器/FireFox浏览器下有。IE浏览器，包括IE11, `fixed`还是`fixed`的表现。
 
 (具体可以看我这里的案例：[【问】position: fixed什么时候会失效？](https://github.com/LinDaiDai/niubility-coding-js/blob/master/CSS/position-fixed什么时候会失效.md))
 
@@ -505,3 +513,4 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 ### 移动端中不同手机html默认的字体大小都是一样的吗
 
 如果没有人为取改变根元素字体大小的话，默认是`1rem = 16px`；根元素默认的字体大小是`16px`。
+

@@ -468,3 +468,67 @@ scrollHeight是指上边看不到的区域加可视区加右边看不到的区�
 - `childNodes`不仅仅获取`element`节点还会获取元素标签中的空白节点
 - `firstElementChild`只获取该节点下的第一个`element`节点
 - `firstChild`会获取空白节点
+
+
+
+### JS三种加载方式的区别
+
+(答案参考来源：[前端性能优化-页面加载渲染优化](https://juejin.im/post/5e9abe2a6fb9a03c7762169b))
+
+**正常模式**
+
+这种情况下 JS 会阻塞浏览器，浏览器必须等待 index.js 加载和执行完毕才能去做其它事情。
+
+```html
+<script src="index.js"></script>
+```
+
+**async(异步) 模式**
+
+async 模式下，JS 不会阻塞浏览器做任何其它的事情。它的加载是异步的，当它加载结束，JS 脚本会立即执行。
+
+```html
+<script async src="index.js"></script>
+```
+
+**defer(延缓) 模式**
+
+efer 模式下，JS 的加载是异步的，执行是被推迟的。等整个文档解析完成、DOMContentLoaded 事件即将被触发时，被标记了 defer 的 JS 文件才会开始依次执行。
+
+```html
+<script defer src="index.js"></script>
+```
+
+从应用的角度来说，一般当我们的脚本与 DOM 元素和其它脚本之间的依赖关系不强时，我们会选用 async；当脚本依赖于 DOM 元素和其它脚本的执行结果时，我们会选用 defer。
+
+
+
+### 了解loading="lazy"吗？
+
+(答案参考：[一、Lazy loading Chrome 76支持啦](https://www.zhangxinxu.com/wordpress/2019/09/native-img-loading-lazy/))
+
+1. Lazy loading加载数量与屏幕高度有关，高度越小加载数量越少，但并不是线性关系。
+2. Lazy loading加载数量与网速有关，网速越慢，加载数量越多，但并不是线性关系。
+3. Lazy loading加载没有缓冲，滚动即会触发新的图片资源加载。
+4. Lazy loading加载在窗口resize尺寸变化时候也会触发，例如屏幕高度从小变大的时候。
+5. Lazy loading加载也有可能会先加载后面的图片资源，例如页面加载时滚动高度很高的时候。
+
+判断浏览器是否支持`loading="lazy"`:
+
+下面三种方法都可以：
+
+```javascript
+var isSupportLoading = 'loading' in document.createElement('img');
+```
+
+或者：
+
+```javascript
+var isSupportLoading = 'loading' in new Image();
+```
+
+或者：
+
+```javascript
+var isSupportLoading = 'loading' in HTMLImageElement.prototype;
+```

@@ -1075,16 +1075,30 @@ event.emit('pet', '我是传递的参数');
 - 文件解析优化：
 
   - `babel-loader`编译慢，可以通过配置`exclude`来去除一些不需要编译的文件夹，还可以通过设置`cacheDirectory`开启缓存，转译的结果会被缓存到文件系统中
-  - 文件解析优化：通过配置`resolve`选项中的`alias`、`extensions`、`modules`来实现。`alias`创建`import`或者`require`的别名；加快`webpack`查找速度。`extensions`自动解析确定的扩展；`modules`解析模块时应该搜索的目录，通常建议使用绝对路径，避免层层查找祖先目录。
+  - 文件解析优化：通过配置`resolve`选项中的`alias`。`alias`创建`import`或者`require`的别名，加快`webpack`查找速度。
+
+- 使用`webpack`自带插件`IgnorePlugin`忽略`moment`目录下的`locale`文件夹使打包后体积减少`278k`
+
+  - 问题原因：使用`moment`时发现会把整个`locale`语言包都打包进去导致打包体积过大，但是我们只需要用到中文包
+
+  - 在`webpack`配置中使用`webpack`自带的插件`IgnorePlugin`忽略`moment`目录下的`locale`文件夹
+
+  - 之后在项目中引入：
+
+    ```javascript
+    // index.js
+    // 利用IgnorePlugin把只需要的语言包导入使用就可以了，省去了一下子打包整个语言包
+    import moment from 'moment';
+    // 单独导入中文语言包
+    import 'moment/locale/zh-cn';
+    ```
 
 - 使用`splitChunks`进行拆包，抽离公共模块，一些常用配置项：
-
-  - `chunks`:表示选择哪些 `chunks` 进行分割，可选值有：`async，initial和all`
+- `chunks`:表示选择哪些 `chunks` 进行分割，可选值有：`async，initial和all`
   - `minSize`: 表示新分离出的`chunk`必须大于等于`minSize`，默认为30000，约30kb
   - `minChunks`: 表示一个模块至少应被minChunks个chunk所包含才能分割，默认为1
   - `name`: 设置`chunk`的文件名
   - `cacheGroups`: 可以配置多个组，每个组根据test设置条件，符合test条件的模块，就分配到该组。模块可以被多个组引用，但最终会根据priority来决定打包到哪个组中。默认将所有来自 node_modules目录的模块打包至vendors组，将两个以上的chunk所共享的模块打包至default组。
-
 - `DllPlugin`动态链接库，将第三方库的代码和业务代码抽离：
 
   - 根目录下创建一个`webpack.dll.js`文件用来打包出`dll`文件。并在`package.json`中配置`dll`指令生成`dll`文件夹，里面就会有`manifest.json`以及生成的`xxx.dll.js`文件
