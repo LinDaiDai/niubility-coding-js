@@ -248,7 +248,7 @@ OK👌，其实不用我多说，你们也应该知道，`Observer`会对对象�
 
 
 
-![](./resource/9.png)
+![9.png](https://upload-images.jianshu.io/upload_images/7190596-7435e598d93f3549.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 > /src/core/instance/observer/index.js
 
@@ -260,5 +260,4 @@ OK👌，其实不用我多说，你们也应该知道，`Observer`会对对象�
 
 
 
-当`new Watcher()`的时候，会将`Dep.target`指向这个`Watcher`实例
-
+未完待续....
