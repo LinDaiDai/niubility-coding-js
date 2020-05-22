@@ -18,8 +18,8 @@ class Watcher {
     this.vm = vm
     this.getter = expOrFn
     this.cb = cb
-    this.lazy = options.lazy
-    this.dirty = options.lazy
+    this.lazy = !!options.lazy
+    this.dirty = !!options.lazy
     this.deps = []
     this.value = undefined
   }
