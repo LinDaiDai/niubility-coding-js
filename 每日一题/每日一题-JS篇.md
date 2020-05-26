@@ -262,8 +262,6 @@ console.log(trim('  1 1  ')) // '1 1'
 
 ## 编程题
 
-
-
 ### 实现sum(1,2,3)==sum(1)(2)(3)
 
 ```javascript

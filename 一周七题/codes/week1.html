@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>week1</title>
+</head>
+<body>
+  <script>
+    // 1
+    // console.log(Array(3))
+    // console.log(Array(3, 4))
+
+    // console.log(new Array(3))
+    // console.log(new Array(3, 4))
+
+    // console.log(Array.of(3))
+    // console.log(Array.of(3, 4))
+
+    // 2
+    // cool点的写法：
+    // [...Array(100).keys()]
+
+    // // 其他方法：
+    // Array(100).join(",").split(",").map((v, i) => i)
+    // Array(100).fill().map((v, i) => i)
+
+    // 3
+    // function createArr (...elements) {
+    //   let handler = {
+    //     get (target, key, receiver) { // 第三个参数传不传都可以
+    //       console.log(key)
+    //       // let index = Number(key)
+    //       let index = ~~key
+    //       if (index < 0) {
+    //         index = String(target.length + index)
+    //       }
+    //       return Reflect.get(target, index, receiver)
+    //     }
+    //   }
+    //   let target = [...elements]
+    //   return new Proxy(target, handler)
+    // }
+    // var arr1 = createArr(1, 2, 3)
+    // console.log(arr1[-1]) // 3
+    // console.log(arr1[-2]) // 2
+
+    // 情况一
+    // var obj = {
+    //   fn: function () {
+    //     console.log('lindaidai')
+    //   }
+    // }
+    // var obj1 = new Proxy(obj, {
+    //   get (target, key, receiver) {
+    //     console.log(receiver === obj1)
+    //     console.log(receiver === target)
+    //     return target[key]
+    //   }
+    // })
+    // obj1.fn()
+    // obj.fn()
+    // 情况二
+    var proxy = new Proxy({}, {
+      get (target, key, receiver) {
+        return receiver;
+      }
+    })
+    console.log(proxy.getReceiver === proxy) // true
+    var inherits = Object.create(proxy)
+    console.log(inherits.getReceiver === inherits) // true
+  </script>
+</body>
+</html>
