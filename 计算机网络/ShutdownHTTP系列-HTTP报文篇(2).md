@@ -10,16 +10,17 @@
 
 系列思维导图：
 
-![](./resource/ShutdownHTTP.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6b309d10fbf?w=2688&h=1718&f=png&s=438444)
 
 系列目录：
 
-- [《🐲【1】Shutdown HTTP系列-基础篇》](./ShutdownHTTP系列-基础篇(1).md)
+- [《🐲【1】Shutdown HTTP系列-基础篇》](https://juejin.im/post/5e955817f265da47c06ecf77)
 - 《🐲【2】Shutdown HTTP系列-HTTP报文篇》「本文」
-- [《🐲【3】Shutdown HTTP系列-Cookie篇》]()
-- [《🐲【4】Shutdown HTTP系列-HTTPS篇》]()
-- [《🐲【5】Shutdown HTTP系列-CCPG篇》]()
-- [《🐲【6】Shutdown HTTP面试系列》]()
+- 《🐲【3】Shutdown HTTP系列-Cookie篇》
+- 《🐲【4】Shutdown HTTP系列-HTTPS篇》
+- 《🐲【5】Shutdown HTTP系列-CCPG篇》
+- 《🐲【6】Shutdown HTTP面试系列》
 
 
 
@@ -33,7 +34,6 @@
 - 编码提升传输速率
 - 多部分对象集合
 - 获取部分内容的范围请求
-- 内容协商
 
 
 
@@ -55,19 +55,23 @@
 
 **请求报文：**
 
-![](./resource/shutdownHTTP/21.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6b9ed927566?w=1458&h=460&f=jpeg&s=70455)
 
 真实例子：
 
-![](./resource/shutdownHTTP/22.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6bb30d88543?w=1272&h=742&f=jpeg&s=135234)
 
 **响应报文：**
 
-![](./resource/shutdownHTTP/23.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6bc6e4c5d73?w=1466&h=508&f=jpeg&s=75413)
 
 真实例子：
 
-![](./resource/shutdownHTTP/24.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6bde714b3c0?w=1374&h=668&f=jpeg&s=157661)
 
 
 
@@ -81,8 +85,8 @@ HTTP报文的整体是：报文首部 + 空行 + 报文实体
 
 大家记住这张图就可以了：
 
-![](./resource/shutdownHTTP/25.png)
 
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6bf5d8cc428?w=1604&h=872&f=jpeg&s=167314)
 
 
 ### 3.1 起始行
@@ -119,7 +123,7 @@ HTTP报文的整体是：报文首部 + 空行 + 报文实体
 
 例如下面这个实例：
 
-![](./resource/shutdownHTTP/26.png)
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6c2481c4124?w=1404&h=830&f=jpeg&s=122430)
 
 在`Connection: keep-alive`下面就有一个换行符。
 
@@ -143,7 +147,8 @@ HTTP报文的整体是：报文首部 + 空行 + 报文实体
 
 （HTTP报文中最繁琐的就是首部字段了，也就是我们经常在`network`上看到的那么一大串的配置）
 
-![](./resource/shutdownHTTP/27.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6c3b33636b9?w=1368&h=664&f=jpeg&s=186926)
 
 
 
@@ -167,7 +172,8 @@ HTTP首部字段我会从这几个方面来讲解：
 
 
 2. 多个字段值用`,`号连接：
-   由：`key: value1, value2`
+
+由：`key: value1, value2`
 
 例：`Keep-Alive: timeout=15, max=100`
 
@@ -202,19 +208,51 @@ HTTP首部字段我会从这几个方面来讲解：
 
 #### 通用首部字段
 
-![](./resource/shutdownHTTP/通用首部字段.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6c6a11a1ae1?w=3168&h=1896&f=png&s=794013)
+
+这边有一个需要注意的点：
+
+`Connection`首部字段有一个值是`keep-alive`，表示开启持久连接。
+
+而其实还有一个首部字段也叫`Keep-Alive`，允许消息发送者暗示连接的状态，还可以用来设置超时时长和最大请求数。
+
+对于这个`Keep-Alive`首部字段，有两个参数：
+
+- `timeout`：指定了一个空闲连接需要保持打开状态的最小时长（以秒为单位）。需要注意的是，如果没有在传输层设置 keep-alive TCP message 的话，大于 TCP 层面的超时设置会被忽略。
+- `max`：在连接关闭之前，在此连接可以发送的请求的最大值。在非管道连接中，除了 0 以外，这个值是被忽略的，因为需要在紧跟着的响应中发送新一次的请求。HTTP 管道连接则可以用它来限制管道的使用。
+
+案例🌰：
+
+```
+HTTP/1.1 200 OK
+Connection: Keep-Alive
+Content-Encoding: gzip
+Content-Type: text/html; charset=utf-8
+Date: Thu, 11 Aug 2016 15:23:13 GMT
+Keep-Alive: timeout=5, max=1000
+Last-Modified: Mon, 25 Jul 2016 04:32:39 GMT
+Server: Apache
+
+(body)
+```
+> 需要将 The Connection 首部的值设置为  "keep-alive" 这个首部才有意义。同时需要注意的是，在HTTP/2 协议中， Connection 和 Keep-Alive  是被忽略的；在其中采用其他机制来进行连接管理。
+
+
 
 #### 请求首部字段
 
-![](./resource/shutdownHTTP/请求首部字段.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6c895110cde?w=2890&h=1876&f=png&s=846411)
 
 #### 响应首部字段
 
-![](./resource/shutdownHTTP/响应首部字段.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6cad9d6b1f5?w=2926&h=1126&f=png&s=386649)
 
 #### 实体首部字段
 
-![](./resource/shutdownHTTP/实体首部字段.png)
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6cd1a7f1b6e?w=2948&h=1364&f=png&s=452956)
 
 ### 4.3 非标准的首部字段
 
@@ -222,7 +260,8 @@ HTTP首部字段我会从这几个方面来讲解：
 
 有这么一些：
 
-![](./resource/shutdownHTTP/非标准首部字段.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6cfa5099d73?w=2984&h=676&f=png&s=247666)
 
 另外关于`Cookie`这块内容也还是挺多的，所以我也会单独放在第三章来进行讲解。
 
@@ -250,7 +289,8 @@ Accept: text/html, q=1; application/xml, q=0.8
 
 （图中的序号并无优先级的意思，只是单纯的作为标记）
 
-![](./resource/shutdownHTTP/Accept相关字段.png)
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6d1cd0daab8?w=3408&h=1224&f=png&s=479386)
 
 需要注意的是：
 
@@ -276,11 +316,13 @@ Accept: text/html, q=1; application/xml, q=0.8
 
 - 都是作用在实体主体上的可逆变换。这句话的意思是说：例如服务器使用了`gzip`压缩了原始的响应体然后发送给浏览器，浏览器在得到之后可以对这个被压缩的响应体进行解码得到原始内容。
 
+
+
 ### 5.1 内容编码
 
 #### 内容编码介绍
 
-`内容编码`表示HTTP应用程序有时在发送请求之前需要对内容进行编码，例如我们常听见的通过**content-encoding**来指定内容的压缩方式，通过**content-length**来指定文件大小。
+`内容编码`表示HTTP应用程序有时在发送请求之前需要对内容进行编码，例如我们常听见的通过**Content-Encoding**来指定内容的压缩方式，通过**Content-Length**来指定文件大小。
 
 内容编码的具体过程主要是：
 
@@ -357,7 +399,8 @@ HTTP采用通用的压缩算法，比如`gzip`来压缩`html,javascript, CSS`文
 
 让我们来看张图：
 
-图片gzip
+
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6d5db1e8edd?w=2000&h=1176&f=png&s=169240)
 
 可以看到，在这里原始响应虽然被压缩过了，但是后面还是能经过解码器转为原始内容，所以这就是前面提到的`可逆变换`。
 
@@ -456,7 +499,7 @@ require('net').createServer(function(sock) {
 
 网上有张图呆呆觉得特别好，借用一下，哈哈😄：
 
-图片分块传输
+![](https://user-gold-cdn.xitu.io/2020/5/25/1724c6dcce176813?w=1902&h=1330&f=jpeg&s=93929)
 
 (图片来源：[用了这么久HTTP, 你是否了解Content-Length和Transfer-Encoding ?](https://juejin.im/post/5d74d0356fb9a06b19735e3a))
 
@@ -504,4 +547,166 @@ dsf
 
 0
 ```
+
+
+
+## 6. 多部分对象集合(Multipart)
+
+HTTP协议中采纳了多部分对象集合(Multipart)，发送的一份报文主体内可含有多类型实体。通常是在图片或文本文件等上传时使用。
+
+多部分对象集合包含的对象如下：
+
+`multipart/form-data`：在Web表单文件上传时使用。
+
+`multipart/byteranges`：状态码206(Partial Content, 部分内容)响应报文包含了多个范围的内容时使用。
+
+例如：
+
+```
+Content-Type: multipart/form-data; boundary=AaB03x
+
+--AaB03x
+Content-Disposition: form-data; name="field1"
+
+--AaB03x
+Content-Disposition: form-data; name="pics";
+filename="file1.txt"
+Content-Type: text/plain
+
+...(file1.txt的数据)...
+--AaB03x--
+```
+
+注意⚠️：
+
+- 在HTTP报文中使用多部分对象集合时，需要在首部字段里加上`Content-Type`。
+- 使用`boundary`字符串来划分多部分对象集合指明的各类实体。
+- 在boundary字符串指定的各个实体的起始行之前插入`"--"`标记，而在多部分对象集合对应的字符串的最后插入`"–"`标记作为结束。
+
+
+
+## 7. 获取部分内容的范围请求
+
+**概念：**
+
+可以指定下载实体范围，也就是说在一次请求内可以不加载整个的实体，而是只加载实体中的一部分。
+
+**如何实现？**
+
+例如有一个`10000`字节的实体，可以只请求`5001 ~ 10000`字节内的资源。
+
+- 请求报文首部字段`Range` 来指定`byte`范围
+
+  ```
+  If-Range: 'userage-12234'
+  Range: bytes=5001-10000
+  ```
+
+- 响应报文使用`Content-Range`告诉客户端此次的请求范围：
+
+  ```
+  HTTP/1.1 206 Partial Content
+  Accept-Ranges: bytes
+  Content-Range: bytes 5001-10000/10000
+  ```
+
+  若是无法处理的话，则返回`200 OK `以及整个资源。
+
+需要注意的点⚠️：
+
+1. 一般要配合`If-Range`来用，它告知服务器如果`If-Range`的值(`ETag`或者最后修改时间)的值和服务器资源 `ETage`或者时间一致则作为范围请求处理，也就是返回`Range`字段中的部分资源；否则就返回整个资源。
+
+2. `If-Range` 和 `Range`以及 `Accept-Ranges` 和 `Content-Range`
+
+   这四个字段只有`Accept-Ranges`是有`s`的。
+
+**案例🌰**：
+
+可以来一个案例看看：
+
+请求：
+
+```
+<!-- 请求 -->
+GET /me.jpg HTTP/1.1
+Host: lindaidai.com
+Range: bytes=5001-10000
+
+<!-- 响应 -->
+HTTP/1.1 206 Partial Content
+Data: Mon, 25 May 2020 12:56:52 GMT
+Content-Range: bytes 5001-10000/10000
+Content-Length: 5000
+Content-Type: image/jpeg
+```
+
+
+
+## 参考文章
+
+知识无价，支持原创。
+
+参考文章：
+
+- [前端性能优化gzip初探（补充gzip压缩使用算法brotli压缩的相关介绍)](https://juejin.im/post/5d27dd2de51d454f6f16ec89)
+- [图解HTTP：发送多种数据的多部分对象集合](https://blog.csdn.net/Watkins_OS/article/details/100976602)
+- [用了这么久HTTP, 你是否了解Content-Length和Transfer-Encoding ?](https://juejin.im/post/5d74d0356fb9a06b19735e3a)
+- [HTTP 协议中的 Transfer-Encoding](https://imququ.com/post/transfer-encoding-header-in-http.html)
+- 《图解HTTP》
+- 《HTTP权威指南》
+
+
+
+## 后语
+
+你盼世界，我盼望你无`bug`。这篇文章就介绍到这里。
+
+这个系列文章的最后我都会送给大家一段情话来表达我对大家的感谢：
+
+`"这是一个普通的我写的普通的文章"`
+
+`"拥有一颗上进拼搏的心"`
+
+`"在这个网络中，有看不完的文章，背不完的面经"`
+
+`"感谢您遇见本篇文章的时候，片刻的停留"`
+
+`"如内容不满意，我诚心向您道歉"`
+
+`"麻烦您先不要开喷，请及时联系我"`
+
+`"我一定改到您满意为止"`
+
+`"原创不易，如果可以的话"`
+
+`"麻烦您能给个赞或者转发"`
+
+🌟🌟🌟🌟🌟
+
+`"祝您安好～～谢谢～～"`
+
+喜欢**霖呆呆**的小伙还希望可以关注霖呆呆的公众号 `LinDaiDai` 或者扫一扫下面的二维码👇👇👇.
+
+![](https://user-gold-cdn.xitu.io/2020/4/14/1717789435f2814a?w=900&h=500&f=gif&s=1632550)
+
+我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉
+
+你的鼓励就是我持续创作的主要动力 😊.
+
+相关推荐:
+
+[《全网最详bpmn.js教材》](https://juejin.im/post/5def372af265da33c84a4818)
+
+[《【建议改成】读完这篇你还不懂Babel我给你寄口罩》](https://juejin.im/post/5e477139f265da574c566dda)
+
+[《【建议星星】要就来45道Promise面试题一次爽到底(1.1w字用心整理)》](https://juejin.im/post/5e58c618e51d4526ed66b5cf)
+
+[《【建议👍】再来40道this面试题酸爽继续(1.2w字用手整理)》](https://juejin.im/post/5e6358256fb9a07cd80f2e70)
+
+[《【何不三连】比继承家业还要简单的JS继承题-封装篇(牛刀小试)》](https://juejin.im/post/5e707417e51d45272054d5d3)
+
+[《【何不三连】做完这48道题彻底弄懂JS继承(1.7w字含辛整理-返璞归真)》](https://juejin.im/post/5e75e22951882549027687f9)
+
+[《霖呆呆的近期面试128题汇总(含超详细答案) | 掘金技术征文》](https://juejin.im/post/5eb55ceb6fb9a0436748297d)
+
 
