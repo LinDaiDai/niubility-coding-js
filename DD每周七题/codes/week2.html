@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    function sum (...args) {
+      function currySum (...rest) {
+        args.push(...rest)
+        return currySum
+      }
+      currySum.toString = function () {
+        console.log(args)
+        return args.reduce((result, cur)=>{
+          return result + cur
+        })
+      }
+      currySum.valueOf = function () {
+        console.log(args)
+        return args.reduce((result, cur)=>{
+          return result + cur
+        })
+      }
+      return currySum
+    }
+    sum(1,2,3)==sum(1)(2)(3)
+    // console.log(sum(1,2,3)==sum(1)(2)(3))
+  </script>
+</body>
+</html>

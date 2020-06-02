@@ -204,10 +204,10 @@ setTimeout(() => {
 
 ### addEventListener和attachEvent的区别？
 
-- 前者是标准浏览器，后者ie8以下
+- 前者是标准浏览器中的用法，后者`IE8`以下
 - `addEventListener`可有冒泡，可有捕获；`attachEvent`只有冒泡，没有捕获。
 - 前者事件名不带`on`，后者带`on`
-- 前者this指向当前元素，后者指向window
+- 前者回调函数中的`this`指向当前元素，后者指向`window`
 
 
 
@@ -290,7 +290,7 @@ DOM事件流分为三个阶段：
 
 - 其它浏览器`event.target`
 - `IE`下为`event.srcElement`
-- 最总写法：`var target = event.target || event.srcElement`
+- 最终写法：`var target = event.target || event.srcElement`
 
 3. 阻止事件冒泡
 
