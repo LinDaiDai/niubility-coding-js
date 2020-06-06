@@ -568,25 +568,9 @@ obj2.foo2()
 
 想想我前面说过的话，谁调用的函数，函数内的`this`指向的就是谁。
 
-这里调用`foo2()`的是`obj2`，所以`setTimeout`里的`this`指向的就是`obj2`。
+而对于匿名函数，它里面的`this`在非严格模式下始终指向的都是`window`。
 
-哦 😯？真的是这样吗？
-
-
-![](https://user-gold-cdn.xitu.io/2020/3/7/170b415e112e97e9?w=198&h=161&f=jpeg&s=4256)
-
-仔细想想，调用`setTimeout`的是`obj2`吗？😁
-
-错咯，调用它的可是`window`，这段代码其实等于：
-
-```javascript
-window.setTimeout(function () {
-	console.log(this)
-  console.log(this.a)
-}, 0)
-```
-
-因此这里的`this`指向的应该是`window`。
+(之前呆呆一直认为的是定时器里的函数和定时器是有关系的，所以有一些错误的理解，感谢掘友[朝游夕宴](https://juejin.im/user/5cb83422e51d456e3267e414)的指出)
 
 所以最终的结果是：
 

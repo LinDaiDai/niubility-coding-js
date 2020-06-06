@@ -325,7 +325,7 @@ String.padStart(targetLength,[padString])
 '09-12'.padStart(10, 'YYYY-MM-DD') // "YYYY-09-12"
 ```
 
-polypill实现：
+polyfill实现：
 
 ```javascript
 String.prototype.myPadStart = function (targetLen, padString = " ") {
@@ -349,7 +349,7 @@ console.log('xxx'.myPadStart(16))
 console.log('xxx'.padStart(16))
 ```
 
-还是比较简单的，而`padEnd`的实现和它一样，只需要把第二层`for`循环里的`${padString}${orignStr}`换下位置就可以了。
+还是比较简单的，而`padEnd`的实现和它一样，只需要把第二层`for`循环里的`${padString[j]}${orignStr}`换下位置就可以了。
 
 
 
