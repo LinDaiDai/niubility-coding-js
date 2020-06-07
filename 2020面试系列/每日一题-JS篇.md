@@ -275,30 +275,6 @@ console.log(trim('  1 1  ')) // '1 1'
 
 ## 编程题
 
-### 实现sum(1,2,3)==sum(1)(2)(3)
-
-```javascript
-function sum(...args){
-  function currySum(...rest){
-    args.push(...rest)
-    return currySum
-  }
-  currySum.toString= function(){ 
-    return args.reduce((result,cur)=>{
-      return result + cur
-    })
-  }
-  currySum.toNumber= function(){ 
-    return args.reduce((result,cur)=>{
-      return result + cur
-    })
-  }
-  return currySum
-}
-```
-
-
-
 ### 实现一个padStart()或padEnd()的polyfill
 
 `String.prototype.padStart` 和 `String.prototype.padEnd`是`ES8`中新增的方法，允许将空字符串或其他字符串添加到原始字符串的开头或结尾。我们先看下使用语法：

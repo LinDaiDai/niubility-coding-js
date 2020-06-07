@@ -10,6 +10,8 @@
 
 所有题目也都会整合至 [LinDaiDai/niubility-coding-js](https://github.com/LinDaiDai/niubility-coding-js/issues) 的`issues`中，欢迎大家提供更好的解题思路，谢谢大家😁。
 
+一起来看看本周的七道题吧。
+
 
 
 ## 正题

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 1
+    // var arr = [1, 2, 3]
+    // delete arr[1]
+    // console.log(arr)
+    // console.log(arr.length)
+    // 2
+const batches = (recipe, available) =>
+  Math.floor(
+    // Math.min(...Object.keys(recipe).map(k => available[k] / recipe[k] || 0))
+    Math.min(...Object.entries(recipe).map(([k, v]) => available[k] / v || 0))
+  )
+    const res0 = batches(
+      { milk: 100, butter: 50, flour: 5 },
+      { milk: 132, butter: 48, flour: 51 }
+    )
+    const res1 = batches(
+      { milk: 100, butter: 50, cheese: 10 },
+      { milk: 198, butter: 52, cheese: 10 }
+    )
+    const res2 = batches(
+      { milk: 2, sugar: 40, butter: 20 },
+      { milk: 5, sugar: 120, butter: 500 }
+    )
+    console.log(res0)
+    console.log(res1)
+    console.log(res2)
+  
+  </script>
+</body>
+</html>
