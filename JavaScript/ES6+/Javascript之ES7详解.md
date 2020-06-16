@@ -683,7 +683,7 @@ console.log(Object.getOwnPropertyDescriptor(obj, 'id'))
 
 ```javascript
         function doSometing(name) {
-            console.log('Hello' + name)
+            console.log('Hello ' + name)
         }
         function myDecorator(fn) {
             return function() {
@@ -695,11 +695,11 @@ console.log(Object.getOwnPropertyDescriptor(obj, 'id'))
         }
         const wrapped = myDecorator(doSometing)
         doSometing('lindaidai')
-        //Hellowlindaidai
+        //Hello lindaidai
         
         wrapped('lindaidai')
         //start 
-        //Hellowlindaidai
+        //Hello lindaidai
         //end
 ```
 

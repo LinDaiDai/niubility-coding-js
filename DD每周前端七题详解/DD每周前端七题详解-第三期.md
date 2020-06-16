@@ -156,7 +156,7 @@ const batches = (recipe, available) =>
 
 1. 尽量不用`target="_blank"`
 
-2. 如果一定要用，需要加上`rel="noopener"`或者`rel="noreferrer"`。这样新窗口的window.openner就是null了，而且会让新窗口运行在独立的进程里，不会拖累原来页面的进程。(不过，有些浏览器对性能做了优化，即使不加这个属性，新窗口也会在独立进程打开。不过为了安全考虑，还是加上吧。)
+2. 如果一定要用，需要加上`rel="noopener"`或者`rel="noreferrer"`。这样新窗口的`window.openner`就是`null`了，而且会让新窗口运行在独立的进程里，不会拖累原来页面的进程。(不过，有些浏览器对性能做了优化，即使不加这个属性，新窗口也会在独立进程打开。不过为了安全考虑，还是加上吧。)
 
 （参考来源：[慎用target="_blank"](https://juejin.im/post/5eb8ed20e51d454db55fb353)）
 
@@ -166,7 +166,7 @@ const batches = (recipe, available) =>
 
 ### 五、children以及childNodes的区别
 
-- `children`和只获取该节点下的所有`element`节点
+- `children`只获取该节点下的所有`element`节点
 - `childNodes`不仅仅获取`element`节点还会获取元素标签中的空白节点
 - `firstElementChild`只获取该节点下的第一个`element`节点
 - `firstChild`会获取空白节点

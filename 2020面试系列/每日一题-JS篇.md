@@ -1175,7 +1175,9 @@ class Person {
 }
 ```
 
-当我们在使用`babel`的这些`plugin`的时候或者使用`preset`的时候，有一个配置属性`loose`它默认是为`false`，在这样的条件下：
+如果你对`Class`或者里面的`static`还不熟悉的话可得先看看呆呆的这篇文章了：[《【何不三连】比继承家业还要简单的JS继承题-封装篇(牛刀小试)》](https://juejin.im/post/5e707417e51d45272054d5d3#heading-14)
+
+当我们在使用`babel`的这些`plugin`或者使用`preset`的时候，有一个配置属性`loose`它默认是为`false`，在这样的条件下：
 
 `Class`编译后：
 
