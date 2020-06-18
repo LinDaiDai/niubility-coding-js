@@ -48,11 +48,84 @@ console.log(getName())
 
 因此最终的结果也就是`undefined`。
 
-[https://github.com/LinDaiDai/niubility-coding-js/issues/22](https://github.com/LinDaiDai/niubility-coding-js/issues/22)
+[https://github.com/LinDaiDai/niubility-coding-js/issues/23](https://github.com/LinDaiDai/niubility-coding-js/issues/23)
 
 
 
-### 二、Babel是如何编译Class的？
+### 二、实现一个pipe函数
+
+(题目来源：[30-seconds-of-interviews](https://github.com/30-seconds/30-seconds-of-interviews))
+
+如下所示，实现一个`pipe`函数：
+
+```javascript
+const square = v => v * v
+const double = v => v * 2
+const addOne = v => v + 1
+const res = pipe(square, double, addOne)
+console.log(res(3)) // 19; addOne(double(square(3)))
+```
+
+首先看到这道题，`pipe`是可以接收任意个数的函数，并且返回的是一个新的函数`res`。
+
+**(1) pipe基本结构**
+
+那么我们可以得出`pipe`的基本结构是这样的：
+
+```javascript
+const pipe = function (...fns) {
+  return function (param) {}
+}
+```
+
+它本身是一个函数，然后我们可以利用`...fns`获取到所有传入的函数参数`square、double`这些。
+
+之后它会返回一个函数，且这个函数中是可以接收参数`param`的。
+
+**(2) 返回的函数**
+
+接下来的逻辑主要就是在于返回的函数上了，在这个返回的函数中，我们需要对`param`进行层层处理。
+
+OK👌，这很容易就让人想到了...`reduce`...
+
+我们可以对`fns`函数数组使用`reduce`，之后`reduce`的初始值为传入的参数`param`。
+
+让我们一起来看看最终的代码：
+
+```javascript
+const pipe = function (...fns) {
+  return function (param) {
+    return fns.reduce((pre, fn) => {
+      return fn(pre)
+    }, param)
+  }
+}
+```
+
+最终返回的是经过`fns`数组中所有函数处理过的值。
+
+当然，我们也可以用简洁点的写法：
+
+```javascript
+const pipe = (...fns) => param => fns.reduce((pre, fn) => fn(pre), param)
+```
+
+这样就得到了我们想要的`pipe`函数了：
+
+```javascript
+const square = v => v * v
+const double = v => v * 2
+const addOne = v => v + 1
+const pipe = (...fns) => param => fns.reduce((pre, fn) => fn(pre), param)
+const res = pipe(square, double, addOne)
+console.log(res(3)) // 19; addOne(double(square(3)))
+```
+
+[https://github.com/LinDaiDai/niubility-coding-js/issues/24](https://github.com/LinDaiDai/niubility-coding-js/issues/24)
+
+
+
+### 三、Babel是如何编译Class的？
 
 (参考来源：[相学长-你的Tree-Shaking并没什么卵用](https://juejin.im/post/5a5652d8f265da3e497ff3de))
 
@@ -86,7 +159,7 @@ class Person {
 - 实例属性和方法定义在构造函数内(如`name`和`getSex()`)
 - 类内部声明的属性方法(`getName`)和静态属性方法(`getLook`)是会被`Object.defineProperty`所处理，将其可枚举属性设置为`false`
 
-
+(下面的代码看着好像很长，其实划分一下并没有什么东西的)
 
 编译后的代码：
 
@@ -210,9 +283,7 @@ var Person = /*#__PURE__*/function () {
 
   (副作用大致理解为：一个函数会、或者可能会对函数外部变量产生影响的行为。)
 
-[https://github.com/LinDaiDai/niubility-coding-js/issues/23](https://github.com/LinDaiDai/niubility-coding-js/issues/23)
-
-
+[https://github.com/LinDaiDai/niubility-coding-js/issues/25](https://github.com/LinDaiDai/niubility-coding-js/issues/25)
 
 
 
@@ -246,11 +317,159 @@ defer 模式下，JS 的加载是异步的，执行是被推迟的。等整个�
 
 从应用的角度来说，一般当我们的脚本与 DOM 元素和其它脚本之间的依赖关系不强时，我们会选用 async；当脚本依赖于 DOM 元素和其它脚本的执行结果时，我们会选用 defer。
 
+[https://github.com/LinDaiDai/niubility-coding-js/issues/26](https://github.com/LinDaiDai/niubility-coding-js/issues/26)
 
 
 
+### 五、如何让`<p>测试 空格</p>`这两个词之间的空格变大？
+
+(题目来源：https://github.com/haizlin/fe-interview/issues/2440)
+
+这道题的意思是说，原本有一段`HTML`代码如下：
+
+```html
+<p>测试 空格</p>
+```
+
+在`"测试"`和`"空格"`两个词之间有一个空格，然后如何将这个空格变大。
+
+这边有这么两种方法：
+
+- 通过给`p`标签设置`word-spacing`，将这个属性设置成自己想要的值。
+- 将这个空格用一个`span`标签包裹起来，然后设置`span`标签的`letter-spacing`或者`word-spacing`。
+
+我分别用`letter-spacing`和`word-spacing`来处理了`p`和`span`标签：
+
+```html
+<style>
+  .p-letter-spacing {
+    letter-spacing: 10px;
+  }
+  .p-word-spacing {
+    word-spacing: 10px;
+  }
+  .span-letter-spacing {
+    letter-spacing: 10px;
+  }
+  .span-word-spacing {
+    word-spacing: 10px;
+  }
+</style>
+<body>
+  <p>测试 空格</p>
+  <p class="p-letter-spacing">测试 空格</p>
+  <p class="p-word-spacing">测试 空格</p>
+  <p>测试<span class="span-letter-spacing"> </span>空格</p>
+  <p>测试<span class="span-word-spacing"> </span>空格</p>
+</body>
+```
+
+让我们一起来看看效果：
+
+![](https://user-gold-cdn.xitu.io/2020/6/17/172c12157aa7f886?w=402&h=454&f=jpeg&s=23658)
+
+大家可以看到效果，我用`letter-spacing`和`word-spacing`处理`p`标签，是会呈现不同的效果的，`letter-spacing`把中文之间的间隙也放大了，而`word-spacing`则不放大中文之间的间隙。
+
+而`span`标签中只有一个空格，所以`letter-spacing`和`word-spacing`效果一样。
+
+因此我们可以得出`letter-spacing`和`word-spacing`的结论：
+
+- `letter-spacing`和`word-spacing`这两个属性都用来添加他们对应的元素中的空白。
+- `letter-spacing`添加字母之间的空白，而`word-spacing`添加每个单词之间的空白。
+- `word-spacing`对中文无效。
+
+[https://github.com/LinDaiDai/niubility-coding-js/issues/27](https://github.com/LinDaiDai/niubility-coding-js/issues/27)
 
 
+
+### 六、如何解决inline-block空白问题？
+
+原本的代码为：
+
+```html
+<style>
+.sub {
+  background: hotpink;
+  display: inline-block;
+}
+</style>
+<body>
+  <div class="super">
+    <div class="sub">
+      孩子
+    </div>
+    <div class="sub">
+      孩子
+    </div>
+    <div class="sub">
+      孩子
+    </div>
+  </div>
+</body>
+```
+
+效果为：
+
+![](https://user-gold-cdn.xitu.io/2020/6/17/172c1217be8dd2f9?w=392&h=116&f=jpeg&s=12598)
+
+可以看到每个`孩子`之间都会有一个空白。`inline-block`元素间有空格或是换行，因此产生了间隙。
+
+解决办法：
+
+- **(1) 删除html中的空白**：不要让元素之间换行：
+
+  ```html
+  <div class="super">
+    <div class="sub">
+      孩子
+    </div><div class="sub">
+      孩子
+    </div><div class="sub">
+      孩子
+    </div>
+  </div>
+  ```
+
+- **(2) 设置负的边距**：你可以用负边距来补齐空白。但你需要调整`font-size`，因为空白的宽度与这个属性有关系。例如下面这个例子：
+
+  ```css
+  .sub {
+    background: hotpink;
+    display: inline-block;
+    font-size:16px;
+    margin-left: -0.4em;
+  }
+  ```
+
+- **(3) 给父级设置font-size: 0**：不管空白多大，由于空白跟`font-size`的关系，设置这个属性即可把空白的宽度设置为0。但是如果你的子级有字的话，也得单独给子级设置字体大小。
+
+- **(4) 注释**：
+
+  ```html
+  <div class="super">
+    <div class="sub">
+      孩子
+    </div><!--
+    --><div class="sub sub2">
+      孩子
+    </div><!--
+    --><div class="sub">
+      孩子
+    </div>
+  </div>
+  ```
+
+[https://github.com/LinDaiDai/niubility-coding-js/issues/28](https://github.com/LinDaiDai/niubility-coding-js/issues/28)
+
+
+
+### 七、脱离文档流是不是指该元素从DOM树中脱离?
+
+并不会，DOM树是HTML页面的层级结构，指的是元素与元素之间的关系，例如包裹我的是我的父级，与我并列的是我的兄弟级，类似这样的关系称之为层级结构。
+
+而文档流则类似于排队，我本应该在队伍中的，然而我脱离了队伍，但是我与我的父亲，兄弟，儿子的关系还在。
+
+[https://github.com/LinDaiDai/niubility-coding-js/issues/29](https://github.com/LinDaiDai/niubility-coding-js/issues/29)
 
 
 
@@ -261,6 +480,7 @@ defer 模式下，JS 的加载是异步的，执行是被推迟的。等整个�
 参考文章：
 
 - [《JavaScript ASI 机制详解》](https://segmentfault.com/a/1190000004548664)
+- [《letter-spacing和word-spacing之间的区别》](https://www.cnblogs.com/OrangeManLi/p/4107536.html)
 
 
 
@@ -274,9 +494,10 @@ defer 模式下，JS 的加载是异步的，执行是被推迟的。等整个�
 
 喜欢**霖呆呆**的小伙还希望可以关注霖呆呆的公众号 `LinDaiDai` 或者扫一扫下面的二维码👇👇👇。
 
-![](https://user-gold-cdn.xitu.io/2020/5/27/17254d5d0a277620?w=900&h=500&f=gif&s=1632550)
+![](https://user-gold-cdn.xitu.io/2020/6/17/172c12220c3a29a1?w=900&h=500&f=gif&s=1632550)
 
 我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉
 
 你的鼓励就是我持续创作的主要动力 😊。
+
 

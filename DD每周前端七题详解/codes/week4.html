@@ -4,16 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+<style>
+  .sub {
+    background: hotpink;
+    display: inline-block;
+  }
+  .p-letter-spacing {
+    letter-spacing: 10px;
+  }
+  .p-word-spacing {
+    word-spacing: 10px;
+  }
+  .span-letter-spacing {
+    letter-spacing: 10px;
+  }
+  .span-word-spacing {
+    word-spacing: 10px;
+  }
+</style>
 </head>
 <body>
+<p>测试 空格</p>
+<p class="p-letter-spacing">测试 空格</p>
+<p class="p-word-spacing">测试 空格</p>
+<p>测试<span class="span-letter-spacing"> </span>空格</p>
+<p>测试<span class="span-word-spacing"> </span>空格</p>
+  <!-- <div class="super">
+    <div class="sub">
+      孩子
+    </div>
+    <div class="sub">
+      孩子
+    </div>
+    <div class="sub">
+      孩子
+    </div>
+  </div> -->
   <script>
-    function getName () {
-      return
-      {
-        name: 'LinDaiDai'
-      }
-    }
-    console.log(getName())
+    // 1
+    // function getName () {
+    //   return
+    //   {
+    //     name: 'LinDaiDai'
+    //   }
+    // }
+    // console.log(getName())
+    // 3
+    // const square = v => v * v
+    // const double = v => v * 2
+    // const addOne = v => v + 1
+    // const pipe = function (...fns) {
+    //   return function (param) {
+    //     return fns.reduce((pre, fn) => {
+    //       return fn(pre)
+    //     }, param)
+    //   }
+    // }
+    // const pipe = (...fns) => param => fns.reduce((pre, fn) => fn(pre), param)
+    // const res = pipe(square, double, addOne)
+    // console.log(res(3)) // 19; addOne(double(square(3)))
   </script>
 </body>
 </html>

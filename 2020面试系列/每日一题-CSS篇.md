@@ -256,7 +256,7 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 }
 ```
 
-图片5
+![](https://user-gold-cdn.xitu.io/2020/6/7/1728f5c2724a713f?w=302&h=192&f=jpeg&s=15299)
 
 设置了`vertial-align: top;`后：
 
@@ -270,13 +270,45 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
 }
 ```
 
-图片6
+![](https://user-gold-cdn.xitu.io/2020/6/7/1728f5c467fb3e50?w=296&h=186&f=jpeg&s=13657)
 
 
 
 ### 如何解决inline-block空白问题？
 
-- **删除html中的空白**：不要让元素之间换行：
+原本的代码为：
+
+```html
+<style>
+.sub {
+  background: hotpink;
+  display: inline-block;
+}
+</style>
+<body>
+  <div class="super">
+    <div class="sub">
+      孩子
+    </div>
+    <div class="sub">
+      孩子
+    </div>
+    <div class="sub">
+      孩子
+    </div>
+  </div>
+</body>
+```
+
+效果为：
+
+图片1
+
+可以看到每个`孩子`之间都会有一个空白。`inline-block`元素间有空格或是换行，因此产生了间隙。
+
+解决办法：
+
+- **(1) 删除html中的空白**：不要让元素之间换行：
 
   ```html
   <div class="super">
@@ -290,7 +322,7 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
   </div>
   ```
 
-- **设置负的边距**：你可以用负边距来补齐空白。但你需要调整`font-size`，因为空白的宽度与这个属性有关系。例如下面这个例子：
+- **(2) 设置负的边距**：你可以用负边距来补齐空白。但你需要调整`font-size`，因为空白的宽度与这个属性有关系。例如下面这个例子：
 
   ```css
   .sub {
@@ -301,9 +333,9 @@ BFC全称 Block Formatting Context 即`块级格式上下文`，简单的说，B
   }
   ```
 
-- **给父级设置font-size: 0**：不管空白多大，由于空白跟font-size的关系，设置这个属性即可把空白的宽度设置为0。但是如果你的子级有字的话，也得单独给子级设置字体大小。
+- **(3) 给父级设置font-size: 0**：不管空白多大，由于空白跟`font-size`的关系，设置这个属性即可把空白的宽度设置为0。但是如果你的子级有字的话，也得单独给子级设置字体大小。
 
-- **注释**：
+- **(4) 注释**：
 
   ```html
   <div class="super">

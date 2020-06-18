@@ -169,14 +169,14 @@ function getCookie(name) {
 
 - `box.onmousedown`
 - `document.onmousemove`
-- `box.onmouseup`
+- `document.onmouseup`
 
 3. 实现的事件顺序
 
 - 首先监听`box.onmousedown`，即鼠标按下`box`时触发的事件，记录下鼠标按下时距离屏幕上边和左边的距离，以及`box`距离屏幕上边和左边的距离，再用前者减去后者得到差值`distanceX`和`distanceY`
 - 然后在此事件中监听`document.onmousemove`事件，记录下每次鼠标移动时距离屏幕上边和左边的距离，然后用它们减去`distanceX`和`distanceY`，再将其赋值给`box`的`left`和`top`，使其能跟着鼠标移动
 - 不过需要考虑`box`距离屏幕最上面/下面/左边/右边的边界情况
-- 当`box.onmouseup`的时候需要将`document.onmousemove`事件设置为`null`
+- 当`document.onmouseup`的时候需要将`document.onmousemove`事件设置为`null`
 
 如图所示：
 
@@ -235,13 +235,15 @@ window.onload = function () {
       box.style.left = left + 'px';
       box.style.top = top + 'px';
     }
-    box.onmouseup = function () {
+    document.onmouseup = function () {
       document.onmousemove = null;
       box.onmouseup = null;
     }
   }
 }
 ```
+
+(感谢[Turbo328](https://github.com/Turbo328)指出使用`document.onmouseup`效果会比`box.onmouseup`好一些)
 
 [https://github.com/LinDaiDai/niubility-coding-js/issues/11](https://github.com/LinDaiDai/niubility-coding-js/issues/11)
 
