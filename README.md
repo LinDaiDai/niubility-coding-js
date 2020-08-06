@@ -103,7 +103,7 @@
 
 - [【建议星星】要就来45道Promise面试题一次爽到底](./JavaScript/异步/要就来45道Promise面试题一次爽到底.md)
 - generator
-- async/await
+- [这篇手写async函数及原理](./JavaScript/异步/这篇手写async函数及原理.md)
 
 #### ES6+
 

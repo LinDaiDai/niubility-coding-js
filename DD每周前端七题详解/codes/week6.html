@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .box {
+      width: 100px;
+      height: 100px;
+    }
+    .red {
+      background-color: red;
+      visibility: collapse;
+    }
+    .blue {
+      background-color: blue;
+    }
+    table {
+      border: 1px solid red;
+    }
+    td {
+      border: 1px solid blue;
+    }
+    .tr1 {
+      /* visibility: hidden; */
+      visibility: collapse;
+    }
+.super {
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+  border: 10px solid darkkhaki;
+  background: skyblue;
+}
+.sub1 {
+  background: #d0e4a9;
+}
+.sub2 {
+  width: 100%;
+  box-sizing: content-box;
+  padding-left: 10px;
+  margin-left: 10px;
+  background: #c077af;
+}
+.sub3 {
+  width: auto;
+  padding-left: 10px;
+  margin-left: 10px;
+  background: #f8d29d;
+}
+
+  </style>
+</head>
+<body>
+  <!-- <label for="username">username:</label>
+  <input type="text" name="username" id="username"/> -->
+
+  <!-- <form autocomplete="on">
+    testaccount: <input type="text" name="testaccount" /><br />
+    testpassword: <input type="text" name="testpassword" autocomplete="off" /><br />
+    <input type="submit" />
+  </form> -->
+
+  <div class="box red"></div>
+  <div class="box blue"></div>
+
+  <table>
+    <tr class="tr1">
+      <td>
+        tr1
+      </td>
+      <td>
+        tr1
+      </td>
+    </tr>
+    <tr>
+      <td>
+        tr2
+      </td>
+      <td>
+        tr2
+      </td>
+    </tr>
+  </table>
+
+<!-- <div class="super">
+  <div class="sub1">
+    我是呆呆的第一个崽
+  </div>
+  <div class="sub2">
+    我是呆呆的第二个崽
+  </div>
+  <div class="sub3">
+    我是呆呆的第三个崽
+  </div> -->
+</div>
+  <script>
+    console.log([,,,].length)
+  </script>
+</body>
+</html>
