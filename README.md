@@ -20,7 +20,7 @@
 
 ### DD每周前端七题详解系列
 
-- [系列目录](./DD每周前端气题详解/README.md)
+- [系列目录](./DD每周前端七题详解/README.md)
 
 ### HTML
 
@@ -135,6 +135,12 @@
 - [vue-cli3打包之后的文件为何不能本地打开](./框架-库/Vue/vue-cli3打包之后的文件为何不能本地打开.md)
 - [Vue面试题整理](./框架-库/Vue/Vue面试题整理.md)
 
+#### React
+
+- [初识React你应该知道的一些点](./框架-库/React/初识React你应该知道的一些点.md)
+- [受控和非受控组件真的那么难理解吗？(React实际案例详解)](./框架-库/React/受控和非受控组件真的那么难理解吗.md)
+- [HOC真的就那么高级吗？(React实际案例详解)](./框架-库/React/HOC真的就那么高级吗.md)
+
 #### Angular
 
 - [Angular自定义组件-UI组件篇-switch组件](./框架-库/Angular/Angular自定义组件-UI组件篇-switch组件.md)
@@ -154,6 +160,7 @@
 
 - [ShutdownHTTP系列-基础篇(1)](./计算机网络/ShutdownHTTP系列-基础篇(1).md)
 - [ShutdownHTTP系列-HTTP请求报文篇(2)](./计算机网络/ShutdownHTTP系列-HTTP请求报文篇(2).md)
+- [ShutdownHTTP系列-Cookie篇(3)](./计算机网络/ShutdownHTTP系列-Cookie篇(3).md)
 - [HTTPS面试问答](./计算机网络/HTTPS面试问答.md)
 
 #### TCP系列

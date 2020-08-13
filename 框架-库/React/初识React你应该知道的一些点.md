@@ -1,4 +1,4 @@
-## React入门
+## 初识React你应该知道的一些点
 
 ### 组件
 
@@ -44,7 +44,7 @@ React 会将以小写字母开头的组件视为原生 DOM 标签。例如，`` 
   
   // 正确
   this.setState({ msg: 'LinDaiDai' })
-   ```
+  ```
 
 - `State`的更新可能是异步的，如果更新的`state`中有依赖到`state`或者`props`则可以用函数：
 
@@ -308,7 +308,7 @@ render() {
 
 
 
-#### displayname
+#### displayName
 
 `displayName` 字符串多用于调试消息。通常，你不需要设置它，因为它可以根据函数组件或 class 组件的名称推断出来。
 
@@ -467,7 +467,7 @@ First · Second
 
 #### style
 
-`style`属性接收的是一个对象，这点和`DOM`中`style`的`JavaScript`属性一样，，同时会更高效的，且能预防跨站脚本（XSS）的安全漏洞。例如：
+`style`属性接收的是一个对象，这点和`DOM`中`style`的`JavaScript`属性一样，同时会更高效的，且能预防跨站脚本（XSS）的安全漏洞。例如：
 
 ```jsx
 const divStyle = {

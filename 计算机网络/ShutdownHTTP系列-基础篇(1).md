@@ -16,13 +16,13 @@
 系列目录：
 
 - 《🐲【1】Shutdown HTTP系列-基础篇》「本篇」
-- 《🐲【2】Shutdown HTTP系列-HTTP报文篇》
+- [《🐲【2】Shutdown HTTP系列-HTTP报文篇》](https://juejin.im/post/6844904168549777422)
 - 《🐲【3】Shutdown HTTP系列-Cookie篇》
 - 《🐲【4】Shutdown HTTP系列-HTTPS篇》
 - 《🐲【5】Shutdown HTTP系列-CCPG篇》
 - 《🐲【6】Shutdown HTTP面试系列》
 
-所有文章内容均被收入GitHub个人博客：[niubility-coding-js](https://github.com/LinDaiDai/niubility-coding-js) ❤️求个Star~
+所有文章内容都已整理至 [LinDaiDai/niubility-coding-js](https://github.com/LinDaiDai/niubility-coding-js) 快来给我Star呀😊~
 
 
 
