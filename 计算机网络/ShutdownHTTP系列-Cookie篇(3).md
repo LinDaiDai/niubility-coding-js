@@ -202,17 +202,17 @@ OK👌，来看看客户端(浏览器端)调用这两个接口的代码：
 
 此时，点击「登录」按钮，可以在`/login`这个接口的响应体中看到`Set-Cookie`这个首部字段：
 
-![](./resource/ShutdownHTTP/31.png)
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee1d79ab2c0d411b8d0de765d3bddb38~tplv-k3u1fbpfcp-zoom-1.image)
 
 (图里红色圈中的`Access-Control-Allow-Credentials: true`请忽略它，因为这张图是另一篇文章中拿来的，所以重点是`Set-Cookie`)
 
 登录成功之后，点击「获取name」按钮，可以在`/corsname`这个接口的请求体中看到`Cookie`这个首部字段：
 
-![](./resource/ShutdownHTTP/32.png)
+![](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d027b7afb79e4bb68a0f0468b17775b2~tplv-k3u1fbpfcp-zoom-1.image)
 
 再来看看在浏览器中，我们可以如何查看`Cookie`：
 
-![](./resource/ShutdownHTTP/33.png)
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4a8e88f3d1d543089cae17471f425bc3~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -360,15 +360,15 @@ Set-Cookie: name=xxx; secure
 
 让我们来看一个实际的运用场景。
 
-前提条件：https://lindaidai.com对`cookie`设置了`secure=true`属性。
+前提条件：https://lindaidai.com 对`cookie`设置了`secure=true`属性。
 
 1. 访问 https://lindaidai.com
 
 2. 输入用户名、密码，用`Chrome`的`developer tool`会看到`response`的`header`里，`set-cookie`的值里有`secure`属性
 
-3. 登录后，继续访问https://lindaidai.com/#user，可以正常看到内容
+3. 登录后，继续访问https://lindaidai.com/#user ，可以正常看到内容
 
-4. 修改url，访问http://lindaidai.com/#domain，会跳转到登录页面，因为`cookie`在`http`协议下不发送给服务器，服务器要求用户重新登录
+4. 修改url，访问http://lindaidai.com/#domain ，会跳转到登录页面，因为`cookie`在`http`协议下不发送给服务器，服务器要求用户重新登录
 
 
 
@@ -390,7 +390,7 @@ Set-Cookie: name=xxx; HttpOnly
 
 作用：用来限制第三方`Cookie`，一般用来防止`CSRF`攻击。
 
-默认值：之前一直是`None`，在`Chrome80`之后为` Lax`。
+默认值：`Chrome80`之前一直是`None`，在`Chrome80`之后为` Lax`。
 
 例如：
 
@@ -477,30 +477,30 @@ eTLD + 1 = 顶级域名 + 二级域名
 
 来看看具体的作用：
 
-**Strict**：
+*Strict*：
 
 最为严格，完全禁止第三方Cookie跨站点使用
 也就是只有网页的URL和请求目标的URL一致才会携带Cookie
 
-**Lax**：
+*Lax*：
 
 允许部分第三方请求携带`Cookie`。
 
 也就是只能允许 链接、预加载、GET表单 发送`Cookie`。
 
-```
+```html
 <a href="..."></a>
 ```
 
-```
+```html
 <link ref="prerender" href="..." />
 ```
 
-```
+```html
 <form method="GET" action="..."></form>
 ```
 
-**None**：
+*None*：
 
 无论是否跨站都会发送`Cookie`。
 
@@ -508,7 +508,7 @@ eTLD + 1 = 顶级域名 + 二级域名
 
 #### Q5：SameSite在使用时需要注意什么？
 
-- 对于默认值，之前一直是`None`，在`Chrome80`之后为` Lax`。
+- 对于默认值，`Chrome80`之前一直是`None`，在`Chrome80`之后为` Lax`。
 - `HTTP`接口不支持`SameSite=None`，必须配合`Secure`属性，表示只有在`HTTPS`协议下才发送`Cookie`；
 - 需要进行`UA`检测，部分浏览器不能加`SameSite=None`，`IOS12`的`Safari`以及老的`Chrome`浏览器会把`SameSite=None`当成`Same=Strict`，所以需要用`User-Agent`获取浏览器信息对一些浏览器不下发`Cookie`
 
@@ -528,7 +528,14 @@ eTLD + 1 = 顶级域名 + 二级域名
 
 - 容量缺陷。Cookie 的体积上限只有4KB，只能用来存储少量的信息。
 - 性能缺陷。Cookie 紧跟域名，不管域名下面的某一个地址需不需要这个 Cookie ，请求都会携带上完整的 Cookie，使得请求会携带不必要的参数。但是可以通过Domain和Path指定作用域来解决
-- 安全缺陷。由于 Cookie 以纯文本的形式在浏览器和服务器中传递，很容易被非法用户截获。在HttpOnly为false的情况下可以通过JS脚本获取到
+- 安全缺陷。由于 Cookie 以纯文本的形式在浏览器和服务器中传递，很容易被非法用户截获。在HttpOnly为false的情况下可以通过JS脚本获取到。
+- 
+
+## 直接拿吧
+
+最后，千言万语汇成一张图...
+
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c460f248d9e247c9b94654aa2111bc45~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -556,11 +563,11 @@ eTLD + 1 = 顶级域名 + 二级域名
 
 ...
 
-喜欢**霖呆呆**的小伙还希望可以关注霖呆呆的公众号 `LinDaiDai` 
+喜欢**霖呆呆**的小伙伴还希望可以关注霖呆呆的公众号 `LinDaiDai` 
 
-我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉
+我会不定时的更新一些前端方面的知识内容以及自己的原创文章🎉。
 
-你的鼓励就是我持续创作的主要动力 😊.
+你的鼓励就是我持续创作的主要动力 😊。
 
 相关推荐:
 
@@ -577,4 +584,5 @@ eTLD + 1 = 顶级域名 + 二级域名
 [《【何不三连】做完这48道题彻底弄懂JS继承(1.7w字含辛整理-返璞归真)》](https://juejin.im/post/5e75e22951882549027687f9)
 
 [《霖呆呆的近期面试128题汇总(含超详细答案) | 掘金技术征文》](https://juejin.im/post/5eb55ceb6fb9a0436748297d)
+
 
