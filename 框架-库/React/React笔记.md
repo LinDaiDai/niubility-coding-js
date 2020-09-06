@@ -454,6 +454,10 @@ AppFunc instanceof Function === true;
 
 
 
+### render阶段
+
+`Fiber`节点是如何被创建并构建`Fiber树`的？
+
 
 
 
