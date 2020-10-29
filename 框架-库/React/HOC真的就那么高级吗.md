@@ -1,16 +1,28 @@
-## HOC真的就那么高级吗？你可知道还能这么玩
+> 希沃ENOW大前端
+>
+> 公司官网：[CVTE(广州视源股份)](http://www.cvte.com/)
+>
+> 团队：CVTE旗下未来教育希沃软件平台中心enow团队
+
+**本文作者：**
+
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/52894355d9bb445fadb78f0a8ef09169~tplv-k3u1fbpfcp-zoom-1.image)
+
+
 
 ## 前言
 
 你盼世界，我盼望你无`bug`。Hello 大家好！我是霖呆呆。
 
+这篇文章首发于我们团队的掘金账号【希沃ENOW大前端】，很荣幸成为第一篇文章的编写人。在接下来日子，我们每周都会为大家输出**好玩、有趣、符合前端发展**的技术型文章，这个过程我们一起学习进步💪。如果觉得某位小哥哥/小姐姐写的不错的话，还请不要吝啬你的赞👍哦，每个赞和评论都是对我们最好的支持😊，感谢。
+
 在正式开始之前，呆呆冒死回答一下标题的问题吧...是的！它很高级😅。
 
-表情包去你妈的
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/21a1c13e8da34c0083e8304612cf910a~tplv-k3u1fbpfcp-zoom-1.image)
 
-在写之前我也调研了很多关于HOC的资料，其中确实也有很多写的比较好的文章。但如果你想问本篇文章的优势在哪里？唔...我可以斗胆的说，会更加详细，案例也会更加齐全。所以这篇文章我会从HOC是什么、怎么用它、用它需要注意什么等方面详细的去讲解，尽量让大家都能理解。
+我也调研了很多关于HOC的资料，其中确实也有很多写的比较好的文章。但如果你想问本篇文章的优势在哪里？唔...我可以斗胆的说，会更加详细，案例也会更加齐全。所以这篇文章我会从HOC是什么、怎么用它、用它需要注意什么等方面详细的去讲解，尽量让大家都能理解。
 
-**适宜人群**：能看得懂一些`React`的靓仔、靓妹。
+**适宜人群**：能看得懂一些`React`的靓仔、靓妹😊。
 
 来看看通过阅读本篇文章我们可以学习到：
 
@@ -101,7 +113,7 @@ export default FinalComponent;
 
 咦～这么着急干嘛？哈哈哈哈，咱接着往下看。
 
-表情包不要着急
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d50e27e180ab433ab50f572369b600cb~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -200,7 +212,7 @@ function proxyHOC(WrappedComponent) {
 }
 ```
 
-表情包开心
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b48745b7b22e4e73918fd46b2731f16d~tplv-k3u1fbpfcp-zoom-1.image)
 
 好的👌，呆呆既然已经告诉了你们这种全新的使用方式了，那你能想到通过这种名为`"属性代理"`的东西能让我们做哪些好玩有趣的事吗？
 
@@ -264,9 +276,7 @@ export default FinalComponent;
 
 `Good boy!`现在我们已经会`"属性代理"`的其中一种用法了，不说了，学累了，喝口水去，顺便想想还可以怎样用。
 
-表情包休息时间
-
-
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/91de52d1198c4b70b58ba776fd1eee61~tplv-k3u1fbpfcp-zoom-1.image)
 
 #### 2.1.2 组合渲染
 
@@ -336,7 +346,7 @@ export default FinalComponent;
 
 和它的名字一样，它可以对我们最终要渲染的`UI`做一些组合，不管这种组合是包裹的，还是兄弟之间的组合，都可以。怎么样？小伙伴们有没有感觉有内味了？😁
 
-表情包嘿嘿
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c86de3f3b7b04297ad4f33c4e8695304~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -494,8 +504,7 @@ export default FinalComponent;
 
 可以看到我们将原本在`TestComponent`中实现受控组件的功能提取出了到`MyHOC`中。
 
-表情包
-
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/046db3e0783942f9ab60e680dc7760ed~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 ### 2.2 反向继承
@@ -720,7 +729,7 @@ Uncaught TypeError: Cannot assign to read only property 'value' of object '#<Obj
 
 啊，这可就是断了我想要玩它们的想法了...
 
-表情包难受
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5abec6cb3c4444c19da739a9b62d1dc3~tplv-k3u1fbpfcp-zoom-1.image)
 
 聪明的我灵机一动💡，那是否可以用什么克隆的方式来克隆这个组件，然后再这个基础上去修改我们想要的属性，亦或者添加上一些属性呢？[奸笑～]
 
@@ -773,7 +782,7 @@ function MyHOC (WrapComponent) {
 
 好吧，给你们思考一下😄。
 
-表情包等待
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1f6eded7b466485da9f9b830875273f0~tplv-k3u1fbpfcp-zoom-1.image)
 
 要回答这个问题，让我们先来看一下组件的生命周期是任何定义的：
 
@@ -875,8 +884,7 @@ function MyHOC (WrappedComponent) {
 }
 ```
 
-表情包厉害
-
+![](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/cdb32ba2664f434fb59d0f27ddd57890~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 ## 3. HOC的几种使用方式
@@ -1007,6 +1015,7 @@ class TestComponent extends React.Component {}
 
 
 
+
 #### 4.1 提取公共部分
 
 唔...其实怎么说呢，刚刚说到的这些用法，例如属性代理操作`props`添加公共属性，或者反向继承如获取到`WrappedComponent`的`state、ref`等操作并不是说是使用`HOC`才能实现的功能，而是要让我们回归到`HOC`的一大特点中来：它能够帮助我们**复用组件逻辑**。而前面提到的这些只是它的一些具体用法。
@@ -1111,7 +1120,7 @@ function TestComponent () {
 
 而且对于一些复杂逻辑和公共的部分我们都可以在`MyHOC`中统一的管理，老大说：这就是我想要看到的代码。
 
-表情包
+![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ce721d3907954265a7db5671794ac991~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
@@ -1194,4 +1203,10 @@ export default FinalComponent;
 
 
 ## 后语
+
+你盼世界，我盼望你无`bug`。这篇文章就介绍到了这里。
+
+总算是写完了😂，能看到最后的你也很厉害。因为呆呆也是最近才转的`React`，可以看到它真的很灵活，也很有意思，但想要真正的学好它可能还有很长的路要走，包括我自己也是，所以：**路漫漫其修远兮，一起入坑乎？**，哈哈哈。
+
+最后，我们是**希沃ENOW大前端**，如果觉得本文对你有帮助的话，唔，你懂得[奸笑～]，下周再见了👋拜拜。
 
