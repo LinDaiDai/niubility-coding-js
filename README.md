@@ -150,6 +150,11 @@
 
 - [霖呆呆的webpack之路目录](./前端工程化/webpack/README.md)
 
+### 桌面端
+
+#### Electron
+
+- [大概是全网最详细的Electron ipc 讲解(一)——主进程与渲染进程的两情相悦](./Electron/大概是全网最详细的ElectronIpc讲解1——主进程与渲染进程的两情相悦.md)
 
 
 ### 计算机网络
